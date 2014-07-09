@@ -1,0 +1,37 @@
+/* This stylesheet is used to style the admin option form of the plugin. */
+
+#wc_pricefiles_pricelist_cat,
+#wc_pricefiles_manufacturer
+{
+    width: 50%;
+    float: left;
+}
+.chosen-container .chosen-results {
+    clear: both;
+}
+
+#options_group_manufacturer #wc_pricefiles_ean_code {
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+
+#options_group_manufacturer p#_ean_code_status {
+    display: none;
+    margin: -11px 0 0 150px;
+    padding-top: 0;
+    line-height: 1;
+}
+
+
+#options_group_manufacturer input.valid {
+    background-image: url(../images/icons/valid.png);
+    background-position: 95% center;
+    background-repeat: no-repeat;
+}
+
+#options_group_manufacturer input.invalid {
+    border-color: #fb7f88;
+    background-image: url(../images/icons/invalid.png);
+    background-position: 95% center;
+    background-repeat: no-repeat;
+}

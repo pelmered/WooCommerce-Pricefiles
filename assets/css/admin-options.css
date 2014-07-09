@@ -1,0 +1,44 @@
+/* This stylesheet is used to style the admin option form of the plugin. */
+
+#content.has-sidebar {
+    width: 75%;
+    float: left;
+}
+.sidebar {
+    width: 20%;
+    float: right;
+}
+.sidebar .postbox {
+    min-width: 0;
+}
+
+h4 {
+    margin: 0;
+    clear: both;
+}
+
+input.wide {
+    /*max-width: 90%;*/
+}
+
+#woocommerce_pricefiles_exclude_ids {
+    width: 90%;
+}
+
+label.shipping-method {
+    padding: 0 15px 10px 0;
+    white-space: nowrap;
+    float: left;
+}
+label.shipping-method input {
+    margin-left: 5px;
+}
+
+#shipping-destination {
+    max-width: 400px;
+}
+input[type="text"]:disabled
+{
+    color: #000;
+}
+
