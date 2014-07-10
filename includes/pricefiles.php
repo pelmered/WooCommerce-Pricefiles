@@ -396,7 +396,7 @@ class WC_Pricefiles
         $plugin_links = array(
             '<a href="' . admin_url('admin.php?page='.$this->plugin_slug) . '">' . __('Settings', $this->plugin_slug) . '</a>',
             //'<a href="http://extendwp.com/">' . __( 'Docs', $this->plugin_slug ) . '</a>',
-            '<a href="http://extendwp.com/">' . __('Info & Support', $this->plugin_slug) . '</a>',
+            '<a href="http://wordpress.org/plugins/woocommerce-pricefiles/">' . __('Info & Support', $this->plugin_slug) . '</a>',
         );
 
         return array_merge($plugin_links, $links);
