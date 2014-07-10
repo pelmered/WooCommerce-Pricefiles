@@ -3,10 +3,11 @@
  * WooCommerce Pricefiles
  * Plugin class.
  *
- * @package   WC-Pricefiles
- * @author    Peter Elmered
- * @link      http://extendwp.com/product/wc-pricelists
- * @copyright 2013 Extend WP
+ * @package   woocommerce-pricefiles
+ * @author    Peter Elmered <peter@elmered.com>
+ * @license   GPL-2.0+
+ * @link      http://elmered.com
+ * @copyright 2014 Peter Elmered
  */
 
 class WC_Pricefiles
@@ -29,7 +30,7 @@ class WC_Pricefiles
      * @since    0.1.0
      * @var      string
      */
-    protected $plugin_slug = WC_PRICEFILES_PLUGIN_SLUG;
+    public $plugin_slug = WC_PRICEFILES_PLUGIN_SLUG;
 
     /**
      * Instance of this class.
@@ -38,14 +39,6 @@ class WC_Pricefiles
      * @var      object
      */
     protected static $instance = null;
-
-    /**
-     * Slug of the plugin screen.
-     *
-     * @since    0.1.0
-     * @var      string
-     */
-    protected $plugin_screen_hook_suffix = null;
 
     /**
      * Initialize the plugin by setting localization, filters, and administration functions.
@@ -81,9 +74,9 @@ class WC_Pricefiles
         //add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
 
         //Add custom fields to the bottom of the "General" product tab.
-        add_action('woocommerce_product_options_general_product_data', array($this, 'sf_product_data_fields'), 999);
+        add_action('woocommerce_product_options_general_product_data', array($this, 'product_data_fields'), 999);
         //Hook into product meta save action to save our custom fields.
-        add_action('woocommerce_process_product_meta', array($this, 'sf_process_product_data_fields'), 10, 2);
+        add_action('woocommerce_process_product_meta', array($this, 'process_product_data_fields'), 10, 2);
 
         //Refresh cache AJAX call
         add_action('wp_ajax_wc_pricefiles_refresh_pricefile_cache', array($this, 'ajax_check_ean_code'));
@@ -226,7 +219,7 @@ class WC_Pricefiles
             ),
         );
         
-        return apply_filters('woocmmerce_available_pricefiles', $wc_pricefiles_list);
+        return apply_filters( WC_PRICEFILES_PLUGIN_SLUG . '_available_pricefiles', $wc_pricefiles_list);
     }
 
     function update_pricefile_category($post_id)
@@ -448,17 +441,17 @@ class WC_Pricefiles
         return apply_filters('woocommerce_attribute_taxonomies', $attribute_taxonomies);
     }
 
-    function sf_product_data_fields()
+    function product_data_fields()
     {
         require(WP_PRICEFILES_PLUGIN_PATH . 'views/product-data.php');
     }
 
-    function sf_process_product_data_fields($post_id, $post)
+    function process_product_data_fields($post_id, $post)
     {
-        update_post_meta($post_id, '_ean_code', stripslashes($_POST['_ean_code']));
-        update_post_meta($post_id, '_sku_manufacturer', stripslashes($_POST['_sku_manufacturer']));
-        update_post_meta($post_id, '_manufacturer', stripslashes($_POST['_manufacturer']));
-        update_post_meta($post_id, '_pricelist_cat', stripslashes($_POST['_pricelist_cat']));
+        update_post_meta($post_id, $this->plugin_slug.'_ean_code', stripslashes($_POST[$this->plugin_slug.'_ean_code']));
+        update_post_meta($post_id, $this->plugin_slug.'_sku_manufacturer', stripslashes($_POST[$this->plugin_slug.'_sku_manufacturer']));
+        update_post_meta($post_id, $this->plugin_slug.'_manufacturer', stripslashes($_POST[$this->plugin_slug.'_manufacturer']));
+        update_post_meta($post_id, $this->plugin_slug.'_pricelist_cat', stripslashes($_POST[$this->plugin_slug.'_pricelist_cat']));
     }
 
     /**

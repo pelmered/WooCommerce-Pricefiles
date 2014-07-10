@@ -3,12 +3,12 @@
  * @package   woocommerce-pricefiles
  * @author    Peter Elmered <peter@elmered.com>
  * @license   GPL-2.0+
- * @link      http://extendwp.com
- * @copyright 2013 Peter Elmered
+ * @link      http://elmered.com
+ * @copyright 2014 Peter Elmered
  *
  * @wordpress-plugin
  * Plugin Name: WooCommerce Pricefiles
- * Plugin URI:  http://extendwp.com/product/wc-pricelists
+ * Plugin URI:  -
  * Description: Connect your WooCommerce shop to Price comparison sites with Pricefiles. Supports: Prisjakt / PriceSpy and Pricerunner
  * Version:     0.1.0
  * Author:      Peter Elmered
@@ -41,8 +41,6 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
     {
         require_once( WP_PRICEFILES_PLUGIN_PATH .'includes/pricefiles.php' );
 
-        global $wc_pricefiles;
-
         $wc_pricefiles = WC_Pricefiles::get_instance();
 
         // Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
@@ -51,6 +49,9 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
         register_deactivation_hook(__FILE__, array($wc_pricefiles, 'deactivate'));
 
         add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $wc_pricefiles, 'action_links' ) );
+        
+        
+        
     }
 
 } 
@@ -116,5 +117,15 @@ else
         <?php
     }
 }
+
+
+function WC_Pricefiles()
+{
+    require_once( WP_PRICEFILES_PLUGIN_PATH .'includes/pricefiles.php' );
+
+    return WC_Pricefiles::get_instance();
+}
+//die(WC_Pricefiles()->plugin_slug);
+
 
 //http://debug.nu/wp-admin/plugins.php?action=deactivate&plugin=woocommerce-pricefiles%2Fpricefiles.php&plugin_status=all&paged=1&s&_wpnonce=828cf67760

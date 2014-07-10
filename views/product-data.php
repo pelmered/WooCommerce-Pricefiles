@@ -6,7 +6,7 @@ global $woocommerce, $post;
     <h3><?php _e('Optional information for price files integration'); ?></h3>
 
     <?php woocommerce_wp_text_input(array(
-        'id' => 'wc_pricefiles_ean_code', 
+        'id' => WC_PRICEFILES_PLUGIN_SLUG.'_ean_code', 
         'class' => '', 
         'label' => '<abbr title="' . __('European Article Number / International Article Number barcode number', 'woocommerce') . '">' . __('EAN code', 'woocommerce') . '</abbr>', 
         'desc_tip' => 'true', 
@@ -16,7 +16,7 @@ global $woocommerce, $post;
     <p id="_ean_code_status"></p>
     
     <?php woocommerce_wp_text_input(array(
-        'id' => 'wc_pricefiles_sku_manufacturer', 
+        'id' => WC_PRICEFILES_PLUGIN_SLUG.'_sku_manufacturer', 
         'class' => '', 
         'label' => '<abbr title="' . __('Stock Keeping Unit manufacturer', 'woocommerce') . '">' . __('Manufacturer SKU', $this->plugin_slug) . '</abbr>', 
         'desc_tip' => 'true', 
@@ -34,7 +34,30 @@ global $woocommerce, $post;
 
     // Make sure it exists
     if ( taxonomy_exists( $attribute_taxonomy_name ) ) :
-        $current = get_post_meta( $post->ID, '_manufacturer', true );
+        $current = get_post_meta( $post->ID, WC_PRICEFILES_PLUGIN_SLUG.'_manufacturer', true );
+    
+    //use woocommerce_wp_select() ?
+    
+    
+    $manufacturer_field = array(
+        'id'    => WC_PRICEFILES_PLUGIN_SLUG.'_manufacturer',
+        'label' => __('Manufacturer'),
+        'class' => 'chosen-select',
+        //'wrapper_class' => '',
+        'options' => array()
+    );
+    
+    $all_terms = get_terms($attribute_taxonomy_name, 'orderby=name&hide_empty=0');
+    if ($all_terms) {
+        foreach ($all_terms as $term) {
+            //echo '<option value="' . esc_attr($term->slug) . '" ' . selected($term->slug, $current, false) . '>' . $term->name . '</option>';
+            $field['options'][$term->slug] = $term->name;
+        }
+    }
+    
+    woocommerce_wp_select($manufacturer_field);
+    
+    echo 'asdas';
     ?>
     <p class="form-field _manufacturer_field ">
         <label for="_manufacturer"><?php _e('Manufacturer'); ?></label>
@@ -89,5 +112,7 @@ global $woocommerce, $post;
    </p>
 
     <?php endif; ?>
+   
+   <?php do_action( WC_PRICEFILES_PLUGIN_SLUG . '_product_options'); ?>
 
 </div>
