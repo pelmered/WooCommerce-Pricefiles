@@ -158,7 +158,12 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             array($this, 'pricefile_display_callback'), // Callback used to render the description of the section
             $this->plugin_slug . '_pricefile_urls_section' // Page on which to add this section of options
         );
-
+        add_settings_section(
+            $this->plugin_slug . '_donate', 
+            __('Donate', $this->plugin_slug), 
+            array($this, 'donation_button'), 
+            $this->plugin_slug . '_donate_section'
+        );
         /*
          * Pricefiles options
          */
@@ -295,6 +300,21 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             }
         }
         echo '</p>';
+    }
+    
+    
+    function donation_button()
+    {
+        ?>
+        <p><?php _e('If you like or find this plugin useful, please consider donating something.'); ?></p>
+
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+        <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="8L2PHLURJMC8Y">
+        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+        <img alt="" border="0" src="https://www.paypalobjects.com/sv_SE/i/scr/pixel.gif" width="1" height="1">
+        </form>
+        <?php
     }
 
     /* ------------------------------------------------------------------------ *
