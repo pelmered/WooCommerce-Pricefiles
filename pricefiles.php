@@ -21,11 +21,6 @@
 
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-//For debuging
-error_reporting(E_ALL);
-ini_set('display_startup_errors', 1);
-ini_set('display_errors', 1);
-
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -57,11 +52,15 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 } 
 else
 {
+    //If WooCommerce is not install, hanldle errors and display notices
+
+    //Deactivate plugin action
     if(!empty($_GET['wcpf-deactivate-woocommerce-pricefiles']) && $_GET['wcpf-deactivate-woocommerce-pricefiles'] == 1)
     {
         add_action('init', 'wpcf_deactivate_plugin');
         add_action('admin_notices', 'wpcf_deactivate_plugin_notice');
     }
+    //Activate WooCommerce action
     if(!empty($_GET['wcpf-activate-woocommerce']) && $_GET['wcpf-activate-woocommerce'] == 1)
     {
         add_action('init', 'wpcf_activate_woocommerce');
@@ -69,6 +68,7 @@ else
     }
     else
     {
+        //Display normal "WooCommerce not installed" notice
         add_action('admin_notices', 'wcpf_woocommerce_not_active_notice');
     }
     
@@ -81,12 +81,12 @@ else
                 '<a href="http://wordpress.org/plugins/woocommerce/">', '</a>',
                 '<a href="?deactivate-woocommerce-pricefiles=1">', '</a>'
             ); ?></p>
-            <?php if( file_exists(dirname(plugin_dir_path( __FILE__ )).'/woocommerce/woocommerce.php') ) : ?>
+            <?php 
+            //WooCommerce is installed, but not actiated. Add adction for activating.
+            if( file_exists(dirname(plugin_dir_path( __FILE__ )).'/woocommerce/woocommerce.php') ) : ?>
             <p><?php printf(__('WooCommerce seams to be installed but not activated. %sClick here to activate%s.', WC_PRICEFILES_PLUGIN_SLUG),
                 '<a href="?wcpf-activate-woocommerce=1">','</a>'
             ); ?></p>
-            
-            
             <?php endif; ?>
         </div>
         <?php
@@ -118,14 +118,11 @@ else
     }
 }
 
-
+//Function for getting an sigleton instance of the plugin main class
 function WC_Pricefiles()
 {
     require_once( WP_PRICEFILES_PLUGIN_PATH .'includes/pricefiles.php' );
 
     return WC_Pricefiles::get_instance();
 }
-//die(WC_Pricefiles()->plugin_slug);
 
-
-//http://debug.nu/wp-admin/plugins.php?action=deactivate&plugin=woocommerce-pricefiles%2Fpricefiles.php&plugin_status=all&paged=1&s&_wpnonce=828cf67760
