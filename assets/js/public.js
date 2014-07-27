@@ -1,6 +1,6 @@
 (function ($) {
 	"use strict";
 	$(function () {
-		// Place your public-facing JavaScript here
+		// Public-facing JavaScript
 	});
 }(jQuery));

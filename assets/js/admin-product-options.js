@@ -4,7 +4,7 @@
     $(function () {
 
         //$('#options_group_manufacturer').on('change', '#wc_pricefiles_ean_code', function() {
-        $('#options_group_manufacturer').on('input', '#wc_pricefiles_ean_code', function() {
+        $('#options_group_manufacturer').on('input', '#woocommerce-pricefiles_ean_code', function() {
 
             var $this = $(this);
             var val = $this.val();
@@ -16,7 +16,7 @@
             }
         });
 
-        $('#options_group_manufacturer').on('blur', '#wc_pricefiles_ean_code', function() {
+        $('#options_group_manufacturer').on('blur', '#woocommerce-pricefiles_ean_code', function() {
 
             var $this = $(this);
             var val = $this.val();
@@ -73,7 +73,7 @@
             });
         });
         
-        $('#wc_pricefiles_manufacturer, #wc_pricefiles_pricelist_cat').each( function() {
+        $('#woocommerce-pricefiles_manufacturer, #woocommerce-pricefiles_pricelist_cat').each( function() {
             $(this).chosen();
         });
 

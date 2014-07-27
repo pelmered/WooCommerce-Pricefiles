@@ -1,7 +1,7 @@
 /* This stylesheet is used to style the admin option form of the plugin. */
 
-#wc_pricefiles_pricelist_cat,
-#wc_pricefiles_manufacturer
+#woocommerce-pricefiles_pricelist_cat,
+#woocommerce-pricefiles_manufacturer
 {
     width: 50%;
     float: left;
@@ -10,12 +10,12 @@
     clear: both;
 }
 
-#options_group_manufacturer #wc_pricefiles_ean_code {
+#options_group_manufacturer #woocommerce-pricefiles_ean_code_ean_code {
     background-position: right center;
     background-repeat: no-repeat;
 }
 
-#options_group_manufacturer p#_ean_code_status {
+#options_group_manufacturer p#woocommerce-pricefiles_ean_code_status {
     display: none;
     margin: -11px 0 0 150px;
     padding-top: 0;

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WooCommerce Pricefiles v0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-07-07 12:26:49+0000\n"
+"PO-Revision-Date: 2014-07-10 13:06:08+0000\n"
 "Last-Translator: peter <peter@elmered.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,39 +21,39 @@ msgstr ""
 "X-Textdomain-Support: yes"
 
 #: includes/admin/category-mapping.php:27
-#: includes/admin/category-mapping.php:60
+#: includes/admin/category-mapping.php:65
 #@ pricefiles
 msgid "Category mappings"
 msgstr "Kategorimappning"
 
-#: includes/admin/category-mapping.php:69
-#: includes/admin/options.php:184
+#: includes/admin/category-mapping.php:74
+#: includes/admin/options.php:189
 #@ pricefiles
 msgid "These products will not show up in the pricefile."
 msgstr "Dessa produkter kommer inte att visas i prisfilen."
 
-#: includes/admin/category-mapping.php:80
+#: includes/admin/category-mapping.php:85
 #@ pricefiles
 msgid "Map your shop categories with the pricefile categories."
 msgstr "Koppla de kategorier du har i din shop med de rekommenderade prisfil-kategorierina."
 
-#: includes/admin/category-mapping.php:97
+#: includes/admin/category-mapping.php:102
 #@ pricefiles
 msgid "Shop categories"
 msgstr "Produktkategori i butiken"
 
-#: includes/admin/category-mapping.php:98
+#: includes/admin/category-mapping.php:103
 #@ pricefiles
 msgid "Pricefile categories"
 msgstr "Produktkategori i prisfil"
 
-#: includes/admin/category-mapping.php:110
-#: views/product-data.php:77
+#: includes/admin/category-mapping.php:115
+#: views/product-data.php:109
 #@ pricefiles
 msgid "Select category"
 msgstr "Välj kategori"
 
-#: includes/admin/category-mapping.php:120
+#: includes/admin/category-mapping.php:125
 #@ pricefiles
 msgid "Overwrite existing pricefile categories"
 msgstr "Skriv över existerande prisfilskategorier"
@@ -68,105 +68,100 @@ msgstr "Prisfiler"
 msgid "Pricefiles options"
 msgstr "Inställningar för prisfiler"
 
-#: includes/admin/options.php:152
+#: includes/admin/options.php:157
 #@ pricefiles
 msgid "Pricefile URLs"
 msgstr "Prisfil-URL:er"
 
-#: includes/admin/options.php:162
+#: includes/admin/options.php:167
 #@ pricefiles
 msgid "Pricefile options"
 msgstr "Inställningar för prisfiler"
 
-#: includes/admin/options.php:170
+#: includes/admin/options.php:175
 #@ pricefiles
 msgid "Output prices"
 msgstr "Visa priser"
 
-#: includes/admin/options.php:175
+#: includes/admin/options.php:180
 #@ pricefiles
 msgid "."
 msgstr ""
 
-#: includes/admin/options.php:189
+#: includes/admin/options.php:194
 #@ pricefiles
 msgid "Select shipping methods"
 msgstr "Välj fraktmedoder"
 
-#: includes/admin/options.php:194
-#@ pricefiles
-msgid "Activate this setting to display the content."
-msgstr ""
-
-#: includes/admin/options.php:200
+#: includes/admin/options.php:205
 #@ pricefiles
 msgid "Shipping destination"
 msgstr "Fraktdestination"
 
-#: includes/admin/options.php:205
+#: includes/admin/options.php:210
 #, php-format
 #@ pricefiles
 msgid "The shipping price will be calculated to this address. %sReset address to default%s"
 msgstr "Fraktpriset kommer att beräknas till den här adressen. %sÄterställ adressen till förvarld%s"
 
-#: includes/admin/options.php:214
+#: includes/admin/options.php:219
 #@ pricefiles
 msgid "Advanced options"
 msgstr "Avancerade inställningar"
 
-#: includes/admin/options.php:220
+#: includes/admin/options.php:225
 #@ pricefiles
 msgid "Use cache for pricefile"
 msgstr "Använde cache för prisfilen"
 
-#: includes/admin/options.php:232
-#: includes/admin/options.php:398
+#: includes/admin/options.php:247
+#: includes/admin/options.php:432
 #@ pricefiles
 #@ default
 msgid "Deactivate EAN validation"
 msgstr "Avaktivera koll av EAN"
 
-#: includes/admin/options.php:259
+#: includes/admin/options.php:274
 #@ pricefiles
 msgid "Copy and send to the respective service."
 msgstr "Kopiera och skicka till respektive tjänst."
 
-#: includes/admin/options.php:271
+#: includes/admin/options.php:288
 #@ pricefiles
 msgid "More information:"
 msgstr "Mer information:"
 
-#: includes/admin/options.php:288
+#: includes/admin/options.php:311
 #@ pricefiles
 msgid "Same as shop"
 msgstr "Samma som shop"
 
-#: includes/admin/options.php:289
+#: includes/admin/options.php:312
 #@ pricefiles
 msgid "Including VAT"
 msgstr "Inklusive moms"
 
-#: includes/admin/options.php:290
+#: includes/admin/options.php:313
 #@ pricefiles
 msgid "Excluding VAT"
 msgstr "Exklusive moms"
 
-#: includes/admin/options.php:300
+#: includes/admin/options.php:323
 #@ woocommerce
 msgid "Search for a product&hellip;"
 msgstr ""
 
-#: includes/admin/options.php:315
+#: includes/admin/options.php:338
 #@ woocommerce
 msgid "Add any products you want to exlude from the price list here."
 msgstr ""
 
-#: includes/admin/options.php:375
+#: includes/admin/options.php:397
 #@ default
 msgid "Use cache"
 msgstr ""
 
-#: includes/admin/options.php:386
+#: includes/admin/options.php:408
 #@ default
 msgid "Refresh cache"
 msgstr ""
@@ -176,22 +171,22 @@ msgstr ""
 msgid "Save Changes"
 msgstr ""
 
-#: includes/pricefiles.php:358
+#: includes/pricefiles.php:403
 #@ pricefiles
 msgid "Settings"
 msgstr "Inställningar"
 
-#: includes/pricefiles.php:360
+#: includes/pricefiles.php:405
 #@ pricefiles
 msgid "Info & Support"
 msgstr "Information och support"
 
-#: includes/pricefiles.php:529
+#: includes/pricefiles.php:571
 #@ pricefiles
 msgid "The EAN code is not valid. Please check the numbers."
 msgstr "EAN-koden är inte giltig. Var god kontrollera numren."
 
-#: includes/pricefiles.php:627
+#: includes/pricefiles.php:660
 #, php-format
 #@ pricefiles
 msgid "The Pricefiles plugin needs to be configured to work. Configure it <a href=\"%s\">here</a>"
@@ -219,12 +214,6 @@ msgstr ""
 #: pricefiles.php:0
 #@ pricefiles
 msgid "Peter Elmered"
-msgstr ""
-
-#. translators: plugin header field 'AuthorURI'
-#: pricefiles.php:0
-#@ pricefiles
-msgid "http://extendwp.com"
 msgstr ""
 
 #. translators: plugin header field 'Version'
@@ -268,38 +257,88 @@ msgstr "Tillverkarens artikelnummer"
 msgid "SKU refers to a Stock-keeping unit, a unique identifier for each distinct product and service that can be purchased."
 msgstr "Artikelnummer(SKU, Stock-Keeping Unit), är ett unikt artikelnummer för varje produkt och tjänst som kan köpas."
 
-#: views/product-data.php:40
+#: includes/pricefiles.php:425
+#: views/product-data.php:45
+#@ pricefiles
 #@ default
 msgid "Manufacturer"
-msgstr ""
+msgstr "Tillverkare"
 
-#: views/product-data.php:41
+#: views/product-data.php:50
 #@ pricefiles
 msgid "Select manufacturer"
 msgstr "Välj tillverkare"
 
-#: views/product-data.php:55
+#: views/product-data.php:48
 #@ default
 msgid "Add new Manufacturers"
 msgstr ""
 
-#: views/product-data.php:76
+#: views/product-data.php:104
 #@ default
 msgid "Category"
 msgstr ""
 
-#: includes/admin/category-mapping.php:81
+#: includes/admin/category-mapping.php:86
 #@ pricefiles
 msgid "This will automattically sync the categories. Everytime a category of a product is added or changed the coresponding category will be added to the pricefiles automatically."
 msgstr "Det här kommer automatiskt synkronisera kategorierna. Varje gång en kategori läggs till eller ändras på en produkt kommer den kopplade kategorin här läggas till i prisfilen automatiskt."
 
-#: includes/admin/options.php:179
+#: includes/admin/options.php:184
 #@ pricefiles
 msgid "Exclude products from pricefile"
 msgstr "Exkludera produkter från prisfil"
 
-#: includes/admin/options.php:237
+#: includes/admin/options.php:199
 #@ pricefiles
-msgid "Inactive the automatic EAN code validation when editong products."
+msgid "Select the shipping methods that will be available in the pricefile. The plugin will automatically select the cheapest option."
+msgstr "Välj de fraktmetoder som ska vara tillgängliga i prisfilen. Tillägget väljer automatiskt det billigaste alternativet bland dessa."
+
+#: includes/admin/options.php:235
+#@ pricefiles
+msgid "Debug mode"
+msgstr "Debug-läge"
+
+#: includes/admin/options.php:240
+#@ pricefiles
+msgid "Output debug messages. Only check this when debugging."
+msgstr "Visa debug-meddelanden. Aktivera bara när du felsöker."
+
+#: includes/admin/options.php:252
+#@ pricefiles
+msgid "Inactive the automatic EAN code validation when editing products."
+msgstr "Inaktivera den automatiska valideringen av EAN-kod när du editerar produkter."
+
+#: includes/admin/options.php:420
+#@ default
+msgid "Use debug mode"
 msgstr ""
+
+#. translators: plugin header field 'AuthorURI'
+#: pricefiles.php:0
+#@ pricefiles
+msgid "http://elmered.com"
+msgstr ""
+
+#: pricefiles.php:80
+#, php-format
+#@ pricefiles
+msgid "The Pricefiles plugin requires the plugin %sWooCommerce%s to work. Please install WooCommerce or %sdeactive%s this plugin."
+msgstr "Prisfiltillägget kräver att tillägget WooCommerce är aktiverat för att fungera. Var god installera WooCommerce eller %sinaktivera%s det här pluginet."
+
+#: pricefiles.php:85
+#, php-format
+#@ pricefiles
+msgid "WooCommerce seams to be installed but not activated. %sClick here to activate%s."
+msgstr "WooCommerce verkar vara installerat, men inte aktivera. %sKlicka här för att aktivera%s."
+
+#: pricefiles.php:103
+#@ pricefiles
+msgid "The Pricefiles plugin was deactivated."
+msgstr "Prisfiltillägget blev inaktiverat."
+
+#: pricefiles.php:115
+#@ pricefiles
+msgid "WooCommerce was activated."
+msgstr "WooCommerce blev aktiverat"
 

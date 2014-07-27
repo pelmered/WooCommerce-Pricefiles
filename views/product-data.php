@@ -13,7 +13,7 @@ global $woocommerce, $post;
         'description' => __('EAN is the international standard for product barcodes. Type in the whole 8 or 13 digit number below the product barcode.', $this->plugin_slug)
     )); ?>
 
-    <p id="_ean_code_status"></p>
+    <p id="<?php echo WC_PRICEFILES_PLUGIN_SLUG; ?>_ean_code_status"></p>
     
     <?php woocommerce_wp_text_input(array(
         'id' => WC_PRICEFILES_PLUGIN_SLUG.'_sku_manufacturer', 
@@ -33,86 +33,57 @@ global $woocommerce, $post;
     $attribute_taxonomy_name = $woocommerce->attribute_taxonomy_name( $manufacturer->attribute_name );
 
     // Make sure it exists
-    if ( taxonomy_exists( $attribute_taxonomy_name ) ) :
+    if ( taxonomy_exists( $attribute_taxonomy_name ) ) 
+    {
         $current = get_post_meta( $post->ID, WC_PRICEFILES_PLUGIN_SLUG.'_manufacturer', true );
     
-    //use woocommerce_wp_select() ?
-    
-    
-    $manufacturer_field = array(
-        'id'    => WC_PRICEFILES_PLUGIN_SLUG.'_manufacturer',
-        'label' => __('Manufacturer'),
-        'class' => 'chosen-select',
-        //'wrapper_class' => '',
-        'options' => array()
-    );
-    
-    $all_terms = get_terms($attribute_taxonomy_name, 'orderby=name&hide_empty=0');
-    if ($all_terms) {
-        foreach ($all_terms as $term) {
-            //echo '<option value="' . esc_attr($term->slug) . '" ' . selected($term->slug, $current, false) . '>' . $term->name . '</option>';
-            $field['options'][$term->slug] = $term->name;
+        $manufacturer_field = array(
+            'id'    => WC_PRICEFILES_PLUGIN_SLUG.'_manufacturer',
+            'label' => __('Manufacturer'),
+            'class' => 'chosen-select',
+            //'wrapper_class' => '',
+            'options' => array()
+        );
+
+        $all_terms = get_terms($attribute_taxonomy_name, 'orderby=name&hide_empty=0');
+        if ($all_terms) 
+        {
+            foreach ($all_terms as $term) 
+            {
+                //echo '<option value="' . esc_attr($term->slug) . '" ' . selected($term->slug, $current, false) . '>' . $term->name . '</option>';
+                $manufacturer_field['options'][$term->slug] = $term->name;
+            }
         }
+
+        woocommerce_wp_select($manufacturer_field);
     }
     
-    woocommerce_wp_select($manufacturer_field);
-    
-    echo 'asdas';
-    ?>
-    <p class="form-field _manufacturer_field ">
-        <label for="_manufacturer"><?php _e('Manufacturer'); ?></label>
-        <select class="chosen-select" name="_manufacturer" id="wc_pricefiles_manufacturer" data-placeholder="<?php _e('Select manufacturer', $this->plugin_slug); ?>" >
-            <option value=""></option>
-            <?php
-            $all_terms = get_terms($attribute_taxonomy_name, 'orderby=name&hide_empty=0');
-            if ($all_terms) {
-                foreach ($all_terms as $term) {
-                    echo '<option value="' . esc_attr($term->slug) . '" ' . selected($term->slug, $current, false) . '>' . $term->name . '</option>';
-                }
-            }
-            ?>
-        </select>
-        <?php /*
-        <img class="help_tip" src="<?php echo WC()->plugin_url(); ?>/assets/images/help.png" height="16" width="16">
-        */ ?>
-        <a style="display: block; clear: both; /*margin-left: 150px*/" href="<?php echo admin_url( 'edit-tags.php?taxonomy=pa_manufacturer&post_type=product'); ?>"><?php _e('Add new Manufacturers'); ?></a>        
-        
-    </p>
-<?php endif; ?>
-<?php 
-    $manufacturer = $this->get_manufacturer_attribute_taxonomy();
-
-    // Get name of taxonomy we're now outputting (pa_xxx)
-    $attribute_taxonomy_name = $woocommerce->attribute_taxonomy_name( $manufacturer->attribute_name );
-
-    global $wc_pricefiles_globals;
-    //$pricelist_cats = $wc_pricefiles_globals['wc_pricefiles_categories'];
     
     $pricelist_cats = WC_Pricefiles::get_instance()->get_category_list();
     
     // Ensure it exists 
-    if ( taxonomy_exists( $attribute_taxonomy_name ) ) :        
+    if ( !(empty($pricelist_cats)) ) 
+    {
 
         $current = get_post_meta( $post->ID, '_pricelist_cat', true );
-?>
-    <p class="form-field _pricelist_cat_field ">
-        <label for="_manufacturer"><?php _e('Category'); ?></label>
-        <select class="chosen-select" name="_pricelist_cat" id="wc_pricefiles_pricelist_cat" data-placeholder="<?php _e('Select category', $this->plugin_slug); ?>" >
-            <option value=""></option>
-            <?php
-            $all_terms = get_terms($attribute_taxonomy_name, 'orderby=name&hide_empty=0');
-            if ($all_terms) {
-                foreach ($pricelist_cats as $id => $name) {
-                    echo '<option value="' . esc_attr($id) . '" ' . selected($id, $current, false) . '>' . $name . '</option>';
-                }
-            }
-            ?>
-        </select>
-       
-   </p>
+        
+        $category_field = array(
+            'id'    => WC_PRICEFILES_PLUGIN_SLUG.'_pricelist_cat',
+            'label' => __('Category'),
+            'class' => 'chosen-select',
+            //'wrapper_class' => '',
+            'options' => array()
+        );
 
-    <?php endif; ?>
+        foreach ($pricelist_cats as $id => $name) {
+            $category_field['options'][esc_attr($id)] = esc_attr($name);
+        }
+
+        woocommerce_wp_select($category_field);
+    }
    
-   <?php do_action( WC_PRICEFILES_PLUGIN_SLUG . '_product_options'); ?>
+    do_action( WC_PRICEFILES_PLUGIN_SLUG . '_product_options'); 
+    
+    ?>
 
 </div>
