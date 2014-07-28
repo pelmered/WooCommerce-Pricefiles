@@ -16,6 +16,10 @@ The first version supports Prisjakt/Pricehunt and Pricerunner but many more are 
 
 Planned serives include: Google Shopping / Google Merchant Center and Kelkoo.
 
+= Development =
+
+All development of this plugin occurs on [GitHub](https://github.com/pelmered/https://github.com/pelmered/WooCommerce-Pricefiles "WooCommerce Pricefiles on GitHub"). Please help me develop this by forking and sending pull requests.
+
 == Installation ==
 
 1. Upload the plugin foler to the `/wp-content/plugins/` directory in your WordPress installation.
