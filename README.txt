@@ -1,7 +1,7 @@
-=== WooCommerce-Pricefiles ===
+=== WooCommerce Pricefiles ===
 Contributors: pekz0r
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8L2PHLURJMC8Y
-Tags: WooCommerce, Pricefiles, Prisjakt, Pricerunner, Pricehunt
+Tags: WooCommerce, Price comparison, Pricefiles, Prisjakt, Pricerunner, Pricespy, Google Shopping, Google Merchant Center, Kelkoo
 Requires at least: 3.5.1
 Tested up to: 3.9
 Stable tag: 0.1.1
@@ -12,9 +12,8 @@ This plugins automates the generation of pricefiles for price comparison service
 
 This plugins automates the generation of pricefiles for price comparison services. 
 
-The first version supports Prisjakt/Pricehunt and Pricerunner but many more are planned and the plugin is easy to extend to support any service.
+The first version supports Prisjakt/Pricespy and Pricerunner and support for additional services is planned for future releases, including Google Shopping/Google Merchant Center and Kelkoo. The plugin is also easy to extend to support any service(more information on that will come).
 
-Planned serives include: Google Shopping / Google Merchant Center and Kelkoo.
 
 = Development =
 
