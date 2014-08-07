@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: WooCommerce, Price comparison, Pricefiles, Prisjakt, Pricerunner, Pricespy, Google Shopping, Google Merchant Center, Kelkoo
 Requires at least: 3.5.1
 Tested up to: 3.9
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 
 This plugins automates the generation of pricefiles for price comparison services.
 
@@ -32,9 +32,12 @@ All development of this plugin occurs on [GitHub](https://github.com/pelmered/ht
 
 == Upgrade Notice ==
 
-Please update as soon as possible. This update contains critical bugfixes.
+Please keep the plugin up to date to ensure that is functions properly.
 
 == Changelog ==
+
+= 0.1.2 =
+Fix: Do not convert 0 into "" (empty string) for prices in pricefile(i.e. free shipping)
 
 = 0.1.1 =
 Bugfixes

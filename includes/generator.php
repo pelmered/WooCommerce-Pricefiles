@@ -213,7 +213,7 @@ abstract class WC_Pricefile_Generator
 
     public static function format_value($value)
     {
-        if (empty($value))
+	if (empty($value) && $value !== 0 )
         {
             $value = '';
         }
