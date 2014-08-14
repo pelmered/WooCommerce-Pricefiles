@@ -19,8 +19,6 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
-include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-
 /*
 //For debuging
 error_reporting(E_ALL);
