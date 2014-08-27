@@ -103,17 +103,17 @@ class WC_Pricefiles
         {
             if(!empty($_GET['wcpf-deactivate-woocommerce-pricefiles']) && $_GET['wcpf-deactivate-woocommerce-pricefiles'] == 1)
             {
-                add_action('init', 'wpcf_deactivate_plugin');
-                add_action('admin_notices', 'wpcf_deactivate_plugin_notice');
+                add_action('init', array($this, 'deactivate_plugin'));
+                add_action('admin_notices', array($this, 'deactivate_plugin_notice'));
             }
             if(!empty($_GET['wcpf-activate-woocommerce']) && $_GET['wcpf-activate-woocommerce'] == 1)
             {
-                add_action('init', 'wpcf_activate_woocommerce');
-                add_action('admin_notices', 'wpcf_activate_woocommerce_notice');
+                add_action('init', array($this, 'activate_woocommerce'));
+                add_action('admin_notices', array($this, 'activate_woocommerce_notice'));
             }
             else
             {
-                add_action('admin_notices', 'wcpf_woocommerce_not_active_notice');
+                add_action('admin_notices', array($this, 'woocommerce_not_active_notice'));
             }
 
             return false;
