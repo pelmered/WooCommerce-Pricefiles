@@ -393,8 +393,6 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
     function shipping_destination_callback($args)
     {
-        global $wc_pricefiles, $woocommerce;
-        
         echo '<p>' . $args['description'] . '</p>';
 
         echo '<div id="shipping-destination">';
@@ -406,7 +404,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             global $wc_pricefiles_globals;
             $shipping_destination_values = $wc_pricefiles_globals['default_shipping_destination'];
         }
-        $shipping_fields = $wc_pricefiles->get_shipping_destination_fields();
+        $shipping_fields = WC_Pricefiles()->get_shipping_destination_fields();
         
         foreach ($shipping_fields as $key => $field) {
             $field['required'] = 0;

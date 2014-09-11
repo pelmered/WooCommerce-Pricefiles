@@ -19,7 +19,7 @@ class WC_Pricefiles
      * @since    0.1.0
      * @var     string
      */
-    const VERSION = '0.1.3';
+    const VERSION = '0.1.4';
 
     /**
      * Unique identifier for your plugin.
@@ -58,11 +58,11 @@ class WC_Pricefiles
         }
     }
 
-    function load_plugin()
+    public static function load_plugin()
     {
-        if($this->check_dependecies())
+        if(self::check_dependencies())
         {
-            return $this->get_instance();
+            return self::get_instance();
         }
         else
         {
@@ -88,7 +88,7 @@ class WC_Pricefiles
         return self::$instance;         
     }
 
-    function check_dependencies()
+    public static function check_dependencies()
     {   
         //Needed for is_plugin_active() call
         include_once( ABSPATH . 'wp-admin/includes/plugin.php' );

@@ -32,6 +32,9 @@ abstract class WC_Pricefile_Generator
         
         $this->pricefile_slug = $pricefile_slug;
         
+        require_once( WP_PRICEFILES_PLUGIN_PATH . 'includes/admin.php' );
+        require_once( WP_PRICEFILES_PLUGIN_PATH . 'includes/admin/options.php' );
+
         $this->options = get_option(WC_PRICEFILES_PLUGIN_SLUG . '_options', WC_Pricefiles_Admin_Options::default_pricelist_options());
         
         //var_dump($this->options);
