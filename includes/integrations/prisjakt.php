@@ -104,7 +104,7 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
                 }
 
                 //Category
-                echo $this::format_value($this->get_categories($product_id));
+                echo $this::format_value($this->get_categories($product));
 
 
                 //Price
