@@ -60,7 +60,7 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
                 $product_meta = get_post_meta($product_id);
 
                 //Category
-                echo $this::format_value($this->get_categories($product_id));
+                echo $this::format_value($this->get_categories($product));
 
                 //Product SKU
                 echo $this::format_value($product->get_sku());

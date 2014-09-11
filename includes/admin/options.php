@@ -21,6 +21,8 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         add_action('admin_enqueue_scripts', array($this, 'admin_options_styles'));
 
         add_action('admin_init', array($this, 'initialize_pricefile_options'));
+        
+        require_once dirname(WC_PLUGIN_FILE).'/includes/wc-template-functions.php';
 
         parent::__construct($plugin_slug);
     }
@@ -392,7 +394,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
     function shipping_destination_callback($args)
     {
         global $wc_pricefiles, $woocommerce;
-
+        
         echo '<p>' . $args['description'] . '</p>';
 
         echo '<div id="shipping-destination">';
@@ -404,9 +406,8 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             global $wc_pricefiles_globals;
             $shipping_destination_values = $wc_pricefiles_globals['default_shipping_destination'];
         }
-
         $shipping_fields = $wc_pricefiles->get_shipping_destination_fields();
-
+        
         foreach ($shipping_fields as $key => $field) {
             $field['required'] = 0;
             woocommerce_form_field($this->plugin_slug . '_options[shipping_destination][' . $key . ']', $field, $shipping_destination_values[$key]);

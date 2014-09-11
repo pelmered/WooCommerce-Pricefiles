@@ -258,19 +258,22 @@ abstract class WC_Pricefile_Generator
         }
     }
 
-    public function get_categories($product_id)
+    public function get_categories($product)
     {
         global $wc_pricefiles_globals;
+        
+        $product_id = $product->id;
 
         $cat = get_post_meta($product_id, '_pricelist_cat', true);
-
+        
         if ($cat && !empty($wc_pricefiles_globals['wc_pricefiles_categories'][$cat]))
         {
             return $wc_pricefiles_globals['wc_pricefiles_categories'][$cat];
         }
 
+        echo $product_id;
         $terms = get_the_terms($product_id, 'product_cat');
-
+        
         if(is_wp_error( $terms ) || count($terms) == 0)
         {
             return '';
