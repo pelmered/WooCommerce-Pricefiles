@@ -36,6 +36,10 @@ Please keep the plugin up to date to ensure that is functions properly.
 
 == Changelog ==
 
+= 0.1.3 =
+Fix: Categories does not show in pricefile
+Fix: WooCommerce 2.2 compatibility
+
 = 0.1.2 =
 Fix: Do not convert 0 into "" (empty string) for prices in pricefile(i.e. free shipping)
 
