@@ -19,7 +19,7 @@ class WC_Pricefiles
      * @since    0.1.0
      * @var     string
      */
-    const VERSION = '0.1.4';
+    const VERSION = '0.1.5';
 
     /**
      * Unique identifier for your plugin.
@@ -48,7 +48,7 @@ class WC_Pricefiles
     private function __construct()
     {
 
-        add_action('init', array($this, 'init'), 2);
+        add_action('init', array($this, 'init'), 20);
 
         // Load plugin text domain
         add_action('init', array($this, 'load_plugin_textdomain'));

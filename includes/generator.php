@@ -274,7 +274,6 @@ abstract class WC_Pricefile_Generator
             return $wc_pricefiles_globals['wc_pricefiles_categories'][$cat];
         }
 
-        echo $product_id;
         $terms = get_the_terms($product_id, 'product_cat');
         
         if(is_wp_error( $terms ) || count($terms) == 0)
