@@ -19,7 +19,7 @@ class WC_Pricefiles
      * @since    0.1.0
      * @var     string
      */
-    const VERSION = '0.1.5';
+    const VERSION = '0.1.6';
 
     /**
      * Unique identifier for your plugin.
