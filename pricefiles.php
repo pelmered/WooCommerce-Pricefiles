@@ -19,12 +19,12 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
-/*
+
 //For debuging
 error_reporting(E_ALL);
 ini_set('display_startup_errors', 1);
 ini_set('display_errors', 1);
-*/
+
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -39,12 +39,12 @@ if ( ! class_exists( 'WC_Pricefiles' ) )
     require_once( WP_PRICEFILES_PLUGIN_PATH .'includes/pricefiles.php' );
 }
 
-add_action( 'plugins_loaded', array('WC_Pricefiles', 'load_plugin') );    
+add_action( 'plugins_loaded', 'WC_Pricefiles' );    
 
 // Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
-register_activation_hook(__FILE__, array('WC_Pricefiles', 'activate'));
+register_activation_hook(__FILE__, array(WC_Pricefiles(), 'activate'));
 //Deletes all data if plugin deactivated
-register_deactivation_hook(__FILE__, array('WC_Pricefiles', 'deactivate'));
+register_deactivation_hook(__FILE__, array(WC_Pricefiles(), 'deactivate'));
 
 function WC_Pricefiles()
 {

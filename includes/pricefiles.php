@@ -47,7 +47,6 @@ class WC_Pricefiles
      */
     private function __construct()
     {
-
         add_action('init', array($this, 'init'), 20);
 
         // Load plugin text domain
@@ -55,18 +54,6 @@ class WC_Pricefiles
 
         if(is_admin())
         {
-        }
-    }
-
-    public static function load_plugin()
-    {
-        if(self::check_dependencies())
-        {
-            return self::get_instance();
-        }
-        else
-        {
-            return false;
         }
     }
 
@@ -88,12 +75,13 @@ class WC_Pricefiles
         return self::$instance;         
     }
 
-    public static function check_dependencies()
+    public function check_dependencies()
     {   
         //Needed for is_plugin_active() call
         include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
-        if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) 
+        if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) 
+        // if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) 
         {
             require_once( WP_PRICEFILES_PLUGIN_PATH .'includes/pricefiles.php' );
             
@@ -101,19 +89,25 @@ class WC_Pricefiles
         } 
         else
         {
+            $misc = new WC_Pricefiles_Misc();
+            
             if(!empty($_GET['wcpf-deactivate-woocommerce-pricefiles']) && $_GET['wcpf-deactivate-woocommerce-pricefiles'] == 1)
             {
-                add_action('init', array($this, 'deactivate_plugin'));
-                add_action('admin_notices', array($this, 'deactivate_plugin_notice'));
+                die(plugin_basename(__FILE__));
+        
+                add_action('init', array($misc, 'deactivate_plugin'));
+                add_action('admin_notices', array($misc, 'deactivate_plugin_notice'));
             }
+            /*
             if(!empty($_GET['wcpf-activate-woocommerce']) && $_GET['wcpf-activate-woocommerce'] == 1)
             {
-                add_action('init', array($this, 'activate_woocommerce'));
-                add_action('admin_notices', array($this, 'activate_woocommerce_notice'));
+                add_action('init', array($misc, 'activate_woocommerce'));
+                add_action('admin_notices', array($misc, 'activate_woocommerce_notice'));
             }
+            */
             else
             {
-                add_action('admin_notices', array($this, 'woocommerce_not_active_notice'));
+                add_action('admin_notices', array($misc, 'woocommerce_not_active_notice'));
             }
 
             return false;
@@ -123,6 +117,13 @@ class WC_Pricefiles
     
     function init()
     {
+        require 'misc.php';
+        
+        if(!$this->check_dependencies())
+        {
+            return false;
+        }
+        
         // Load public-facing style sheet and JavaScript.
         //add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
         //add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
@@ -800,52 +801,6 @@ class WC_Pricefiles
         //return array_merge($up, $pricelist_cats);
     }
 
-
-    
-    function wcpf_woocommerce_not_active_notice()
-    {
-        ?>
-        <div class="updated fade">
-            <p><?php 
-            printf(__('The Pricefiles plugin requires the plugin %sWooCommerce%s to work. Please install WooCommerce or %sdeactive%s this plugin.', WC_PRICEFILES_PLUGIN_SLUG), 
-                '<a href="http://wordpress.org/plugins/woocommerce/">', '</a>',
-                '<a href="?deactivate-woocommerce-pricefiles=1">', '</a>'
-            ); ?></p>
-            <?php if( file_exists(dirname(plugin_dir_path( __FILE__ )).'/woocommerce/woocommerce.php') ) : ?>
-            <p><?php printf(__('WooCommerce seams to be installed but not activated. %sClick here to activate%s.', WC_PRICEFILES_PLUGIN_SLUG),
-                '<a href="?wcpf-activate-woocommerce=1">','</a>'
-            ); ?></p>
-            
-            
-            <?php endif; ?>
-        </div>
-        <?php
-    }
-    
-    function wpcf_deactivate_plugin()
-    {
-        deactivate_plugins( plugin_basename( __FILE__ ) );
-    }
-    function wpcf_deactivate_plugin_notice()
-    {
-        ?>
-        <div class="updated fade">
-            <p><?php _e('The Pricefiles plugin was deactivated.', WC_PRICEFILES_PLUGIN_SLUG); ?></p>
-        </div>
-        <?php
-    }
-    function wpcf_activate_woocommerce()
-    {
-        deactivate_plugins( plugin_basename( __FILE__ ) );
-    }
-    function wpcf_activate_woocommerce_notice()
-    {
-        ?>
-        <div class="updated fade">
-            <p><?php _e('WooCommerce was activated.', WC_PRICEFILES_PLUGIN_SLUG); ?></p>
-        </div>
-        <?php
-    }
 
 
 }
