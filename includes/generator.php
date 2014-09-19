@@ -28,7 +28,9 @@ abstract class WC_Pricefile_Generator
     {
         global $wc_pricefiles_globals;
 
-        set_time_limit(0);
+        if(!@set_time_limit(0)) {
+            //TODO: Debug log: Could not set time limit
+        }
         
         $this->pricefile_slug = $pricefile_slug;
         
