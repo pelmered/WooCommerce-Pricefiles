@@ -73,13 +73,15 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
             <div id="icon-themes" class="icon32"></div>
             <h2><?php echo $tabs[$first_key]['name'] ?></h2>
-        <?php settings_errors(); ?>
+            <?php settings_errors(); ?>
 
             <h2 class="nav-tab-wrapper">
         <?php foreach ($tabs AS $slug => $name) : ?>
                     <a href="?page=<?php echo $this->plugin_slug; ?>&tab=<?php echo $slug; ?>" class="nav-tab <?php echo $active_tab == $slug ? 'nav-tab-active' : ''; ?>"><?php echo $name['name']; ?></a>
                 <?php endforeach; ?>
             </h2>
+            
+            <?php $this->donation_button(); ?>
 
             <form method="post" action="options.php">
         <?php
@@ -138,7 +140,6 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
         $this->submit_button();
         
-        
         settings_fields($this->plugin_slug . '_advanced_options');
         do_settings_sections($this->plugin_slug . '_advanced_options_section');
 
@@ -164,12 +165,15 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             array($this, 'pricefile_display_callback'), // Callback used to render the description of the section
             $this->plugin_slug . '_urls_section' // Page on which to add this section of options
         );
+        /*
         add_settings_section(
             $this->plugin_slug . '_donate', 
             __('Donate', $this->plugin_slug), 
             array($this, 'donation_button'), 
             $this->plugin_slug . '_donate_section'
         );
+        */
+        
         /*
          * Pricefiles options
          */
