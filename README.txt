@@ -17,7 +17,7 @@ The first version supports Prisjakt/Pricespy and Pricerunner and support for add
 
 = Development =
 
-All development of this plugin occurs on [GitHub](https://github.com/pelmered/https://github.com/pelmered/WooCommerce-Pricefiles "WooCommerce Pricefiles on GitHub"). Please help me develop this by forking and sending pull requests.
+All development of this plugin occurs on [GitHub](https://github.com/pelmered/WooCommerce-Pricefiles "WooCommerce Pricefiles on GitHub"). Please help me develop this by forking and sending pull requests.
 
 == Installation ==
 
