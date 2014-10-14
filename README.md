@@ -3,6 +3,7 @@ WooCommerce-Pricefiles
 
 Generate pricefiles for integration with price comparison services.
 
+This plugin on WordPress.org: https://wordpress.org/plugins/woocommerce-pricefiles/
 
 
 ###TODO
