@@ -19,7 +19,7 @@ class WC_Pricefiles
      * @since    0.1.0
      * @var     string
      */
-    const VERSION = '0.1.8';
+    const VERSION = '0.1.9';
 
     /**
      * Unique identifier for your plugin.
@@ -275,9 +275,15 @@ class WC_Pricefiles
             return;
         }
 
-        $cat = $this->get_deepest_child_category(
-            wp_get_post_terms($post_id, 'product_cat')
-        );
+        $categories = wp_get_post_terms($post_id, 'product_cat');
+        
+        if( empty($categories))
+        {
+            //No product categories found
+            return;
+        }
+        
+        $cat = $this->get_deepest_child_category($categories);
 
         $cats_map = get_option($this->plugin_slug . '_category_mappings');
         $pl_cat = $cats_map[$cat->term_id];
@@ -289,6 +295,12 @@ class WC_Pricefiles
     {
         $maxId = 0;
         $maxKey = 0;
+
+        if( empty($categories))
+        {
+            return false;
+        }
+
         foreach ($categories as $key => $value)
         {
             if ($value->parent > $maxId)
@@ -297,6 +309,7 @@ class WC_Pricefiles
                 $maxKey = $key;
             }
         }
+
         return $categories[$maxKey];
     }
 

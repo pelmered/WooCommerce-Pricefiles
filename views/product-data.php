@@ -30,7 +30,7 @@ global $woocommerce, $post;
     $manufacturer = $this->get_manufacturer_attribute_taxonomy();
     
     // Get name of taxonomy we're now outputting (pa_xxx)
-    $attribute_taxonomy_name = $woocommerce->attribute_taxonomy_name( $manufacturer->attribute_name );
+    $attribute_taxonomy_name = wc_attribute_taxonomy_name( $manufacturer->attribute_name );
 
     // Make sure it exists
     if ( taxonomy_exists( $attribute_taxonomy_name ) ) 
