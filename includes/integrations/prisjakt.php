@@ -32,7 +32,7 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
         if ($loop->have_posts())
         {
             //Output headers
-            echo 'Produktnamn;Art.nr.;Tillverkare;Tillverkar-SKU;Kategori;Pris inkl.moms;Frakt;Produkt-URL;Bild-URL;Lagerstatus' . "\n";
+            echo 'Produktnamn;Art.nr.;EAN;Tillverkare;Tillverkar-SKU;Kategori;Pris inkl.moms;Frakt;Produkt-URL;Bild-URL;Lagerstatus' . "\n";
 
             //Get list of excluded products
             if (empty($this->options['exclude_ids']))
