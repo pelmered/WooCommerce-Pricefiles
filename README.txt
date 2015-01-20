@@ -12,8 +12,9 @@ This plugins automates the generation of pricefiles and product feeds for price 
 
 This plugins automates the generation of pricefiles for price comparison services. 
 
-The first version supports Prisjakt/Pricespy and Pricerunner and support for additional services is planned for future releases, including Google Shopping/Google Merchant Center and Kelkoo. The plugin is also easy to extend to support any service(more information on that will come).
+The plugin supports Prisjakt/Pricespy and Pricerunner. Support for Google Shopping/Google Merchant Center and Kelkoo was planned, but is on hold due to limited demand. If you want this, send me a message and if enough people do, I will reconsider.
 
+This plugin required PHP version 5.3+.
 
 = Development =
 
