@@ -13,6 +13,26 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
 {
 
     /**
+     * Generates header for CSV-file
+     * 
+     * @since    0.1.10
+     */
+    function get_header()
+    {
+        $columns = array(
+            'Produktnamn','Art.nr.','EAN','Tillverkare','Tillverkar-SKU','Kategori','Pris inkl.moms','Frakt','Produkt-URL','Bild-URL','Lagerstatus'
+        );
+        
+        $header = '';
+        foreach($columns AS $c)
+        {
+            $header .= self::VALUE_ENCLOSER_BEFORE . $c . self::VALUE_ENCLOSER_AFTER . self::VALUE_SEPARATOR;
+        }
+        
+        return trim($header, self::VALUE_SEPARATOR)."\n";
+    }
+
+    /**
      * Implements WC_Pricefile_Generator->generate_pricefile)= and  genereates the pricefile
      * 
      * @since    0.1.0
@@ -32,7 +52,7 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
         if ($loop->have_posts())
         {
             //Output headers
-            echo 'Produktnamn;Art.nr.;EAN;Tillverkare;Tillverkar-SKU;Kategori;Pris inkl.moms;Frakt;Produkt-URL;Bild-URL;Lagerstatus' . "\n";
+            echo  $this->get_header();
 
             //Get list of excluded products
             if (empty($this->options['exclude_ids']))
@@ -79,11 +99,10 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
                 echo $this::format_value($this::get_manufacturer($product_meta));
 
                 //Manufacturer SKU/Product id
-                echo $this::format_value($this::get_sku_manufacturer($product_meta));
+                echo $this::format_value($this::get_manufacturer_sku($product_meta));
 
                 //Category
                 echo $this::format_value($this->get_categories($product));
-
 
                 //Price
                 echo $this::format_value($product->get_price_including_tax(1));

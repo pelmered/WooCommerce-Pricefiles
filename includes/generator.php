@@ -24,6 +24,11 @@ abstract class WC_Pricefile_Generator
     public $price_type = null;
     public $pricefile_slug = null;
 
+    //Default CSV separators
+    const VALUE_SEPARATOR = ';';
+    const VALUE_ENCLOSER_BEFORE = '"';
+    const VALUE_ENCLOSER_AFTER = '"';
+
     public function __construct($pricefile_slug)
     {
         global $wc_pricefiles_globals;
@@ -218,16 +223,14 @@ abstract class WC_Pricefile_Generator
 
     public static function format_value($value)
     {
-	if (empty($value) && $value !== 0 && $value !== 0.0 )
+		if (empty($value) && $value !== 0 && $value !== 0.0 )
         {
             $value = '';
         }
         
-        return '"' . addcslashes($value, '"\\') . '";';
+        $c = get_called_class();
 
-        //return str_replace(';', '\;', esc_attr($value.'"\\')).';';
-        //return preg_replace('', $replacement, $subject)
-        //(';', '\;', esc_attr($value)).';';
+        return $c::VALUE_ENCLOSER_BEFORE . addcslashes($value, '"\\') . $c::VALUE_ENCLOSER_AFTER . $c::VALUE_SEPARATOR;
     }
 
     public function get_price($product)
@@ -451,7 +454,7 @@ abstract class WC_Pricefile_Generator
      * @param array $product_meta Return value from get_post_meta()
      * @return string The manufacturer SKU or an empty string if it's missing.
      */
-    protected static function get_sku_manufacturer($product_meta)
+    protected static function get_manufacturer_sku($product_meta)
     {
         if (isset($product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0]))
         {

@@ -11,6 +11,25 @@
  */
 class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
 {
+    const VALUE_SEPARATOR = ',';
+    const VALUE_ENCLOSER_BEFORE = '"';
+    const VALUE_ENCLOSER_AFTER = '"';
+    
+    function get_header()
+    {
+        $columns = array(
+            'Category','SKU','Price','Product URL','Product Name','Manufacturer SKU','Manufacturer','EAN','Description','Graphic URL','In Stock','Stock Level','Delivery Time','Shippingcost'
+        );
+        
+        $header = '';
+        foreach($columns AS $c)
+        {
+            $header .= self::VALUE_ENCLOSER_BEFORE . $c . self::VALUE_ENCLOSER_AFTER . self::VALUE_SEPARATOR;
+        }
+        
+        return $header."\n";
+        //return trim($header, self::VALUE_SEPARATOR)."\n";
+    }
 
     /**
      * Implements WC_Pricefile_Generator->generate_pricefile)= and  genereates the pricefile
@@ -32,7 +51,7 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
         if ($loop->have_posts())
         {
             //Output headers
-            echo '"Category";"SKU";"Price";"Product URL";"Product Name";"Manufacturer SKU";"Manufacturer";"EAN";"Description";"Graphic URL";"In Stock";"Stock Level";"Delivery Time";"Shippingcost"' . "\n";
+            echo  $this->get_header();
 
             //Get list of excluded products
             $excluded = $this->options['exclude_ids'];
@@ -75,7 +94,7 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
                 echo $this::format_value($product_data->post_title);
 
                 //Manufacturer SKU/Product id
-                echo $this::format_value($this->get_sku_manufacturer($product_meta));
+                echo $this::format_value($this->get_manufacturer_sku($product_meta));
                 
                 //Manufacturer name
                 echo $this::format_value($this->get_manufacturer($product_meta));
