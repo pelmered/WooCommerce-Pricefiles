@@ -32,7 +32,7 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
         if ($loop->have_posts())
         {
             //Output headers
-            echo '"Category";"SKU";"Price";"Product URL";"Product Name";"Manufacturer SKU";"Manufacturer";"EAN";"Description,Graphic URL";"In Stock";"Stock Level";"Delivery Time";"Shippingcost"' . "\n";
+            echo '"Category";"SKU";"Price";"Product URL";"Product Name";"Manufacturer SKU";"Manufacturer";"EAN";"Description";"Graphic URL";"In Stock";"Stock Level";"Delivery Time";"Shippingcost"' . "\n";
 
             //Get list of excluded products
             $excluded = $this->options['exclude_ids'];
