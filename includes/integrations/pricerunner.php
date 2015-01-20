@@ -75,31 +75,13 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
                 echo $this::format_value($product_data->post_title);
 
                 //Manufacturer SKU/Product id
-                if(empty($product_meta['_sku_manufacturer'][0]))
-                {
-                    echo $this::format_value('');
-                }
-                else {
-                    echo $this::format_value($product_meta['_sku_manufacturer'][0]);
-                }
+                echo $this::format_value($this->get_sku_manufacturer($product_meta));
                 
                 //Manufacturer name
-                if(empty($product_meta['_manufacturer'][0]))
-                {
-                    echo $this::format_value('');
-                }
-                else {
-                    echo $this::format_value($product_meta['_manufacturer'][0]);
-                }
+                echo $this::format_value($this->get_manufacturer($product_meta));
 
                 //EAN code
-                if(empty($product_meta['_ean_code'][0]))
-                {
-                    echo $this::format_value('');
-                }
-                else {
-                    echo $this::format_value($product_meta['_ean_code'][0]);
-                }
+                echo $this::format_value($this->get_ean($product_meta));
 
                 //Discription
                 echo $this::format_value(strip_tags($product_data->post_excerpt));

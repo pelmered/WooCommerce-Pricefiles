@@ -269,7 +269,7 @@ abstract class WC_Pricefile_Generator
         
         $product_id = $product->id;
 
-        $cat = get_post_meta($product_id, '_pricelist_cat', true);
+        $cat = get_post_meta($product_id, WC_PRICEFILES_PLUGIN_SLUG . '_pricelist_cat', true);
         
         if ($cat && !empty($wc_pricefiles_globals['wc_pricefiles_categories'][$cat]))
         {
@@ -392,6 +392,63 @@ abstract class WC_Pricefile_Generator
         }
 
         return $lowest_shipping_cost;
+    }
+
+    /**
+     * Extract the EAN code of a product.
+     * 
+     * @param array $product_meta Return value from get_post_meta()
+     * @return string The EAN code or an empty string if it's missing.
+     */
+    protected static function get_ean($product_meta)
+    {
+        if (isset($product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0]))
+        {
+            return $product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0];
+        }
+        else {
+            return '';
+        }
+    }
+
+    /**
+     * Extract the manufacturer name of a product.
+     * 
+     * @param array $product_meta Return value from get_post_meta()
+     * @return string The manufacturer name or an empty string if it's missing.
+     */
+    protected static function get_manufacturer($product_meta)
+    {
+        if (isset($product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0]))
+	{
+            $term = get_term_by('slug', $product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0], 'pa_manufacturer');
+            if ($term !== false) {
+                return $term->name;
+            }
+            else {
+                return '';
+            }
+        }
+        else {
+            return '';
+        }
+    }
+
+    /**
+     * Extract the manufacturer SKU of a product.
+     * 
+     * @param array $product_meta Return value from get_post_meta()
+     * @return string The manufacturer SKU or an empty string if it's missing.
+     */
+    protected static function get_sku_manufacturer($product_meta)
+    {
+        if (isset($product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0]))
+        {
+            return $product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0];
+        }
+        else {
+            return '';
+        }
     }
 
 }

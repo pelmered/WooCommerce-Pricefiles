@@ -43,12 +43,6 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
                 $excluded = $this->options['exclude_ids'];
             }
 
-            $product_meta_values = array(
-                '_ean_code' => array(''),
-                '_manufacturer' => array(''),
-                '_sku_manufacturer' => array(''),
-            );
-
             while ($loop->have_posts())
             {
                 $loop->the_post();
@@ -70,7 +64,7 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
                 $product_data = $product->get_post_data();
 
 
-                $product_meta = array_merge($product_meta_values, get_post_meta($product_id));
+                $product_meta = get_post_meta($product_id);
 
                 //Product title
                 echo $this::format_value($product_data->post_title);
@@ -79,29 +73,13 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
                 echo $this::format_value($product->get_sku());
 
                 //EAN code
-                if (empty($product_meta['_ean_code'][0]))
-                {
-                    echo $this::format_value('');
-                } else
-                {
-                    echo $this::format_value($product_meta['_ean_code'][0]);
-                }
+                echo $this::format_value($this::get_ean($product_meta));
+
                 //Manufacturer name
-                if (empty($product_meta['_manufacturer'][0]))
-                {
-                    echo $this::format_value('');
-                } else
-                {
-                    echo $this::format_value($product_meta['_manufacturer'][0]);
-                }
+                echo $this::format_value($this::get_manufacturer($product_meta));
+
                 //Manufacturer SKU/Product id
-                if (empty($product_meta['_sku_manufacturer'][0]))
-                {
-                    echo $this::format_value('');
-                } else
-                {
-                    echo $this::format_value($product_meta['_sku_manufacturer'][0]);
-                }
+                echo $this::format_value($this::get_sku_manufacturer($product_meta));
 
                 //Category
                 echo $this::format_value($this->get_categories($product));
