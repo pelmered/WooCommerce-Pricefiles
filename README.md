@@ -10,7 +10,7 @@ I strongly recomend downloading the plugin from [WordPress.org](https://wordpres
 ###Supported services
  -  [Prisjakt](http://www.prisjakt.nu/ "").
  -  [Pricerunner](http://www.pricerunner.se/ "").
- -  [Kelkoo](http://www.kelkoo.com/ "") (On hold. Well be developed if I feel there is enough sufficient demand. If you want it send me a message.).
+ -  [Kelkoo](http://www.kelkoo.com/ "") (On hold. Will be developed if I feel there is enough sufficient demand. If you want it send me a message.).
  -  [Google Merchant Center](https://www.google.com/merchants/merchantdashboard "") (On hold. There are other plugins for this. Duplication of efforts vs all-in-one solution).
 
 
