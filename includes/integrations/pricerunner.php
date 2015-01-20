@@ -109,6 +109,10 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
                 {
                     echo $this::format_value(wp_get_attachment_url(get_post_thumbnail_id($product_id)));
                 }
+                else
+                {
+                    echo $this::format_value('');
+                }
 
                 //Stock status
                 if ($product->is_in_stock())
