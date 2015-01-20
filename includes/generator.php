@@ -380,12 +380,23 @@ abstract class WC_Pricefile_Generator
             {
                 if (in_array($rate->method_id, $this->shipping_methods))
                 {
-                    //echo $rate->method_id.'_'.$rate->cost.'||';
-                    //print_r($rate);
-
-                    if (empty($lowest_shipping_cost) || $rate->cost < $lowest_shipping_cost)
+                    $total_tax = 0;
+                    
+                    if( $this->get_price_type() == 'incl' )
                     {
-                        $lowest_shipping_cost = $rate->cost;
+                        //Sum the taxes
+                        foreach($rate->taxes AS $tax)
+                        {
+                            $total_tax += $tax;
+                        }
+
+                        //Calc shipping cost including tax
+                        $total_cost_inc_tax = $rate->cost + $total_tax;
+                    }
+
+                    if (empty($lowest_shipping_cost) || $total_cost_inc_tax < $lowest_shipping_cost)
+                    {
+                        $lowest_shipping_cost = $total_cost_inc_tax;
                     }
                 }
             }
