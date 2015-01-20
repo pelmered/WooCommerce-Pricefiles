@@ -127,6 +127,9 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
                 if (has_post_thumbnail($product_id))
                 {
                     echo $this::format_value(wp_get_attachment_url(get_post_thumbnail_id($product_id)));
+                } else
+                {
+                    echo $this::format_value('');
                 }
 
                 //Stock status
