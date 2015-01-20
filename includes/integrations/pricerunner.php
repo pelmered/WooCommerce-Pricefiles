@@ -15,6 +15,11 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
     const VALUE_ENCLOSER_BEFORE = '"';
     const VALUE_ENCLOSER_AFTER = '"';
     
+    /**
+     * Generates header for CSV-file
+     * 
+     * @since    0.1.10
+     */
     function get_header()
     {
         $columns = array(

@@ -1,10 +1,10 @@
 === WooCommerce Pricefiles ===
-Contributors: pekz0r
+Contributors: pekz0r, Doxwork
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8L2PHLURJMC8Y
 Tags: WooCommerce, Price comparison, Pricefiles, Prisjakt, Pricerunner, Pricespy, Google Shopping, Google Merchant Center, Kelkoo
 Requires at least: 3.5.1
-Tested up to: 4.0
-Stable tag: 0.1.9
+Tested up to: 4.1
+Stable tag: 0.1.10
 
 This plugins automates the generation of pricefiles and product feeds for price comparison and product listing services.
 
@@ -19,6 +19,10 @@ This plugin required PHP version 5.3+.
 = Development =
 
 All development of this plugin occurs on [GitHub](https://github.com/pelmered/WooCommerce-Pricefiles "WooCommerce Pricefiles on GitHub"). Please help me develop this by forking and sending pull requests.
+
+This plugin is developed by [Peter Elmered](https://github.com/pelmered/).
+Contributors:
+Mattias Päivärinta at [Doxwork](http://doxwork.com/)
 
 == Installation ==
 
@@ -36,6 +40,14 @@ All development of this plugin occurs on [GitHub](https://github.com/pelmered/Wo
 Please keep the plugin up to date to ensure that is functions properly.
 
 == Changelog ==
+
+= 0.1.10 =
+Fix: Data columns did't match the headers in some cases, for example if there was no product image.
+Fix: List floating point zero as '0' insted of empty string.
+Fix: Better tax calculation for shipping
+Fix: Ean header missing in Prisjakt file
+Various other small bugfixes.
+Big thanks to Mattias Päivärinta at Doxwork for contributing to this version.
 
 = 0.1.9 =
 Fix: Removed deprication notices with WC 2.2+.
