@@ -470,6 +470,8 @@ class WC_Pricefiles
     {
         global $wpdb;
         
+        //@TODO: add check for WC Brands plugin
+
         $manufacturer = $wpdb->get_row('SELECT * FROM ' . $wpdb->prefix . 'woocommerce_attribute_taxonomies WHERE attribute_name = "manufacturer"');
         
         if ($manufacturer == null)
@@ -507,10 +509,22 @@ class WC_Pricefiles
 
     function process_product_data_fields($post_id, $post)
     {
-        update_post_meta($post_id, $this->plugin_slug.'_ean_code', stripslashes($_POST[$this->plugin_slug.'_ean_code']));
-        update_post_meta($post_id, $this->plugin_slug.'_sku_manufacturer', stripslashes($_POST[$this->plugin_slug.'_sku_manufacturer']));
-        update_post_meta($post_id, $this->plugin_slug.'_manufacturer', stripslashes($_POST[$this->plugin_slug.'_manufacturer']));
-        update_post_meta($post_id, $this->plugin_slug.'_pricelist_cat', stripslashes($_POST[$this->plugin_slug.'_pricelist_cat']));
+        if(!empty($_POST[$this->plugin_slug.'_ean_code']))
+        {
+            update_post_meta($post_id, $this->plugin_slug.'_ean_code', stripslashes($_POST[$this->plugin_slug.'_ean_code']));            
+        }
+        if(!empty($_POST[$this->plugin_slug.'_sku_manufacturer']))
+        {
+            update_post_meta($post_id, $this->plugin_slug.'_sku_manufacturer', stripslashes($_POST[$this->plugin_slug.'_sku_manufacturer']));            
+        }
+        if(!empty($_POST[$this->plugin_slug.'_manufacturer']))
+        {
+            update_post_meta($post_id, $this->plugin_slug.'_manufacturer', stripslashes($_POST[$this->plugin_slug.'_manufacturer']));            
+        }
+        if(!empty($_POST[$this->plugin_slug.'_pricelist_cat']))
+        {
+            update_post_meta($post_id, $this->plugin_slug.'_pricelist_cat', stripslashes($_POST[$this->plugin_slug.'_pricelist_cat']));            
+        }
     }
 
     /**
@@ -817,3 +831,4 @@ class WC_Pricefiles
 
 
 }
+

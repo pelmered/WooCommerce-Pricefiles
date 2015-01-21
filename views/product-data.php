@@ -48,14 +48,30 @@ global $woocommerce, $post;
         $all_terms = get_terms($attribute_taxonomy_name, 'orderby=name&hide_empty=0');
         if ($all_terms) 
         {
+            if(empty(get_post_meta( $post->ID, WC_PRICEFILES_PLUGIN_SLUG.'_manufacturer', true )))
+            {
+                $manufacturer_field['options'][''] = __('Choose manufacturer', WC_PRICEFILES_PLUGIN_SLUG);
+            }
+            
             foreach ($all_terms as $term) 
             {
                 //echo '<option value="' . esc_attr($term->slug) . '" ' . selected($term->slug, $current, false) . '>' . $term->name . '</option>';
                 $manufacturer_field['options'][$term->slug] = $term->name;
             }
+
+            woocommerce_wp_select($manufacturer_field);
+        }
+        else
+        {
+            _e(
+                sprintf(
+                    'You need to add manufacturers to use the manufaturer field.<br />You can add manufacturers <a href="%s">here</a>', 
+                    admin_url('edit-tags.php?taxonomy=pa_manufacturer&post_type=product')
+                ), 
+                WC_PRICEFILES_PLUGIN_SLUG
+            );
         }
 
-        woocommerce_wp_select($manufacturer_field);
     }
     
     
@@ -74,6 +90,11 @@ global $woocommerce, $post;
             //'wrapper_class' => '',
             'options' => array()
         );
+        
+        if(empty(get_post_meta( $post->ID, WC_PRICEFILES_PLUGIN_SLUG.'_pricelist_cat', true )))
+        {
+            $category_field['options'][''] = __('Choose category', WC_PRICEFILES_PLUGIN_SLUG);
+        }
 
         foreach ($pricelist_cats as $id => $name) {
             $category_field['options'][esc_attr($id)] = esc_attr($name);
@@ -87,3 +108,4 @@ global $woocommerce, $post;
     ?>
 
 </div>
+
