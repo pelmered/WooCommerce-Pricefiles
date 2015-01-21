@@ -39,7 +39,10 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
      */
     public function generate_pricefile()
     {
-        $this->read_cache();
+        if($this->read_cache())
+        {
+            die();    
+        }
          
         $args = array(
             'post_type' => 'product',
