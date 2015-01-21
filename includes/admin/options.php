@@ -361,7 +361,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             {
 
                 $product = get_product($product_id);
-                $product_name = woocommerce_get_formatted_product_name($product);
+                $product_name = $product->get_formatted_name();
 
                 echo '<option value="' . esc_attr($product_id) . '" selected="selected">' . esc_html($product_name) . '</option>';
             }
