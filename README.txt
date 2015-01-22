@@ -44,50 +44,49 @@ Please keep the plugin up to date to ensure that is functions properly.
 == Changelog ==
 
 = 0.1.11 =
-Fix: Error in shipping tax calculation
-Fix: Error in empty check for manufacturer and category fields in product settings
-Tested with WordPress 4.2 alpha.
+* Fix: Error in shipping tax calculation
+* Fix: Error in empty check for manufacturer and category fields in product settings
+* Tested with WordPress 4.2 alpha.
 
 = 0.1.10 =
-Fix: Data columns did't match the headers in some cases, for example if there was no product image.
-Fix: List floating point zero as '0' insted of empty string.
-Fix: Better tax calculation for shipping
-Fix: Ean header missing in Prisjakt file
-Various other small bugfixes.
-Big thanks to Mattias Päivärinta at Doxwork for contributing to this version.
+* Fix: Data columns did't match the headers in some cases, for example if there was no product image.
+* Fix: List floating point zero as '0' insted of empty string.
+* Fix: Better tax calculation for shipping
+* Fix: Ean header missing in Prisjakt file
+* Various other small bugfixes.
+* Big thanks to Mattias Päivärinta at Doxwork for contributing to this version.
 
 = 0.1.9 =
-Fix: Removed deprication notices with WC 2.2+.
-Fix: Removed PHP warnings when there are no product categories.
+* Fix: Removed deprication notices with WC 2.2+.
+* Fix: Removed PHP warnings when there are no product categories.
 
 = 0.1.8 =
-Fix: Fixed form error on settings page.
+* Fix: Fixed form error on settings page.
 
 = 0.1.7 =
-Fix: Handle case where set_time_limit() is not available more gracefully
+* Fix: Handle case where set_time_limit() is not available more gracefully
 
 = 0.1.6 =
-Fix: Fixed issue with static loading of the plugin during actrivationa nd deactivation
+* Fix: Fixed issue with static loading of the plugin during actrivationa nd deactivation
 
 = 0.1.5 =
-Fix: Categories does not show in pricefile (again). Plugin initialized too early to access terms created by WooCommerce.
+* Fix: Categories does not show in pricefile (again). Plugin initialized too early to access terms created by WooCommerce.
 
 = 0.1.4 =
-Fix: Errors in pricefile
-Fix: Plugin loader issues
+* Fix: Errors in pricefile
+* Fix: Plugin loader issues
 
 = 0.1.3 =
-Fix: Categories does not show in pricefile
-
-Fix: WooCommerce 2.2 compatibility
+* Fix: Categories does not show in pricefile
+* Fix: WooCommerce 2.2 compatibility
 
 = 0.1.2 =
-Fix: Do not convert 0 into "" (empty string) for prices in pricefile(i.e. free shipping)
+* Fix: Do not convert 0 into "" (empty string) for prices in pricefile(i.e. free shipping)
 
 = 0.1.1 =
-Bugfixes
+* Bugfixes
 
 = 0.1.0 =
-First public release
+* First public release
 
 
