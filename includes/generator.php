@@ -461,9 +461,9 @@ abstract class WC_Pricefile_Generator
                         $total_cost = $rate->cost;
                     }
 
-                    if (empty($lowest_shipping_cost) || $total_cost_inc_tax < $lowest_shipping_cost)
+                    if (empty($lowest_shipping_cost) || $total_cost < $lowest_shipping_cost)
                     {
-                        $lowest_shipping_cost = $total_cost_inc_tax;
+                        $lowest_shipping_cost = $total_cost;
                     }
                 }
             }

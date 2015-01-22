@@ -20,9 +20,11 @@ This plugin required PHP version 5.3+.
 
 All development of this plugin occurs on [GitHub](https://github.com/pelmered/WooCommerce-Pricefiles "WooCommerce Pricefiles on GitHub"). Please help me develop this by forking and sending pull requests.
 
-This plugin is developed by [Peter Elmered](https://github.com/pelmered/).
-Contributors:
-Mattias Päivärinta at [Doxwork](http://doxwork.com/)
+This plugin is developed by [Peter Elmered](https://github.com/pelmered/)
+
+= Contributors =
+
+* Mattias Päivärinta at [Doxwork](http://doxwork.com/)
 
 == Installation ==
 
