@@ -29,6 +29,27 @@ abstract class WC_Pricefile_Generator
     const VALUE_ENCLOSER_BEFORE = '"';
     const VALUE_ENCLOSER_AFTER = '"';
 
+    /*
+     * Tell generator implementation to start a new pricefile
+     *
+     * @since 0.1.12
+     */
+    protected abstract function start();
+
+    /*
+     * Tell generator implementation about a product
+     *
+     * @since 0.1.12
+     */
+    protected abstract function product($product_info);
+
+    /*
+     * Tell generator implementation to wrap up pricefile
+     *
+     * @since 0.1.12
+     */
+    protected abstract function finish();
+
     public function __construct($pricefile_slug)
     {
         global $wc_pricefiles_globals;
@@ -95,8 +116,127 @@ abstract class WC_Pricefile_Generator
 
     //protected static abstract function get_instance();
 
-    
-    protected abstract function generate_pricefile();
+    /**
+     * Genereates the pricefile
+     * 
+     * @since     0.1.0
+     */
+    public function generate_pricefile()
+    {
+        if($this->read_cache())
+        {
+            die();
+        }
+
+        $args = array(
+            'post_type' => 'product',
+            'posts_per_page' => -1,
+            'nopaging' => TRUE
+        );
+
+        $loop = new WP_Query($args);
+
+        if ($loop->have_posts())
+        {
+            //Tell generator implementation to start a new pricefile
+            $this->start();
+
+            //Get list of excluded products
+            if (empty($this->options['exclude_ids']))
+            {
+                $excluded = array();
+            } else
+            {
+                $excluded = $this->options['exclude_ids'];
+            }
+
+            while ($loop->have_posts())
+            {
+                $loop->the_post();
+
+                $product_id = get_the_id();
+
+                if (in_array($product_id, $excluded))
+                {
+                    continue;
+                }
+
+                $product = get_product($product_id);
+
+                if (!$product->is_purchasable() || $product->visibility == 'hidden')
+                {
+                    continue;
+                }
+
+                $product_data = $product->get_post_data();
+
+                $product_meta = get_post_meta($product_id);
+
+                //Image URL
+                if (has_post_thumbnail($product_id))
+                {
+                    $image_url = wp_get_attachment_url(get_post_thumbnail_id($product_id));
+                }
+                else
+                {
+                    $image_url = '';
+                }
+
+                //Stock status
+                if ($product->is_in_stock())
+                {
+                    $stock_status = 'Ja';
+                }
+                else
+                {
+                    $stock_status = 'Nej';
+                }
+
+                //Shipping cost
+                if ($product->needs_shipping())
+                {
+                    $shipping_cost = $this->get_shipping_cost($product);
+                    //$shipping_cost = $product->get_price_including_tax(1);
+                }
+                else
+                {
+                    $shipping_cost = '';
+                }
+
+                //Tell generator implementation about this product
+                $this->product(array(
+                    'category' => $this->get_categories($product),
+                    'product_sku' => $product->get_sku(),
+                    'price' => $this->get_price($product),
+                    'product_url' => get_permalink($product_id),
+                    'product_title' => $product_data->post_title,
+                    'manufacturer_sku' => $this->get_manufacturer_sku($product_meta),
+                    'manufacturer_name' => $this->get_manufacturer($product_meta),
+                    'ean_code' => $this->get_ean($product_meta),
+                    'description' => $product_data->post_excerpt,
+                    'image_url' => $image_url,
+                    'stock_status' => $stock_status,
+                    'shipping_cost' => $shipping_cost,
+                    'stock_level' => $product->get_stock_quantity(),
+                    'delivery_time' => '',
+                ));
+            }
+
+            //Tell generator implementation to wrap up pricefile
+            $this->finish();
+
+            return $this->save_cache();
+        } else
+        {
+            if($this->is_debug())
+            {
+                echo 'No products found';
+                return false;
+            }
+        }
+
+    }
+
 
     /**
      * Check if cache is activated
