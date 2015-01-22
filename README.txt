@@ -3,8 +3,8 @@ Contributors: pekz0r, Doxwork
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8L2PHLURJMC8Y
 Tags: WooCommerce, Price comparison, Pricefiles, Prisjakt, Pricerunner, Pricespy, Google Shopping, Google Merchant Center, Kelkoo
 Requires at least: 3.5.1
-Tested up to: 4.1
-Stable tag: 0.1.10
+Tested up to: 4.2
+Stable tag: 0.1.11
 
 This plugins automates the generation of pricefiles and product feeds for price comparison and product listing services.
 
@@ -22,7 +22,7 @@ All development of this plugin occurs on [GitHub](https://github.com/pelmered/Wo
 
 This plugin is developed by [Peter Elmered](https://github.com/pelmered/)
 
-= Contributors =
+Contributors:
 
 * Mattias Päivärinta at [Doxwork](http://doxwork.com/)
 
@@ -42,6 +42,11 @@ This plugin is developed by [Peter Elmered](https://github.com/pelmered/)
 Please keep the plugin up to date to ensure that is functions properly.
 
 == Changelog ==
+
+= 0.1.11 =
+Fix: Error in shipping tax calculation
+Fix: Error in empty check for manufacturer and category fields in product settings
+Tested with WordPress 4.2 alpha.
 
 = 0.1.10 =
 Fix: Data columns did't match the headers in some cases, for example if there was no product image.
