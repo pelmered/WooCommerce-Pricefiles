@@ -48,7 +48,9 @@ global $woocommerce, $post;
         $all_terms = get_terms($attribute_taxonomy_name, 'orderby=name&hide_empty=0');
         if ($all_terms) 
         {
-            if(empty(get_post_meta( $post->ID, WC_PRICEFILES_PLUGIN_SLUG.'_manufacturer', true )))
+            $m = get_post_meta( $post->ID, WC_PRICEFILES_PLUGIN_SLUG.'_manufacturer', true );
+
+            if(empty($m))
             {
                 $manufacturer_field['options'][''] = __('Choose manufacturer', WC_PRICEFILES_PLUGIN_SLUG);
             }
@@ -91,7 +93,9 @@ global $woocommerce, $post;
             'options' => array()
         );
         
-        if(empty(get_post_meta( $post->ID, WC_PRICEFILES_PLUGIN_SLUG.'_pricelist_cat', true )))
+        $c = get_post_meta( $post->ID, WC_PRICEFILES_PLUGIN_SLUG.'_pricelist_cat', true );
+        
+        if(empty($c))
         {
             $category_field['options'][''] = __('Choose category', WC_PRICEFILES_PLUGIN_SLUG);
         }
