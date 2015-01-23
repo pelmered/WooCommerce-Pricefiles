@@ -23,7 +23,6 @@ This plugin required PHP version 5.3+.
 * More info on how to genereate pricefiles with cron and cache
 * More admin options(If you want anything specific, send me a message and I will consider it)
 
-
 = Development =
 
 All development of this plugin occurs on [GitHub](https://github.com/pelmered/WooCommerce-Pricefiles "WooCommerce Pricefiles on GitHub"). Please help me develop this by forking and sending pull requests.
