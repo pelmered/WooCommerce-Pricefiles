@@ -39,24 +39,25 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
     /**
      * Implements WC_Pricefile_Generator->product()= and echoes a formatted product
      * 
+     * @param     array  An opaque object used by property getters.
      * @since     0.1.12
      */
-    protected function product($product_info)
+    protected function product($product_obj)
     {
-        echo $this::format_value($product_info['category']);
-        echo $this::format_value($product_info['product_sku']);
-        echo $this::format_value($product_info['price']);
-        echo $this::format_value($product_info['product_url']);
-        echo $this::format_value($product_info['product_title']);
-        echo $this::format_value($product_info['manufacturer_sku']);
-        echo $this::format_value($product_info['manufacturer_name']);
-        echo $this::format_value($product_info['ean_code']);
-        echo $this::format_value(strip_tags($product_info['description']));
-        echo $this::format_value($product_info['image_url']);
-        echo $this::format_value($product_info['stock_status']);
-        echo $this::format_value($product_info['stock_level']);
-        echo $this::format_value($product_info['delivery_time']);
-        echo $this::format_value($product_info['shipping_cost']);
+        echo $this::format_value($this->get_categories($product_obj));
+        echo $this::format_value($this->get_product_sku($product_obj));
+        echo $this::format_value($this->get_price($product_obj));
+        echo $this::format_value($this->get_product_url($product_obj));
+        echo $this::format_value($this->get_product_title($product_obj));
+        echo $this::format_value($this->get_manufacturer_sku($product_obj));
+        echo $this::format_value($this->get_manufacturer($product_obj));
+        echo $this::format_value($this->get_ean($product_obj));
+        echo $this::format_value(strip_tags($this->get_description($product_obj)));
+        echo $this::format_value($this->get_image_url($product_obj));
+        echo $this::format_value($this->get_stock_status($product_obj));
+        echo $this::format_value($this->get_stock_quantity($product_obj));
+        echo $this::format_value($this->get_delivery_time($product_obj));
+        echo $this::format_value($this->get_shipping_cost($product_obj));
         echo "\n";
     }
 

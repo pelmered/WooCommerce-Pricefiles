@@ -174,22 +174,7 @@ abstract class WC_Pricefile_Generator
                 );
 
                 //Tell generator implementation about this product
-                $this->product(array(
-                    'category' => $this->get_categories($product_obj),
-                    'product_sku' => $this->get_product_sku($product_obj),
-                    'price' => $this->get_price($product_obj),
-                    'product_url' => $this->get_product_url($product_obj),
-                    'product_title' => $this->get_product_title($product_obj),
-                    'manufacturer_sku' => $this->get_manufacturer_sku($product_obj),
-                    'manufacturer_name' => $this->get_manufacturer($product_obj),
-                    'ean_code' => $this->get_ean($product_obj),
-                    'description' => $this->get_description($product_obj),
-                    'image_url' => $this->get_image_url($product_obj),
-                    'stock_status' => $this->get_stock_status($product_obj),
-                    'shipping_cost' => $this->get_shipping_cost($product_obj),
-                    'stock_level' => $this->get_stock_quantity($product_obj),
-                    'delivery_time' => $this->get_delivery_time($product_obj),
-                ));
+                $this->product($product_obj);
             }
 
             //Tell generator implementation to wrap up pricefile
