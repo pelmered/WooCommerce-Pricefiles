@@ -168,24 +168,27 @@ abstract class WC_Pricefile_Generator
                     continue;
                 }
 
-                $product_meta = get_post_meta($product_id);
+                $product_obj = array(
+                    'product' => $product,
+                    'product_meta' => get_post_meta($product_id),
+                );
 
                 //Tell generator implementation about this product
                 $this->product(array(
-                    'category' => $this->get_categories($product),
-                    'product_sku' => $this->get_product_sku($product),
-                    'price' => $this->get_price($product),
-                    'product_url' => $this->get_product_url($product),
-                    'product_title' => $this->get_product_title($product),
-                    'manufacturer_sku' => $this->get_manufacturer_sku($product_meta),
-                    'manufacturer_name' => $this->get_manufacturer($product_meta),
-                    'ean_code' => $this->get_ean($product_meta),
-                    'description' => $this->get_description($product),
-                    'image_url' => $this->get_image_url($product),
-                    'stock_status' => $this->get_stock_status($product),
-                    'shipping_cost' => $this->get_shipping_cost($product),
-                    'stock_level' => $this->get_stock_quantity($product),
-                    'delivery_time' => $this->get_delivery_time(),
+                    'category' => $this->get_categories($product_obj),
+                    'product_sku' => $this->get_product_sku($product_obj),
+                    'price' => $this->get_price($product_obj),
+                    'product_url' => $this->get_product_url($product_obj),
+                    'product_title' => $this->get_product_title($product_obj),
+                    'manufacturer_sku' => $this->get_manufacturer_sku($product_obj),
+                    'manufacturer_name' => $this->get_manufacturer($product_obj),
+                    'ean_code' => $this->get_ean($product_obj),
+                    'description' => $this->get_description($product_obj),
+                    'image_url' => $this->get_image_url($product_obj),
+                    'stock_status' => $this->get_stock_status($product_obj),
+                    'shipping_cost' => $this->get_shipping_cost($product_obj),
+                    'stock_level' => $this->get_stock_quantity($product_obj),
+                    'delivery_time' => $this->get_delivery_time($product_obj),
                 ));
             }
 
@@ -379,17 +382,18 @@ abstract class WC_Pricefile_Generator
     /**
      * Get price with correct tax display option
      *
+     * @param   array   An array with keys for product and product_meta.
      * @return  string  'incl' or 'excl'
      * @since   0.1.10
      */
-    public function get_price($product)
+    public function get_price($product_obj)
     {
         if ($this->get_price_type() === 'excl')
         {
-            return $product->get_price_excluding_tax(1);
+            return $product_obj['product']->get_price_excluding_tax(1);
         } else
         {
-            return $product->get_price_including_tax(1);
+            return $product_obj['product']->get_price_including_tax(1);
         }
     }
 
@@ -428,15 +432,15 @@ abstract class WC_Pricefile_Generator
     /**
      * Get product categories formatted for pricefile.
      *
-     * @param   array   $product_meta Return value from get_post_meta()
+     * @param   array   An array with keys for product and product_meta.
      * @return  string  The manufacturer name or an empty string if it's missing.
      * @since   0.1.10
      */
-    public function get_categories($product)
+    public function get_categories($product_obj)
     {
         global $wc_pricefiles_globals;
         
-        $product_id = $product->id;
+        $product_id = $product_obj['product']->id;
 
         $cat = get_post_meta($product_id, WC_PRICEFILES_PLUGIN_SLUG . '_pricelist_cat', true);
         
@@ -491,12 +495,14 @@ abstract class WC_Pricefile_Generator
      * TODO: This need to be revisited. Has been improved, but not perfect
      * 
      * @global  object  $woocommerce
-     * @param   object  $product Product object
+     * @param   array   An array with keys for product and product_meta.
      * @return  float   Lowest shipping price
      */
-    public function get_shipping_cost($product)
+    public function get_shipping_cost($product_obj)
     {
         global $woocommerce;
+
+        $product = $product_obj['product'];
 
         if (!$product->needs_shipping()) {
             return '';
@@ -586,12 +592,13 @@ abstract class WC_Pricefile_Generator
     /**
      * Extract the EAN code of a product.
      * 
-     * @param array $product_meta Return value from get_post_meta()
+     * @param   array   An array with keys for product and product_meta.
      * @return string The EAN code or an empty string if it's missing.
      * @since    0.1.10
      */
-    protected static function get_ean($product_meta)
+    protected static function get_ean($product_obj)
     {
+        $product_meta = $product_obj['product_meta'];
         if (isset($product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0]))
         {
             return $product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0];
@@ -604,12 +611,13 @@ abstract class WC_Pricefile_Generator
     /**
      * Extract the manufacturer name of a product.
      *
-     * @param   array   $product_meta Return value from get_post_meta()
+     * @param   array   An array with keys for product and product_meta.
      * @return  string  The manufacturer name or an empty string if it's missing.
      * @since   0.1.10
      */
-    protected static function get_manufacturer($product_meta)
+    protected static function get_manufacturer($product_obj)
     {
+        $product_meta = $product_obj['product_meta'];
         if (isset($product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0]))
     {
             $term = get_term_by('slug', $product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0], 'pa_manufacturer');
@@ -628,12 +636,13 @@ abstract class WC_Pricefile_Generator
     /**
      * Extract the manufacturer SKU of a product.
      * 
-     * @param   array   $product_meta Return value from get_post_meta()
+     * @param   array   An array with keys for product and product_meta.
      * @return  string  The manufacturer SKU or an empty string if it's missing.
      * @since    0.1.10
      */
-    protected static function get_manufacturer_sku($product_meta)
+    protected static function get_manufacturer_sku($product_obj)
     {
+        $product_meta = $product_obj['product_meta'];
         if (isset($product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0]))
         {
             return $product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0];
@@ -646,13 +655,13 @@ abstract class WC_Pricefile_Generator
     /**
      * Extract the stock status of a product.
      * 
-     * @param   object   $product A product
+     * @param   array   An array with keys for product and product_meta.
      * @return  string  'Ja' or 'Nej'
      * @since    0.1.12
      */
-    protected static function get_stock_status($product)
+    protected static function get_stock_status($product_obj)
     {
-        if ($product->is_in_stock())
+        if ($product_obj['product']->is_in_stock())
         {
             return 'Ja';
         }
@@ -665,27 +674,28 @@ abstract class WC_Pricefile_Generator
     /**
      * Extract the product URL a product.
      * 
-     * @param   object   $product A product
+     * @param   array   An array with keys for product and product_meta.
      * @return  string  A URL.
      * @since    0.1.12
      */
-    protected static function get_product_url($product)
+    protected static function get_product_url($product_obj)
     {
-        return get_permalink($product->id);
+        return get_permalink($product_obj['product']->id);
     }
 
     /**
      * Extract the image URL a product.
      * 
-     * @param   object   $product A product
+     * @param   array   An array with keys for product and product_meta.
      * @return  string  A URL or an empty string if it's missing.
      * @since    0.1.12
      */
-    protected static function get_image_url($product)
+    protected static function get_image_url($product_obj)
     {
-        if (has_post_thumbnail($product->id))
+        $product_id = $product_obj['product']->id;
+        if (has_post_thumbnail($product_id))
         {
-            return wp_get_attachment_url(get_post_thumbnail_id($product->id));
+            return wp_get_attachment_url(get_post_thumbnail_id($product_id));
         }
         else
         {
@@ -696,60 +706,60 @@ abstract class WC_Pricefile_Generator
     /**
      * Extract the product SKU of a product.
      * 
-     * @param   object   $product A product
+     * @param   array   An array with keys for product and product_meta.
      * @return  string  The SKU.
      * @since    0.1.12
      */
-    protected static function get_product_sku($product)
+    protected static function get_product_sku($product_obj)
     {
-        return $product->get_sku();
+        return $product_obj['product']->get_sku();
     }
 
     /**
      * Extract the product title of a product.
      * 
-     * @param   object   $product A product
+     * @param   array   An array with keys for product and product_meta.
      * @return  string  The product title.
      * @since    0.1.12
      */
-    protected static function get_product_title($product)
+    protected static function get_product_title($product_obj)
     {
-        $product_data = $product->get_post_data();
-        return $product_data->post_title;
+        return $product_obj['product']->get_post_data()->post_title;
     }
 
     /**
      * Extract the description of a product.
      * 
-     * @param   object   $product A product
+     * @param   array   An array with keys for product and product_meta.
      * @return  string  The product description.
      * @since    0.1.12
      */
-    protected static function get_description($product)
+    protected static function get_description($product_obj)
     {
-        $product_data = $product->get_post_data();
+        $product_data = $product_obj['product']->get_post_data();
         return $product_data->post_excerpt;
     }
 
     /**
      * Extract the stock quantity of a product.
      * 
-     * @param   object   $product A product
+     * @param   array   An array with keys for product and product_meta.
      * @return  int  The stock quantity
      * @since    0.1.12
      */
-    protected static function get_stock_quantity($product)
+    protected static function get_stock_quantity($product_obj)
     {
-        return $product->get_stock_quantity();
+        return $product_obj['product']->get_stock_quantity();
     }
 
     /**
      * Extract the delivery time of a product.
      * 
+     * @param   array   An array with keys for product and product_meta.
      * @return  string  Always an empty string.
      * @since    0.1.12
      */
-    protected static function get_delivery_time()
+    protected static function get_delivery_time($product_obj)
     {
         return '';
     }
