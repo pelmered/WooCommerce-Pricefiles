@@ -421,7 +421,7 @@ abstract class WC_Pricefile_Generator
      * @return  string  The manufacturer name or an empty string if it's missing.
      * @since   0.1.10
      */
-    public function get_categories($product_obj)
+    public static function get_categories($product_obj)
     {
         global $wc_pricefiles_globals;
         
