@@ -36,6 +36,9 @@ abstract class WC_Pricefile_Generator
         if(!@set_time_limit(0)) {
             //TODO: Debug log: Could not set time limit
         }
+
+        //Try to rise memory limit
+        ini_set('memory_limit', '1024M');
         
         $this->pricefile_slug = $pricefile_slug;
         
