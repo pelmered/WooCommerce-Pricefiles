@@ -41,6 +41,13 @@ class WC_Pricefiles
     protected static $instance = null;
 
     /**
+     * Plugin options
+     * 
+     * @since    0.1.0
+     */
+    protected $options = array();
+
+    /**
      * Initialize the plugin by setting localization, filters, and administration functions.
      * 
      * @since    0.1.0
@@ -130,6 +137,7 @@ class WC_Pricefiles
 
         if (is_admin())
         {
+            $this->options = get_option(WC_PRICEFILES_PLUGIN_SLUG . '_options', $this->default_pricelist_options());
             // Activate plugin when new blog is added
             //add_action('wpmu_new_blog', array($this, 'activate_new_site'));
 
@@ -170,6 +178,8 @@ class WC_Pricefiles
         if (!empty($_GET['pricefile']))
         {
             header('Content-Type: text/html; charset=utf-8',true);
+            
+            $this->options = get_option(WC_PRICEFILES_PLUGIN_SLUG . '_options', $this->default_pricelist_options());
             
             if (!class_exists('WC_Pricefile_Generator'))
                 require_once( WP_PRICEFILES_PLUGIN_PATH . 'includes/generator.php' );
@@ -244,6 +254,29 @@ class WC_Pricefiles
         }
     }
     
+    function get_options()
+    {
+        return $this->options;
+    }
+    
+    /**
+     * Provides default values for the Display Options.
+     */
+    function default_pricelist_options()
+    {
+        global $wc_pricefiles_globals;
+        
+        $defaults = array(
+            'output_prices'         => 'shop',
+            'use_cache'             => 0,
+            'exclude_ids'           => array(),
+            'shipping_methods'      => array(),
+            'shipping_destination'  => $wc_pricefiles_globals['default_shipping_destination']
+        );
+        
+        return apply_filters('default_pricelist_options', $defaults);
+    }
+    
     function get_available_pricefiles()
     {
         $wc_pricefiles_list = array(
@@ -289,6 +322,39 @@ class WC_Pricefiles
         $pl_cat = $cats_map[$cat->term_id];
 
         update_post_meta($post_id, '_pricelist_cat', $pl_cat);
+    }
+
+
+    /**
+     * Get price tax display option. I.e. whether we should out put prices including or excluding tax  
+     *
+     * @return  string  'incl' or 'excl'
+     * @since   0.1.10
+     */
+    public function get_price_type()
+    {
+        if (!empty($this->price_type))
+        {
+            return $this->price_type;
+        }
+        if ($this->options['output_prices'] == 'shop')
+        {
+            $wc_option = get_option('woocommerce_tax_display_cart');
+            if(!empty($wc_option) )
+            {
+                $this->price_type = $wc_option;
+                return $this->price_type;
+            }
+        } 
+        if (!empty($this->options['output_prices']))
+        {
+            $this->price_type = $this->options['output_prices'];
+            return $this->price_type;
+        } else
+        {
+            $this->price_type = 'incl';
+            return $this->price_type;
+        }
     }
 
     function get_deepest_child_category($categories)
@@ -492,6 +558,61 @@ class WC_Pricefiles
             do_action('woocommerce_attribute_added', $wpdb->insert_id, $attribute);
         }
     }
+
+
+
+    /**
+     * 
+     * @global type $wc_pricefiles_globals
+     * @return type
+     */
+    function get_shipping_destination()
+    {
+        $shipping_destination = array();
+        $shipping_destination_values = $this->options['shipping_destination'];
+
+        
+        if (!is_array($shipping_destination_values) || empty($shipping_destination_values))
+        {
+            $shipping_destination_values = $wc_pricefiles_globals['default_shipping_destination'];
+        }
+
+        foreach ($shipping_destination_values AS $key => $value)
+        {
+            $shipping_destination[str_replace('shipping_', '', $key)] = $value;
+        }
+
+        if(!isset($shipping_destination['state']))
+        {
+            $shipping_destination['state'] = '';
+        }
+        if(!isset($shipping_destination['address_2']))
+        {
+            $shipping_destination['address_2'] = '';
+        }
+        
+        return $shipping_destination;
+    }
+    
+    
+    function get_shipping_methods()
+    {
+        $shipping_methods = $this->options['shipping_methods'];
+
+        if (is_array($shipping_methods) && count($shipping_methods))
+        {
+            foreach ($shipping_methods AS $shipping_method)
+            {
+                $s[$shipping_method] = $shipping_method;
+            }
+        } else
+        {
+            $s = array();
+        }
+
+        return $s;
+    }
+
 
     function get_manufacturer_attribute_taxonomy()
     {

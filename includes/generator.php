@@ -63,7 +63,7 @@ abstract class WC_Pricefile_Generator
         require_once( WP_PRICEFILES_PLUGIN_PATH . 'includes/admin.php' );
         require_once( WP_PRICEFILES_PLUGIN_PATH . 'includes/admin/options.php' );
 
-        $this->options = get_option(WC_PRICEFILES_PLUGIN_SLUG . '_options', WC_Pricefiles_Admin_Options::default_pricelist_options());
+        $this->options = WC_Pricefiles()->get_options();
         
         //var_dump($this->options);
         
@@ -175,6 +175,7 @@ abstract class WC_Pricefile_Generator
 
                 //Tell generator implementation about this product
                 $this->product($product_obj);
+
             }
 
             //Tell generator implementation to wrap up pricefile
@@ -373,7 +374,7 @@ abstract class WC_Pricefile_Generator
      */
     public function get_price($product_obj)
     {
-        if ($this->get_price_type() === 'excl')
+        if (WC_Pricefiles()->get_price_type() === 'excl')
         {
             return $product_obj['product']->get_price_excluding_tax(1);
         } else
@@ -382,37 +383,6 @@ abstract class WC_Pricefile_Generator
         }
     }
 
-    /**
-     * Get price tax display option. I.e. whether we should out put prices including or excluding tax  
-     *
-     * @return  string  'incl' or 'excl'
-     * @since   0.1.10
-     */
-    public function get_price_type()
-    {
-        if (!empty($this->price_type))
-        {
-            return $this->price_type;
-        }
-        if ($this->options['output_prices'] == 'shop')
-        {
-            $wc_option = get_option('woocommerce_tax_display_cart');
-            if(!empty($wc_option) )
-            {
-                $this->price_type = $wc_option;
-                return $this->price_type;
-            }
-        } 
-        if (!empty($this->options['output_prices']))
-        {
-            $this->price_type = $this->options['output_prices'];
-            return $this->price_type;
-        } else
-        {
-            $this->price_type = 'incl';
-            return $this->price_type;
-        }
-    }
 
     /**
      * Get product categories formatted for pricefile.

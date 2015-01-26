@@ -14,7 +14,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
         //add_filter($this->plugin_slug . '_option_tabs', array($this, 'add_options_tab'), 1);
 
-        $this->plugin_options = get_option($this->plugin_slug . '_options', $this::default_pricelist_options());
+        $this->plugin_options = get_option($this->plugin_slug . '_options', WC_Pricefiles()->default_pricelist_options());
 
         add_action('admin_menu', array($this, 'add_plugin_menu'));
 
@@ -97,24 +97,6 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
         </div><!-- /.wrap -->
         <?php
-    }
-    
-    /**
-     * Provides default values for the Display Options.
-     */
-    static function default_pricelist_options()
-    {
-        global $wc_pricefiles_globals;
-        
-        $defaults = array(
-            'output_prices'         => 'shop',
-            'use_cache'             => 0,
-            'exclude_ids'           => array(),
-            'shipping_methods'      => array(),
-            'shipping_destination'  => $wc_pricefiles_globals['default_shipping_destination']
-        );
-        
-        return apply_filters('default_pricelist_options', $defaults);
     }
 
     /* ------------------------------------------------------------------------ *
@@ -243,9 +225,9 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             $this->plugin_slug . '_advanced_options', 
             array(
                 
-                'description' => __('Use cache for pricefile. Usefull if you have many products. Needs cron to refresh cache.<br />' . WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG . '/' . ' needs to be writable by PHP', $this->plugin_slug).
-                        ' ('.(is_writable(WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG . '/') ? '<span style="color: green">'.__('Is writable', $this->plugin_slug).'</span>' : '<span style="color: red">'.__('NOT WRITABLE', $this->plugin_slug).'</span>' ).').'
-                        
+                'description' => __('Use cache for pricefile. Usefull if you have many products. Needs cron to refresh cache.<br />' . 
+                        WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG . '/' . ' needs to be writable by PHP', $this->plugin_slug).
+                        ' ('.(is_writable(WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG . '/') ? '<span style="color: green">'.__('Is writable', $this->plugin_slug).'</span>' : '<span style="color: red">'.__('NOT WRITABLE', $this->plugin_slug).'</span>' ).').'       
             )
         );
         add_settings_field(
@@ -255,7 +237,33 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             $this->plugin_slug . '_advanced_options_section', 
             $this->plugin_slug . '_advanced_options', 
             array(
-                'description' => __('Output debug messages. Only check this when debugging.', $this->plugin_slug),
+                'key'           => 'use_debug',
+                'label'         => __('Use debug mode', $this->plugin_slug),
+                'description'   => __('Output debug messages. Only check this when debugging.', $this->plugin_slug),
+            )
+        );
+        add_settings_field(
+            'set_memory_limit', 
+            __('Memory limit', $this->plugin_slug), 
+            array($this, 'set_memory_limit_callback'), 
+            $this->plugin_slug . '_advanced_options_section', 
+            $this->plugin_slug . '_advanced_options', 
+            array(
+                'key'           => 'set_memory_limit',
+                'label'         => __('Set PHP memory limit', $this->plugin_slug),
+                'description'   => __('Try to set the PHP memory limit when generating the pricefiles. Try using this when you get 500 Internal server error. ', $this->plugin_slug),
+            )
+        );
+        add_settings_field(
+            'disable_timeout', 
+            __('Disable timeout', $this->plugin_slug), 
+            array($this, 'disable_timeout_callback'), 
+            $this->plugin_slug . '_advanced_options_section', 
+            $this->plugin_slug . '_advanced_options', 
+            array(
+                'key'           => 'disable_timeout',
+                'label'         => __('Disable timeout', $this->plugin_slug),
+                'description'   => __('Try to disable the PHP timeout when generating the pricefiles. Try using this when you get timeouts or 500 Internal server error. ', $this->plugin_slug),
             )
         );
         
@@ -267,7 +275,9 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             $this->plugin_slug . '_advanced_options_section', 
             $this->plugin_slug . '_advanced_options', 
             array(
-                'description' => __('Inactive the automatic EAN code validation when editing products.', $this->plugin_slug),
+                'key'           => 'deactivate_ean_validation',
+                'label'         => __('Deactivate EAN validation', $this->plugin_slug),
+                'description'   => __('Inactive the automatic EAN code validation when editing products.', $this->plugin_slug),
             )
         );
         
@@ -433,7 +443,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
         $pricefile_base_url = get_bloginfo('url') . '/?pricefile=all&refresh=1';
 
-        echo '<input class="wide" type="text" size="110" value="' . $pricefile_base_url . '" disabled />';
+        echo '<input class="wide" type="text" size="60" value="' . $pricefile_base_url . '" disabled />';
 
         echo '<br /><button id="' . $this->plugin_slug . '_refresh_cache_button">' . __('Refresh cache') . '</button>';
         echo '<span id="' . $this->plugin_slug . '_cache_refresh_status"></span>';
@@ -441,13 +451,35 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         echo '</div>';
     }
     
-    function use_debug_callback($args)
+    function set_memory_limit_callback($args)
     {
-        $use_debug = (empty($this->plugin_options['use_debug']) ? array() : $this->plugin_options['use_debug'] );
+        $option_value = (empty($this->plugin_options[$args['key']]) ? array() : $this->plugin_options[$args['key']] );
 
         echo '<label class="shipping-method"> ';
-        echo '<input type="checkbox" name="' . $this->plugin_slug . '_options[use_debug]" id="' . $this->plugin_slug . '_options_use_cache" value="1" ' . ($use_debug == 1 ? 'checked="checked"' : '') . '/>';
-        echo '<span>' . __('Use debug mode') . '</span>';
+        echo '<input type="checkbox" name="' . $this->plugin_slug . '_options['.$args['key'].']" id="' . $this->plugin_slug . '_options_'.$args['key'].'" value="1" ' . ($option_value == 1 ? 'checked="checked"' : '') . '/>';
+        echo '<span>' . $args['label'] . '</span>';
+        echo '</label>';
+
+        echo '<p style="clear: both">' . $args['description'] . '</p>';
+    }
+    function disable_timeout_callback($args)
+    {
+        $option_value = (empty($this->plugin_options[$args['key']]) ? array() : $this->plugin_options[$args['key']] );
+
+        echo '<label class="shipping-method"> ';
+        echo '<input type="checkbox" name="' . $this->plugin_slug . '_options['.$args['key'].']" id="' . $this->plugin_slug . '_options_'.$args['key'].'" value="1" ' . ($option_value == 1 ? 'checked="checked"' : '') . '/>';
+        echo '<span>' . $args['label'] . '</span>';
+        echo '</label>';
+
+        echo '<p style="clear: both">' . $args['description'] . '</p>';
+    }
+    function use_debug_callback($args)
+    {
+        $option_value = (empty($this->plugin_options[$args['key']]) ? array() : $this->plugin_options[$args['key']] );
+
+        echo '<label class="shipping-method"> ';
+        echo '<input type="checkbox" name="' . $this->plugin_slug . '_options['.$args['key'].']" id="' . $this->plugin_slug . '_options_'.$args['key'].'" value="1" ' . ($option_value == 1 ? 'checked="checked"' : '') . '/>';
+        echo '<span>' . $args['label'] . '</span>';
         echo '</label>';
 
         echo '<p style="clear: both">' . $args['description'] . '</p>';
