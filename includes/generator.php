@@ -157,22 +157,16 @@ abstract class WC_Pricefile_Generator
                 {
                     continue;
                 }
-                /*
-                $product = get_product($product_id);
-
-                if (!$product->is_purchasable() || $product->visibility == 'hidden')
-                {
-                    continue;
-                }
-
-                $product_obj = array(
-                    'product' => $product,
-                    'product_meta' => get_post_meta($product_id),
-                );
-                */
                 
+                $product = new WC_Pricefiles_Product($product_id);
+
+                if( !$product::show() )
+                {
+                    return;
+                }
+        
                 //Tell generator implementation about this product
-                $this->print_product( $product_id );
+                $this->print_product( $product );
             }
 
             //Generate file footer
