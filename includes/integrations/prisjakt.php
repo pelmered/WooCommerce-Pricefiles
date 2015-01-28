@@ -17,7 +17,7 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
      * 
      * @since    0.1.12
      */
-    protected function start()
+    protected function print_header()
     {
         $columns = array(
             'Produktnamn','Art.nr.','EAN','Tillverkare','Tillverkar-SKU','Kategori','Pris inkl.moms','Frakt','Produkt-URL','Bild-URL','Lagerstatus'
@@ -33,24 +33,26 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
     }
 
     /**
-     * Implements WC_Pricefile_Generator->product()= and echoes a formatted product
+     * Implements WC_Pricefile_Generator->print_product()= and echoes a formatted product
      * 
      * @param     array  An opaque object used by property getters.
      * @since    0.1.12
      */
-    protected function product($product_obj)
+    protected function print_product($product_id)
     {
-        echo $this::format_value($this->get_product_title($product_obj));
-        echo $this::format_value($this->get_product_sku($product_obj));
-        echo $this::format_value($this->get_ean($product_obj));
-        echo $this::format_value($this->get_manufacturer($product_obj));
-        echo $this::format_value($this->get_manufacturer_sku($product_obj));
-        echo $this::format_value($this->get_categories($product_obj));
-        echo $this::format_value($this->get_price($product_obj));
-        echo $this::format_value($this->get_shipping_cost($product_obj));
-        echo $this::format_value($this->get_product_url($product_obj));
-        echo $this::format_value($this->get_image_url($product_obj));
-        echo $this::format_value($this->get_stock_status($product_obj));
+        $product = new WC_Pricefiles_Product($product_id);
+        
+        echo $this::format_value($product->get_product_title());
+        echo $this::format_value($product->get_product_sku());
+        echo $this::format_value($product->get_ean());
+        echo $this::format_value($product->get_manufacturer());
+        echo $this::format_value($product->get_manufacturer_sku());
+        echo $this::format_value($product->get_categories());
+        echo $this::format_value($product->get_price());
+        echo $this::format_value($product->get_shipping_cost());
+        echo $this::format_value($product->get_product_url());
+        echo $this::format_value($product->get_image_url());
+        echo $this::format_value($product->get_stock_status());
         echo "\n";
     }
 
@@ -59,7 +61,7 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
      * 
      * @since    0.1.12
      */
-    protected function finish()
+    protected function print_footer()
     {
     }
 

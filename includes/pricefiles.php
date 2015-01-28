@@ -93,7 +93,7 @@ class WC_Pricefiles
             require_once( WP_PRICEFILES_PLUGIN_PATH .'includes/pricefiles.php' );
             
             return true;
-        } 
+        }
         else
         {
             $misc = new WC_Pricefiles_Misc();
@@ -137,7 +137,7 @@ class WC_Pricefiles
 
         if (is_admin())
         {
-            $this->options = get_option(WC_PRICEFILES_PLUGIN_SLUG . '_options', $this->default_pricelist_options());
+            $this->options = $this->get_options();
             // Activate plugin when new blog is added
             //add_action('wpmu_new_blog', array($this, 'activate_new_site'));
 
@@ -179,7 +179,7 @@ class WC_Pricefiles
         {
             header('Content-Type: text/html; charset=utf-8',true);
             
-            $this->options = get_option(WC_PRICEFILES_PLUGIN_SLUG . '_options', $this->default_pricelist_options());
+            $this->options = $this->get_options();
             
             if (!class_exists('WC_Pricefile_Generator'))
                 require_once( WP_PRICEFILES_PLUGIN_PATH . 'includes/generator.php' );
@@ -256,6 +256,15 @@ class WC_Pricefiles
     
     function get_options()
     {
+        if( !empty($this->options) )
+        {
+            return $this->options;
+        }
+        
+        $options = get_option(WC_PRICEFILES_PLUGIN_SLUG . '_options', array());
+        
+        $this->options = wp_parse_args($options, $this->default_pricelist_options());
+        
         return $this->options;
     }
     
@@ -267,11 +276,20 @@ class WC_Pricefiles
         global $wc_pricefiles_globals;
         
         $defaults = array(
+            //General options
             'output_prices'         => 'shop',
-            'use_cache'             => 0,
             'exclude_ids'           => array(),
+            'show_variations'       => 0,
+            'show_variations_format' => '',
             'shipping_methods'      => array(),
-            'shipping_destination'  => $wc_pricefiles_globals['default_shipping_destination']
+            'shipping_destination'  => $wc_pricefiles_globals['default_shipping_destination'],
+            
+            //Advanced options
+            'use_cache'             => 0,
+            'use_debug'             => 0,
+            'set_memory_limit'      => 0,
+            'disable_timeout'       => 0,
+            'deactivate_ean_validation' => 0
         );
         
         return apply_filters('default_pricelist_options', $defaults);
@@ -851,6 +869,19 @@ class WC_Pricefiles
         }
     }
 
+    function get_shipping_destination_values()
+    {
+        $shipping_destination = array();
+        $options = $this->get_options();
+        
+        foreach ($options['shipping_destination'] AS $key => $value)
+        {
+            $shipping_destination[str_replace('shipping_', '', $key)] = $value;
+        }
+        
+        return $shipping_destination;
+    }
+    
     /**
      * Gets an array of default shipping destination fields to be used of shipping calculations 
      * 

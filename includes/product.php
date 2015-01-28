@@ -7,23 +7,20 @@
 
 class WC_Pricefiles_Product
 {
-    private $product;
-    private $product_data = array();
-    private $product_meta = array();
+    private static $product;
+    private static $product_meta = array();
     
+    private static $options = array();
     
-    private $options = array();
+    private static $price_type;
     
     public function __construct( $product_id )
     {
-        $this->product = get_product( $product_id );
-        
-        $this->product_data = $this->product->get_post_data();
+        self::$product = get_product( $product_id );
 
-        $this->product_meta = get_post_meta( $product_id );
+        self::$product_meta = get_post_meta( $product_id );
         
-        $this->options = WC_Pricefiles()->get_options();
-        //$this->options = get_option(WC_PRICEFILES_PLUGIN_SLUG . '_options', WC_Pricefiles_Admin_Options::default_pricelist_options());
+        self::$options = WC_Pricefiles()->get_options();
     }
     
     /**
@@ -31,9 +28,9 @@ class WC_Pricefiles_Product
      * 
      * @return boolean
      */
-    function show()
+    public static function show()
     {
-        if (!$this->product->is_purchasable() || $this->product->visibility == 'hidden')
+        if (!self::$product->is_purchasable() || self::$product->visibility == 'hidden')
         {
             return false;
         }
@@ -54,14 +51,14 @@ class WC_Pricefiles_Product
      * @return  string  'incl' or 'excl'
      * @since   0.1.10
      */
-    public function get_price($product)
+    public static function get_price()
     {
-        if ($this->get_price_type() === 'excl')
+        if (self::get_price_type() === 'excl')
         {
-            return $product->get_price_excluding_tax(1);
+            return self::$product->get_price_excluding_tax(1);
         } else
         {
-            return $product->get_price_including_tax(1);
+            return self::$product->get_price_including_tax(1);
         }
     }
 
@@ -71,32 +68,203 @@ class WC_Pricefiles_Product
      * @return  string  'incl' or 'excl'
      * @since   0.1.10
      */
-    public function get_price_type()
+    public static function get_price_type()
     {
-        if (!empty($this->price_type))
+        if (!empty(self::$price_type))
         {
-            return $this->price_type;
+            return self::$price_type;
         }
-        if ($this->options['output_prices'] == 'shop')
+        if (self::$options['output_prices'] == 'shop')
         {
             $wc_option = get_option('woocommerce_tax_display_cart');
             if(!empty($wc_option) )
             {
-                $this->price_type = $wc_option;
-                return $this->price_type;
+                self::$price_type = $wc_option;
+                return self::$price_type;
             }
         } 
         if (!empty($this->options['output_prices']))
         {
-            $this->price_type = $this->options['output_prices'];
-            return $this->price_type;
+            self::$price_type = self::$options['output_prices'];
+            return self::$price_type;
         } else
         {
-            $this->price_type = 'incl';
-            return $this->price_type;
+            self::$price_type = 'incl';
+            return self::$price_type;
         }
     }
 
+    /**
+     * Extract the EAN code of a product.
+     * 
+     * @param   array   An array with keys for product and product_meta.
+     * @return string The EAN code or an empty string if it's missing.
+     * @since    0.1.10
+     */
+    public static function get_ean()
+    {
+        if (isset(self::$product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0]))
+        {
+            return self::$product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0];
+        }
+        else {
+            return '';
+        }
+    }
+
+    /**
+     * Extract the manufacturer name of a product.
+     *
+     * @param   array   An array with keys for product and product_meta.
+     * @return  string  The manufacturer name or an empty string if it's missing.
+     * @since   0.1.10
+     */
+    public static function get_manufacturer()
+    {
+        if (isset(self::$product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0]))
+        {
+            $term = get_term_by('slug', self::$product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0], 'pa_manufacturer');
+            if ($term !== false) {
+                return $term->name;
+            }
+            else {
+                return '';
+            }
+        }
+        else {
+            return '';
+        }
+    }
+
+    /**
+     * Extract the manufacturer SKU of a product.
+     * 
+     * @param   array   An array with keys for product and product_meta.
+     * @return  string  The manufacturer SKU or an empty string if it's missing.
+     * @since    0.1.10
+     */
+    public static function get_manufacturer_sku()
+    {
+        if (isset(self::$product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0]))
+        {
+            return self::$product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0];
+        }
+        else {
+            return '';
+        }
+    }
+
+    /**
+     * Extract the stock status of a product.
+     * 
+     * @param   array   An array with keys for product and product_meta.
+     * @return  string  'Ja' or 'Nej'
+     * @since    0.1.12
+     */
+    public static function get_stock_status()
+    {
+        if (self::$product->is_in_stock())
+        {
+            return 'Ja';
+        }
+        else
+        {
+            return 'Nej';
+        }
+    }
+
+    /**
+     * Extract the product URL a product.
+     * 
+     * @param   array   An array with keys for product and product_meta.
+     * @return  string  A URL.
+     * @since    0.1.12
+     */
+    public static function get_product_url()
+    {
+        return get_permalink(self::$product->id);
+    }
+
+    /**
+     * Extract the image URL a product.
+     * 
+     * @param   array   An array with keys for product and product_meta.
+     * @return  string  A URL or an empty string if it's missing.
+     * @since    0.1.12
+     */
+    public static function get_image_url()
+    {
+        $product_id = self::$product->id;
+        if (has_post_thumbnail($product_id))
+        {
+            return wp_get_attachment_url(get_post_thumbnail_id($product_id));
+        }
+        else
+        {
+            return '';
+        }
+    }
+
+    /**
+     * Extract the product SKU of a product.
+     * 
+     * @param   array   An array with keys for product and product_meta.
+     * @return  string  The SKU.
+     * @since    0.1.12
+     */
+    public static function get_product_sku()
+    {
+        return self::$product->get_sku();
+    }
+
+    /**
+     * Extract the product title of a product.
+     * 
+     * @param   array   An array with keys for product and product_meta.
+     * @return  string  The product title.
+     * @since    0.1.12
+     */
+    public static function get_product_title()
+    {
+        return self::$product->post->post_title;
+    }
+
+    /**
+     * Extract the description of a product.
+     * 
+     * @param   array   An array with keys for product and product_meta.
+     * @return  string  The product description.
+     * @since    0.1.12
+     */
+    public static function get_description()
+    {
+        return strip_tags(self::$product->post->post_excerpt);
+    }
+
+    /**
+     * Extract the stock quantity of a product.
+     * 
+     * @param   array   An array with keys for product and product_meta.
+     * @return  int  The stock quantity
+     * @since    0.1.12
+     */
+    public static function get_stock_quantity()
+    {
+        return self::$product->get_stock_quantity();
+    }
+
+    /**
+     * Extract the delivery time of a product.
+     * 
+     * @param   array   An array with keys for product and product_meta.
+     * @return  string  Always an empty string.
+     * @since    0.1.12
+     */
+    static function get_delivery_time()
+    {
+        return '';
+    }
+    
     /**
      * Get product categories formatted for pricefile.
 	 *
@@ -104,11 +272,11 @@ class WC_Pricefiles_Product
      * @return  string  The manufacturer name or an empty string if it's missing.
      * @since   0.1.10
      */
-    public function get_categories($product)
+    public static function get_categories()
     {
         global $wc_pricefiles_globals;
         
-        $product_id = $product->id;
+        $product_id = self::$product->id;
 
         $cat = get_post_meta($product_id, WC_PRICEFILES_PLUGIN_SLUG . '_pricelist_cat', true);
         
@@ -166,17 +334,16 @@ class WC_Pricefiles_Product
      * @param   object  $product Product object
      * @return  float   Lowest shipping price
      */
-    public function get_shipping_cost($product)
+    public static function get_shipping_cost()
     {
-        global $woocommerce;
-
         // Packages array for storing package/cart object
         $packages = array();
+        $product = self::$product;
 
         $price = $product->get_price_excluding_tax(1);
         $price_tax = $product->get_price_including_tax(1) - $price;
 
-		// Build up a fake package object
+        // Build up a fake package object
         $cart = array(
             'product_id' => $product->id,
             'variation_id' => '',
@@ -189,35 +356,35 @@ class WC_Pricefiles_Product
             'line_subtotal_tax' => $price_tax,
         );
 
-		// Items in the package
+        // Items in the package
         $packages[0]['contents'][md5('wc_pricefiles_' . $product->id . $price)] = $cart;  
-		// Cost of items in the package, set below
+        // Cost of items in the package, set below
         $packages[0]['contents_cost'] = $price;  
- 		// Applied coupons - some, like free shipping, affect costs    
+        // Applied coupons - some, like free shipping, affect costs    
         $packages[0]['applied_coupons'] = ''; 
-		// Fake destination address. Needed for calculation the shipping
+        // Fake destination address. Needed for calculation the shipping
         $packages[0]['destination'] = WC_Pricefiles()->get_shipping_destination();
 
-		// Apply filters to mimic normal behaviour
+        // Apply filters to mimic normal behaviour
         $packages = apply_filters('woocommerce_cart_shipping_packages', $packages);
 
 
         $package = $packages[0];
-
-		// Calculate the shipping using our fake package object
-        $shipping_method_rates = $woocommerce->shipping->calculate_shipping_for_package($package);
+        
+        // Calculate the shipping using our fake package object
+        $shipping_method_rates = WC()->shipping->calculate_shipping_for_package($package);
 
         $shipping_methods = WC_Pricefiles()->get_shipping_methods();
 
         $lowest_shipping_cost = 0;
 
-        if (!empty($this->shipping_methods))
+        if (!empty($shipping_methods))
         {
             //$shipping_methods = array_intersect_key($shipping_method_rates['rates'], $this->shipping_methods);
 
             foreach ($shipping_method_rates['rates'] AS $rate)
             {
-                if (in_array($rate->method_id, $this->shipping_methods))
+                if (in_array($rate->method_id, $shipping_methods))
                 {
                     $total_tax = 0;
                     
@@ -237,75 +404,15 @@ class WC_Pricefiles_Product
                         $total_cost = $rate->cost;
                     }
 
-                    if (empty($lowest_shipping_cost) || $total_cost_inc_tax < $lowest_shipping_cost)
+                    if (empty($lowest_shipping_cost) || $total_cost < $lowest_shipping_cost)
                     {
-                        $lowest_shipping_cost = $total_cost_inc_tax;
+                        $lowest_shipping_cost = $total_cost;
                     }
                 }
             }
         }
 
         return $lowest_shipping_cost;
-    }
-
-    /**
-     * Extract the EAN code of a product.
-     * 
-     * @param array $product_meta Return value from get_post_meta()
-     * @return string The EAN code or an empty string if it's missing.
-     * @since    0.1.10
-     */
-    protected static function get_ean($product_meta)
-    {
-        if (isset($product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0]))
-        {
-            return $product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0];
-        }
-        else {
-            return '';
-        }
-    }
-
-    /**
-     * Extract the manufacturer name of a product.
-	 *
-     * @param   array   $product_meta Return value from get_post_meta()
-     * @return  string  The manufacturer name or an empty string if it's missing.
-     * @since   0.1.10
-     */
-    protected static function get_manufacturer($product_meta)
-    {
-        if (isset($product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0]))
-	{
-            $term = get_term_by('slug', $product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0], 'pa_manufacturer');
-            if ($term !== false) {
-                return $term->name;
-            }
-            else {
-                return '';
-            }
-        }
-        else {
-            return '';
-        }
-    }
-
-    /**
-     * Extract the manufacturer SKU of a product.
-     * 
-     * @param   array   $product_meta Return value from get_post_meta()
-     * @return  string  The manufacturer SKU or an empty string if it's missing.
-	 * @since    0.1.10
-     */
-    protected static function get_manufacturer_sku($product_meta)
-    {
-        if (isset($product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0]))
-        {
-            return $product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0];
-        }
-        else {
-            return '';
-        }
     }
 
     

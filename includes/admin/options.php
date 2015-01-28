@@ -14,7 +14,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
         //add_filter($this->plugin_slug . '_option_tabs', array($this, 'add_options_tab'), 1);
 
-        $this->plugin_options = get_option($this->plugin_slug . '_options', WC_Pricefiles()->default_pricelist_options());
+        $this->plugin_options = WC_Pricefiles()->get_options();
 
         add_action('admin_menu', array($this, 'add_plugin_menu'));
 
@@ -187,6 +187,48 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             )
         );
         add_settings_field(
+            'stock_status_type', __('Show variations', $this->plugin_slug), 
+            array($this, 'select_option_callback'), 
+            $this->plugin_slug . '_options_section', 
+            $this->plugin_slug . '_options', 
+            array(
+                'key'           => 'stock_status_type',
+                'label'         => __('Stock status type', $this->plugin_slug),
+                'options'       => array(
+                    array(
+                        'value' => 'yes_no',
+                        'label' => __('Yes / No', $this->plugin_slug),
+                    ),
+                    array(
+                        'value' => 'stock_qty',
+                        'label' => __('Stock Qty', $this->plugin_slug),
+                    )
+                ),
+                'description'   => __('', $this->plugin_slug),
+            )
+        );
+        add_settings_field(
+            'show_variations', __('Show variations', $this->plugin_slug), 
+            array($this, 'checkbox_option_callback'), 
+            $this->plugin_slug . '_options_section', 
+            $this->plugin_slug . '_options', 
+            array(
+                'key'           => 'show_variations',
+                'label'         => __('Show variations', $this->plugin_slug),
+                'description'   => __('If checked, all variations will be listed in the pricefile. If it\'s not checked, only the main variable product will be shown.', $this->plugin_slug),
+            )
+        );
+        add_settings_field(
+            'show_variation_format', __('Variation title format', $this->plugin_slug), 
+            array($this, 'text_option_callback'), 
+            $this->plugin_slug . '_options_section', 
+            $this->plugin_slug . '_options', 
+            array(
+                'key'           => 'show_variations',
+                'description' => __('.', $this->plugin_slug),
+            )
+        );
+        add_settings_field(
             'shipping_methods', 
             __('Select shipping methods', $this->plugin_slug), 
             array($this, 'shipping_methods_callback'), 
@@ -220,11 +262,12 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         add_settings_field(
             'use_cache', 
             __('Use cache for pricefile', $this->plugin_slug), 
-            array($this, 'use_cache_callback'), 
+            array($this, 'checkbox_option_callback'), 
             $this->plugin_slug . '_advanced_options_section', 
             $this->plugin_slug . '_advanced_options', 
             array(
-                
+                'key'           => 'use_cache',
+                'label'         => __('Use cache', $this->plugin_slug),
                 'description' => __('Use cache for pricefile. Usefull if you have many products. Needs cron to refresh cache.<br />' . 
                         WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG . '/' . ' needs to be writable by PHP', $this->plugin_slug).
                         ' ('.(is_writable(WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG . '/') ? '<span style="color: green">'.__('Is writable', $this->plugin_slug).'</span>' : '<span style="color: red">'.__('NOT WRITABLE', $this->plugin_slug).'</span>' ).').'       
@@ -233,7 +276,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         add_settings_field(
             'use_debug', 
             __('Debug mode', $this->plugin_slug), 
-            array($this, 'use_debug_callback'), 
+            array($this, 'checkbox_option_callback'), 
             $this->plugin_slug . '_advanced_options_section', 
             $this->plugin_slug . '_advanced_options', 
             array(
@@ -245,7 +288,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         add_settings_field(
             'set_memory_limit', 
             __('Memory limit', $this->plugin_slug), 
-            array($this, 'set_memory_limit_callback'), 
+            array($this, 'checkbox_option_callback'), 
             $this->plugin_slug . '_advanced_options_section', 
             $this->plugin_slug . '_advanced_options', 
             array(
@@ -257,7 +300,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         add_settings_field(
             'disable_timeout', 
             __('Disable timeout', $this->plugin_slug), 
-            array($this, 'disable_timeout_callback'), 
+            array($this, 'checkbox_option_callback'), 
             $this->plugin_slug . '_advanced_options_section', 
             $this->plugin_slug . '_advanced_options', 
             array(
@@ -271,7 +314,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         add_settings_field(
             'deactivate_ean_validation', 
             __('Deactivate EAN validation', $this->plugin_slug), 
-            array($this, 'deactivate_ean_validation_callback'), 
+            array($this, 'checkbox_option_callback'), 
             $this->plugin_slug . '_advanced_options_section', 
             $this->plugin_slug . '_advanced_options', 
             array(
@@ -326,24 +369,11 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
     }
     
     
-    function donation_button()
-    {
-        ?>
-        <p><?php _e('If you like or find this plugin useful, please consider donating something.'); ?></p>
-
-        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-        <input type="hidden" name="cmd" value="_s-xclick">
-        <input type="hidden" name="hosted_button_id" value="8L2PHLURJMC8Y">
-        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-        <img alt="" border="0" src="https://www.paypalobjects.com/sv_SE/i/scr/pixel.gif" width="1" height="1">
-        </form>
-        <?php
-    }
 
     /* ------------------------------------------------------------------------ *
      * Field Callbacks
      * ------------------------------------------------------------------------ */
-
+    
     function output_prices_callback($args)
     {
 
@@ -382,7 +412,15 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
         echo '<p>' . $args['description'] . '</p>';
     }
-
+    function show_variations_callback()
+    {
+        
+    }
+    function show_variation_format_callback()
+    {
+        
+    }
+    
     function shipping_methods_callback()
     {
         global $woocommerce;
