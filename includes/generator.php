@@ -160,9 +160,9 @@ abstract class WC_Pricefile_Generator
                 
                 $product = new WC_Pricefiles_Product($product_id);
 
-                if( !$product::show() )
+                if( !$product->show() )
                 {
-                    return;
+                    continue;
                 }
         
                 //Tell generator implementation about this product

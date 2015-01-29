@@ -7,20 +7,16 @@
 
 class WC_Pricefiles_Product
 {
-    private static $product;
-    private static $product_meta = array();
-    
-    private static $options = array();
+    private $product;
+    private $product_meta = array();
     
     private static $price_type;
     
     public function __construct( $product_id )
     {
-        self::$product = get_product( $product_id );
+        $this->product = get_product( $product_id );
 
-        self::$product_meta = get_post_meta( $product_id );
-        
-        self::$options = WC_Pricefiles()->get_options();
+        $this->product_meta = get_post_meta( $product_id );
     }
     
     /**
@@ -28,9 +24,9 @@ class WC_Pricefiles_Product
      * 
      * @return boolean
      */
-    public static function show()
+    public function show()
     {
-        if (!self::$product->is_purchasable() || self::$product->visibility == 'hidden')
+        if (!$this->product->is_purchasable() || $this->product->visibility == 'hidden')
         {
             return false;
         }
@@ -51,14 +47,14 @@ class WC_Pricefiles_Product
      * @return  string  'incl' or 'excl'
      * @since   0.1.10
      */
-    public static function get_price()
+    public function get_price()
     {
         if (self::get_price_type() === 'excl')
         {
-            return self::$product->get_price_excluding_tax(1);
+            return $this->product->get_price_excluding_tax(1);
         } else
         {
-            return self::$product->get_price_including_tax(1);
+            return $this->product->get_price_including_tax(1);
         }
     }
 
@@ -74,7 +70,8 @@ class WC_Pricefiles_Product
         {
             return self::$price_type;
         }
-        if (self::$options['output_prices'] == 'shop')
+        $options = WC_Pricefiles()->get_options();
+        if ($options['output_prices'] == 'shop')
         {
             $wc_option = get_option('woocommerce_tax_display_cart');
             if(!empty($wc_option) )
@@ -83,9 +80,9 @@ class WC_Pricefiles_Product
                 return self::$price_type;
             }
         } 
-        if (!empty($this->options['output_prices']))
+        if (!empty($options['output_prices']))
         {
-            self::$price_type = self::$options['output_prices'];
+            self::$price_type = $options['output_prices'];
             return self::$price_type;
         } else
         {
@@ -101,11 +98,11 @@ class WC_Pricefiles_Product
      * @return string The EAN code or an empty string if it's missing.
      * @since    0.1.10
      */
-    public static function get_ean()
+    public function get_ean()
     {
-        if (isset(self::$product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0]))
+        if (isset($this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0]))
         {
-            return self::$product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0];
+            return $this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0];
         }
         else {
             return '';
@@ -119,11 +116,11 @@ class WC_Pricefiles_Product
      * @return  string  The manufacturer name or an empty string if it's missing.
      * @since   0.1.10
      */
-    public static function get_manufacturer()
+    public function get_manufacturer()
     {
-        if (isset(self::$product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0]))
+        if (isset($this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0]))
         {
-            $term = get_term_by('slug', self::$product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0], 'pa_manufacturer');
+            $term = get_term_by('slug', $this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0], 'pa_manufacturer');
             if ($term !== false) {
                 return $term->name;
             }
@@ -143,11 +140,11 @@ class WC_Pricefiles_Product
      * @return  string  The manufacturer SKU or an empty string if it's missing.
      * @since    0.1.10
      */
-    public static function get_manufacturer_sku()
+    public function get_manufacturer_sku()
     {
-        if (isset(self::$product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0]))
+        if (isset($this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0]))
         {
-            return self::$product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0];
+            return $this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0];
         }
         else {
             return '';
@@ -161,9 +158,9 @@ class WC_Pricefiles_Product
      * @return  string  'Ja' or 'Nej'
      * @since    0.1.12
      */
-    public static function get_stock_status()
+    public function get_stock_status()
     {
-        if (self::$product->is_in_stock())
+        if ($this->product->is_in_stock())
         {
             return 'Ja';
         }
@@ -180,9 +177,9 @@ class WC_Pricefiles_Product
      * @return  string  A URL.
      * @since    0.1.12
      */
-    public static function get_product_url()
+    public function get_product_url()
     {
-        return get_permalink(self::$product->id);
+        return get_permalink($this->product->id);
     }
 
     /**
@@ -192,9 +189,9 @@ class WC_Pricefiles_Product
      * @return  string  A URL or an empty string if it's missing.
      * @since    0.1.12
      */
-    public static function get_image_url()
+    public function get_image_url()
     {
-        $product_id = self::$product->id;
+        $product_id = $this->product->id;
         if (has_post_thumbnail($product_id))
         {
             return wp_get_attachment_url(get_post_thumbnail_id($product_id));
@@ -212,9 +209,9 @@ class WC_Pricefiles_Product
      * @return  string  The SKU.
      * @since    0.1.12
      */
-    public static function get_product_sku()
+    public function get_product_sku()
     {
-        return self::$product->get_sku();
+        return $this->product->get_sku();
     }
 
     /**
@@ -224,9 +221,9 @@ class WC_Pricefiles_Product
      * @return  string  The product title.
      * @since    0.1.12
      */
-    public static function get_product_title()
+    public function get_product_title()
     {
-        return self::$product->post->post_title;
+        return $this->product->post->post_title;
     }
 
     /**
@@ -236,9 +233,9 @@ class WC_Pricefiles_Product
      * @return  string  The product description.
      * @since    0.1.12
      */
-    public static function get_description()
+    public function get_description()
     {
-        return strip_tags(self::$product->post->post_excerpt);
+        return strip_tags($this->product->post->post_excerpt);
     }
 
     /**
@@ -248,9 +245,9 @@ class WC_Pricefiles_Product
      * @return  int  The stock quantity
      * @since    0.1.12
      */
-    public static function get_stock_quantity()
+    public function get_stock_quantity()
     {
-        return self::$product->get_stock_quantity();
+        return $this->product->get_stock_quantity();
     }
 
     /**
@@ -272,11 +269,11 @@ class WC_Pricefiles_Product
      * @return  string  The manufacturer name or an empty string if it's missing.
      * @since   0.1.10
      */
-    public static function get_categories()
+    public function get_categories()
     {
         global $wc_pricefiles_globals;
         
-        $product_id = self::$product->id;
+        $product_id = $this->product->id;
 
         $cat = get_post_meta($product_id, WC_PRICEFILES_PLUGIN_SLUG . '_pricelist_cat', true);
         
@@ -334,11 +331,11 @@ class WC_Pricefiles_Product
      * @param   object  $product Product object
      * @return  float   Lowest shipping price
      */
-    public static function get_shipping_cost()
+    public function get_shipping_cost()
     {
         // Packages array for storing package/cart object
         $packages = array();
-        $product = self::$product;
+        $product = $this->product;
 
         $price = $product->get_price_excluding_tax(1);
         $price_tax = $product->get_price_including_tax(1) - $price;
@@ -388,7 +385,7 @@ class WC_Pricefiles_Product
                 {
                     $total_tax = 0;
                     
-                    if( $this->get_price_type() == 'incl' )
+                    if( self::get_price_type() == 'incl' )
                     {
                         //Sum the taxes
                         foreach($rate->taxes AS $tax)
