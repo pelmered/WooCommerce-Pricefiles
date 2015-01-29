@@ -162,7 +162,7 @@ abstract class WC_Pricefile_Generator
 
                 if( !$product::show() )
                 {
-                    return;
+                    continue;
                 }
         
                 //Tell generator implementation about this product
