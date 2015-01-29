@@ -10,8 +10,6 @@ class WC_Pricefiles_Product
     private $product;
     private $product_meta = array();
     
-    private static $price_type;
-    
     public function __construct( $product_id )
     {
         $this->product = get_product( $product_id );
@@ -36,8 +34,6 @@ class WC_Pricefiles_Product
         }
     }
     
-    
-    
     // Getters
     
     
@@ -55,39 +51,6 @@ class WC_Pricefiles_Product
         } else
         {
             return $this->product->get_price_including_tax(1);
-        }
-    }
-
-    /**
-     * Get price tax display option. I.e. whether we should out put prices including or excluding tax  
-	 *
-     * @return  string  'incl' or 'excl'
-     * @since   0.1.10
-     */
-    public static function get_price_type()
-    {
-        if (!empty(self::$price_type))
-        {
-            return self::$price_type;
-        }
-        $options = WC_Pricefiles()->get_options();
-        if ($options['output_prices'] == 'shop')
-        {
-            $wc_option = get_option('woocommerce_tax_display_cart');
-            if(!empty($wc_option) )
-            {
-                self::$price_type = $wc_option;
-                return self::$price_type;
-            }
-        } 
-        if (!empty($options['output_prices']))
-        {
-            self::$price_type = $options['output_prices'];
-            return self::$price_type;
-        } else
-        {
-            self::$price_type = 'incl';
-            return self::$price_type;
         }
     }
 

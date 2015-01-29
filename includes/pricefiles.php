@@ -46,6 +46,14 @@ class WC_Pricefiles
      * @since    0.1.0
      */
     protected $options = array();
+    
+    /**
+     * Variable to store cached data in singleton for reuse
+     * 
+     * @var type 
+     * @since    1.0
+     */
+    protected $cache_data = array();
 
     /**
      * Initialize the plugin by setting localization, filters, and administration functions.
@@ -269,6 +277,39 @@ class WC_Pricefiles
     }
     
     /**
+     * Get price tax display option. I.e. whether we should out put prices including or excluding tax  
+	 *
+     * @return  string  'incl' or 'excl'
+     * @since   0.1.10
+     */
+    public function get_price_type()
+    {
+        if (!empty($this->cache_data['price_type']))
+        {
+            return $this->cache_data['price_type'];
+        }
+        $options = WC_Pricefiles()->get_options();
+        if ($options['output_prices'] == 'shop')
+        {
+            $wc_option = get_option('woocommerce_tax_display_cart');
+            if(!empty($wc_option) )
+            {
+                $this->cache_data['price_type'] = $wc_option;
+                return $this->cache_data['price_type'];
+            }
+        } 
+        if (!empty($options['output_prices']))
+        {
+            $this->cache_data['price_type'] = $options['output_prices'];
+            return $this->cache_data['price_type'];
+        } else
+        {
+            $this->cache_data['price_type'] = 'incl';
+            return $this->cache_data['price_type'];
+        }
+    }
+    
+    /**
      * Provides default values for the Display Options.
      */
     function default_pricelist_options()
@@ -340,39 +381,6 @@ class WC_Pricefiles
         $pl_cat = $cats_map[$cat->term_id];
 
         update_post_meta($post_id, '_pricelist_cat', $pl_cat);
-    }
-
-
-    /**
-     * Get price tax display option. I.e. whether we should out put prices including or excluding tax  
-     *
-     * @return  string  'incl' or 'excl'
-     * @since   0.1.10
-     */
-    public function get_price_type()
-    {
-        if (!empty($this->price_type))
-        {
-            return $this->price_type;
-        }
-        if ($this->options['output_prices'] == 'shop')
-        {
-            $wc_option = get_option('woocommerce_tax_display_cart');
-            if(!empty($wc_option) )
-            {
-                $this->price_type = $wc_option;
-                return $this->price_type;
-            }
-        } 
-        if (!empty($this->options['output_prices']))
-        {
-            $this->price_type = $this->options['output_prices'];
-            return $this->price_type;
-        } else
-        {
-            $this->price_type = 'incl';
-            return $this->price_type;
-        }
     }
 
     function get_deepest_child_category($categories)
