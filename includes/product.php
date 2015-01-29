@@ -83,7 +83,7 @@ class WC_Pricefiles_Product
                 return self::$price_type;
             }
         } 
-        if (!empty($this->options['output_prices']))
+        if (!empty(self::options['output_prices']))
         {
             self::$price_type = self::$options['output_prices'];
             return self::$price_type;
@@ -388,7 +388,7 @@ class WC_Pricefiles_Product
                 {
                     $total_tax = 0;
                     
-                    if( $this->get_price_type() == 'incl' )
+                    if( self::get_price_type() == 'incl' )
                     {
                         //Sum the taxes
                         foreach($rate->taxes AS $tax)
