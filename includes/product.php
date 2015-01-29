@@ -10,8 +10,6 @@ class WC_Pricefiles_Product
     private $product;
     private $product_meta = array();
     
-    private static $options = array();
-    
     private static $price_type;
     
     public function __construct( $product_id )
@@ -19,8 +17,6 @@ class WC_Pricefiles_Product
         $this->product = get_product( $product_id );
 
         $this->product_meta = get_post_meta( $product_id );
-        
-        self::$options = WC_Pricefiles()->get_options();
     }
     
     /**
@@ -74,7 +70,8 @@ class WC_Pricefiles_Product
         {
             return self::$price_type;
         }
-        if (self::$options['output_prices'] == 'shop')
+        $options = WC_Pricefiles()->get_options();
+        if ($options['output_prices'] == 'shop')
         {
             $wc_option = get_option('woocommerce_tax_display_cart');
             if(!empty($wc_option) )
@@ -83,9 +80,9 @@ class WC_Pricefiles_Product
                 return self::$price_type;
             }
         } 
-        if (!empty(self::options['output_prices']))
+        if (!empty($options['output_prices']))
         {
-            self::$price_type = self::$options['output_prices'];
+            self::$price_type = $options['output_prices'];
             return self::$price_type;
         } else
         {
