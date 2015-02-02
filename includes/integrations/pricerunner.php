@@ -45,10 +45,10 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
     protected function print_product( $product )
     {
         echo $this::format_value($product->get_categories());
-        echo $this::format_value($product->get_product_sku());
+        echo $this::format_value($product->get_sku());
         echo $this::format_value($product->get_price());
-        echo $this::format_value($product->get_product_url());
-        echo $this::format_value($product->get_product_title());
+        echo $this::format_value($product->get_url());
+        echo $this::format_value($product->get_title());
         echo $this::format_value($product->get_manufacturer_sku());
         echo $this::format_value($product->get_manufacturer());
         echo $this::format_value($product->get_ean());

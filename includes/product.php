@@ -45,7 +45,7 @@ class WC_Pricefiles_Product
      */
     public function get_price()
     {
-        if (self::get_price_type() === 'excl')
+        if (WC_Pricefiles()->get_price_type() === 'excl')
         {
             return $this->product->get_price_excluding_tax(1);
         } else
@@ -140,7 +140,7 @@ class WC_Pricefiles_Product
      * @return  string  A URL.
      * @since    0.1.12
      */
-    public function get_product_url()
+    public function get_url()
     {
         return get_permalink($this->product->id);
     }
@@ -172,7 +172,7 @@ class WC_Pricefiles_Product
      * @return  string  The SKU.
      * @since    0.1.12
      */
-    public function get_product_sku()
+    public function get_sku()
     {
         return $this->product->get_sku();
     }
@@ -184,7 +184,7 @@ class WC_Pricefiles_Product
      * @return  string  The product title.
      * @since    0.1.12
      */
-    public function get_product_title()
+    public function get_title()
     {
         return $this->product->post->post_title;
     }

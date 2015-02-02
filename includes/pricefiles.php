@@ -383,6 +383,13 @@ class WC_Pricefiles
         update_post_meta($post_id, '_pricelist_cat', $pl_cat);
     }
 
+    /**
+     * Extract the deepest caregory from a category tree (from wp_get_post_terms())
+     * TODO: Revist. Not a perfect solution
+     * 
+     * @param type $categories
+     * @return boolean
+     */
     function get_deepest_child_category($categories)
     {
         $maxId = 0;
