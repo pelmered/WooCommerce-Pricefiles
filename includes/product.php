@@ -303,7 +303,7 @@ class WC_Pricefiles_Product
 
         $terms = get_the_terms($product_id, 'product_cat');
         
-        if(is_wp_error( $terms ) || count($terms) == 0)
+        if(is_wp_error( $terms ) || count($terms) == 0 || !is_array($terms))
         {
             return '';
         }

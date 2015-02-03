@@ -49,8 +49,11 @@
             e.preventDefault();
 
             $('#woocommerce-pricefiles_cache_refresh_status').html('loading...');
+            
+            var $url = $(this).data('url');
 
-            var cache_refresh_xhr = $.get( 'http://debug.nu/?pricefile=all&refresh=1&output=json', function() {
+            //var cache_refresh_xhr = $.get( wc_pricelists_options.site_url + '?pricefile=all&refresh=1&output=json', function() {
+            var cache_refresh_xhr = $.get( $url , function() {
                 
                 $('#woocommerce-pricefiles_cache_refresh_status').html('Done');
                 
@@ -58,6 +61,16 @@
 
 
         });
+        
+        
+        $('#woocommerce-pricefiles_expand_disable_timeout_info').click(function(e){
+            
+            e.preventDefault();
+            
+            $('#woocommerce-pricefiles_disable_timeout_info').slideToggle();
+            
+        });
+        
     });
 
         

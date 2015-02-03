@@ -286,6 +286,12 @@ abstract class WC_Pricefile_Generator
         
         $cache_path = WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG . '/' . $this->pricefile_slug . '.txt';
 
+        //If files does not exist, test if we can create it
+        if(!file_exists($cache_path))
+        {
+            $w = file_put_contents($cache_path, '.');
+        }
+        
         if (!is_writable($cache_path))
         {
             if (!file_exists(dirname($cache_path)))

@@ -229,11 +229,11 @@ class WC_Pricefiles
                         
                         $wc_pricefile_generator = $class_name::get_instance($slug);
                         //var_dump($wc_pricefile_generator);
-                        $res = $wc_pricefile_generator->generate_pricefile();
+                        $response_code = $wc_pricefile_generator->generate_pricefile();
                         
-                        if($res != 'cache_written')
+                        if($response_code != 'cache_written')
                         {
-                            $error = true;
+                            $error = 'Cache could not be written';
                         }
                     }
                     
@@ -245,12 +245,32 @@ class WC_Pricefiles
                         if($error)
                         {
                             $response['status'] = 'error';
+                            $response['code'] = $response_code;
+                            $response['msg'] = $error;
+                            $response['time'] = timer_stop();
+                            
+                            
                         }
                         else
                         {
                             $response['status'] = 'ok';
+                            $response['time'] = timer_stop();
                         }
+                        
+                        //Add some nice spacing if runt fom command line
+                        if(php_sapi_name() === 'cli')
+                        {
+                            echo "\n\n";
+                        }
+                        
                         echo json_encode($response);
+                        
+                        //Add some nice spacing if runt fom command line
+                        if(php_sapi_name() === 'cli')
+                        {
+                            echo "\n\n";
+                        }
+                        
                         die();        
                     }
                     else
@@ -752,6 +772,7 @@ class WC_Pricefiles
         
         wp_localize_script($this->plugin_slug . '-admin-options-script', 'wc_pricelists_options', array(
             'woocommerce_url'           => WC()->plugin_url(),
+            'site_url'                  => get_bloginfo('url'),
             'ajax_url'                  => admin_url('/admin-ajax.php'),
             'search_products_nonce' 	=> wp_create_nonce("search-products"),
         ));

@@ -329,7 +329,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         add_settings_field(
             'disable_timeout', 
             __('Disable timeout', $this->plugin_slug), 
-            array($this, 'checkbox_option_callback'), 
+            array($this, 'disable_timeout_callback'), 
             $this->plugin_slug . '_advanced_options_section', 
             $this->plugin_slug . '_advanced_options', 
             array(
@@ -505,17 +505,55 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         echo '</label>';
 
         echo '<p style="clear: both">' . $args['description'] . '</p>';
-
-        echo '<div id="' . $this->plugin_slug . '_cache_additional" style="' . ($use_cache == 1 ? '' : 'display: none') . '">';
-
+        
         $pricefile_base_url = get_bloginfo('url') . '/?pricefile=all&refresh=1&output=json';
+        ?>
+        
+        <div id="<?php echo $this->plugin_slug; ?>'_cache_additional" style="<?php echo ($use_cache == 1 ? '' : 'display: none'); ?>">
+            <input class="wide" type="text" size="60" value="<?php echo $pricefile_base_url; ?>" disabled />
 
-        echo '<input class="wide" type="text" size="60" value="' . $pricefile_base_url . '" disabled />';
+            <br /><button id="<?php echo $this->plugin_slug; ?>'_refresh_cache_button" data-url="<?php echo $pricefile_base_url; ?>"><?php _e('Refresh cache'); ?></button>
+            <span id="<?php echo $this->plugin_slug; ?>'_cache_refresh_status"></span>
 
-        echo '<br /><button id="' . $this->plugin_slug . '_refresh_cache_button" data-url="' . $pricefile_base_url. '">' . __('Refresh cache') . '</button>';
-        echo '<span id="' . $this->plugin_slug . '_cache_refresh_status"></span>';
-
-        echo '</div>';
+            
+            
+            <p>
+                It's recommanded to use crontab toether with cache. Click <a href="#" id="<?php echo $this->plugin_slug; ?>_expand_disable_timeout_info">here</a> for setup instructions.
+            </p>
+        </div>
+        
+        <div id="<?php echo $this->plugin_slug; ?>_disable_timeout_info" style="display: none;">
+        
+            <p  style="margin-top: 40px">
+                
+            </p>
+            
+            <p>Copy this file:</p>
+            <pre><?php echo WP_PRICEFILES_PLUGIN_PATH.'cron/pricefiles-cron.php'; ?></pre>
+            <p>To:</p>
+            <pre><?php echo ABSPATH.'pricefiles-cron.php'; ?></pre>
+            
+            <p>Open your crontabs file, usually /etc/contabs. It's recommanded to use (use "sudo" on Ubuntu): </p>
+            <pre>crontabs -e</pre>
+            
+            <p>Add this:</p>
+            <pre>55 23 * * * <?php echo ABSPATH.'pricefiles-cron.php'; ?></pre>
+            
+            <p>Test the script with this command:</p>
+            <pre>php -f <?php echo ABSPATH.'pricefiles-cron.php'; ?></pre>
+            
+            <p>It should output something similar to this:</p>
+            <pre>{<strong>"status":"ok"</strong>,"time":"11.211"}</pre>
+            
+            <p>You might have to change the permissions on the cache folder like this:</p>
+            <pre>chmod -R 777 <?php echo WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG; ?></pre>
+            
+            <p  style="margin-bottom: 40px">
+                
+                
+            </p>
+        </div>
+        <?php
     }
     
     function set_memory_limit_callback($args)
@@ -539,6 +577,54 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         echo '</label>';
 
         echo '<p style="clear: both">' . $args['description'] . '</p>';
+        ?>
+        <p>
+            If you get timeouts, consider using cache and cron to pre-generate the pricefiles. <br />
+            For more information click <a href="#" id="<?php echo $this->plugin_slug; ?>_expand_disable_timeout_info">here</a>.
+        </p>
+        
+        
+        <?php /*
+        <p style="clear: both">
+            This might not work if you are using Nginx and PHP-FPM. To fix this you need to make changes in the config files on your server. 
+            For more information click <a href="#" id="<?php echo $this->plugin_slug; ?>_expand_disable_timeout_info">here</a>.
+        </p>
+        
+        <div id="<?php echo $this->plugin_slug; ?>_disable_timeout_info" style="display: none;">
+        <h4>Changes in php.ini</h4>
+        <p>Edit:</p>
+        <pre>/etc/php5/fpm/php.ini</pre>
+        <p>Set:</p>
+        <pre>max_execution_time = 300</pre>
+        
+        <h4>Changes in PHP-FPM</h4>
+        <p>Edit:</p>
+        <pre>/etc/php5/fpm/pool.d/www.conf</pre>
+        <p>Set:</p>
+        <pre>request_terminate_timeout = 300</pre>
+        
+        <h4>Changes in Nginx Config</h4>
+        <p>Edit:</p>
+        <pre>/etc/nginx/sites-available/example.com</pre>
+        <p>Set:</p>
+        <pre>
+    location ~ \.php$ {
+        ...
+        fastcgi_pass  unix:/var/run/php5-fpm.sock;
+        ...
+	<strong>fastcgi_read_timeout 300;</strong>
+    }
+        </pre>
+        
+        <p>
+            For more information see <a target="_blank" href="https://rtcamp.com/tutorials/php/increase-script-execution-time/">here</a>.
+        </p>
+           
+            
+        </div>
+        */?>
+        
+        <?php
     }
     function use_debug_callback($args)
     {
