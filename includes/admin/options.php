@@ -238,7 +238,17 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
                 __('Select the shipping methods that will be available in the pricefile. The plugin will automatically select the cheapest option.', $this->plugin_slug),
             )
         );
-
+        add_settings_field(
+            'product_id_as_sku', __('Use product ID as SKU', $this->plugin_slug), 
+            array($this, 'checkbox_option_callback'), 
+            $this->plugin_slug . '_options_section', 
+            $this->plugin_slug . '_options', 
+            array(
+                'key'           => 'product_id_as_sku',
+                'label'         => __('Use product ID as SKU', $this->plugin_slug),
+                'description'   => __('If checked, product ID will be used as SKU if the SKU-field is empty, otherwise it will be empty in the pricefile if no SKU is set.', $this->plugin_slug),
+            )
+        );
         add_settings_field(
             'shipping_destination', 
             __('Shipping destination', $this->plugin_slug), 

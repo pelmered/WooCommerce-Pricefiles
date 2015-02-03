@@ -323,6 +323,7 @@ class WC_Pricefiles
             'show_variations'       => 0,
             'show_variations_format' => '',
             'shipping_methods'      => array(),
+            'product_id_as_sku'     => 0,
             'shipping_destination'  => $wc_pricefiles_globals['default_shipping_destination'],
             
             //Advanced options
