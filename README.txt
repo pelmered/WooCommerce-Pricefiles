@@ -50,6 +50,13 @@ Please keep the plugin up to date to ensure that is functions properly.
 
 == Changelog ==
 
+= 0.2.0 =
+* Major rewrite of the plugin. The plugin now has much better code structure and much cleaner code.
+* Cache functionality revisted and rewritten
+* More options
+* Product variation support
+* 
+
 = 0.1.11 =
 * Fix: Error in shipping tax calculation
 * Fix: Error in empty check for manufacturer and category fields in product settings

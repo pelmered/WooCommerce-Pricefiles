@@ -159,14 +159,29 @@ abstract class WC_Pricefile_Generator
                 }
                 
                 $product = new WC_Pricefiles_Product($product_id);
-
-                if( !$product->show() )
+                
+                if($product->show_variations())
                 {
-                    continue;
+                    $available_variations = $product->get_variations();
+                    
+                    if(is_array($available_variations))
+                    {
+                        foreach($available_variations AS $variation)
+                        {
+                            //Instantiate product variation
+                            $product_variation = new WC_Pricefiles_Product($variation['variation_id']);
+
+                            //Tell generator implementation to print this product
+                            $this->print_product( $product_variation );
+                        }
+                    }
+                }
+                else if( $product->show() )
+                {
+                    //Tell generator implementation to print this product
+                    $this->print_product( $product );
                 }
         
-                //Tell generator implementation about this product
-                $this->print_product( $product );
             }
 
             //Generate file footer

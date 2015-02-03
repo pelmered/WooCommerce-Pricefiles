@@ -187,7 +187,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             )
         );
         add_settings_field(
-            'stock_status_type', __('Show variations', $this->plugin_slug), 
+            'stock_status_type', __('Stock status variant', $this->plugin_slug), 
             array($this, 'select_option_callback'), 
             $this->plugin_slug . '_options_section', 
             $this->plugin_slug . '_options', 
@@ -218,14 +218,33 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
                 'description'   => __('If checked, all variations will be listed in the pricefile. If it\'s not checked, only the main variable product will be shown.', $this->plugin_slug),
             )
         );
+        
         add_settings_field(
             'show_variation_format', __('Variation title format', $this->plugin_slug), 
             array($this, 'text_option_callback'), 
             $this->plugin_slug . '_options_section', 
             $this->plugin_slug . '_options', 
             array(
-                'key'           => 'show_variations',
-                'description' => __('.', $this->plugin_slug),
+                'key'           => 'show_variation_format',
+                'description' => __(
+                        'Define format for product variation titles in the pricefile. <br />' .
+                        '<strong>%title%</strong> ville be replaced by product title. <br />' .
+                        '<strong>%var%</strong> ville be replaced by variable atribute. <br />' .
+                        'Default: <strong>%title% - %var%</strong>'
+                    , $this->plugin_slug),
+            )
+        );
+        add_settings_field(
+            'variation_glue', __('Variation Glue', $this->plugin_slug), 
+            array($this, 'text_option_callback'), 
+            $this->plugin_slug . '_options_section', 
+            $this->plugin_slug . '_options', 
+            array(
+                'key'           => 'variation_glue',
+                'description' => __(
+                        'Sting that will be used to concatinate variable attributes if there are more than one for a product variation.<br />' .
+                        'If you leave it blank the default is " "(a space) witch gives you for example this: <strong>"T-shirt - Blue XL"</strong> (depending on the variation format)' 
+                    , $this->plugin_slug),
             )
         );
         add_settings_field(
@@ -272,7 +291,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         add_settings_field(
             'use_cache', 
             __('Use cache for pricefile', $this->plugin_slug), 
-            array($this, 'checkbox_option_callback'), 
+            array($this, 'use_cache_callback'), 
             $this->plugin_slug . '_advanced_options_section', 
             $this->plugin_slug . '_advanced_options', 
             array(
@@ -480,7 +499,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
     {
         $use_cache = (empty($this->plugin_options['use_cache']) ? array() : $this->plugin_options['use_cache'] );
 
-        echo '<label class="shipping-method"> ';
+        echo '<label for="' . $this->plugin_slug . '_options_use_cache" class=""> ';
         echo '<input type="checkbox" name="' . $this->plugin_slug . '_options[use_cache]" id="' . $this->plugin_slug . '_options_use_cache" value="1" ' . ($use_cache == 1 ? 'checked="checked"' : '') . '/>';
         echo '<span>' . __('Use cache') . '</span>';
         echo '</label>';
@@ -489,11 +508,11 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
         echo '<div id="' . $this->plugin_slug . '_cache_additional" style="' . ($use_cache == 1 ? '' : 'display: none') . '">';
 
-        $pricefile_base_url = get_bloginfo('url') . '/?pricefile=all&refresh=1';
+        $pricefile_base_url = get_bloginfo('url') . '/?pricefile=all&refresh=1&output=json';
 
         echo '<input class="wide" type="text" size="60" value="' . $pricefile_base_url . '" disabled />';
 
-        echo '<br /><button id="' . $this->plugin_slug . '_refresh_cache_button">' . __('Refresh cache') . '</button>';
+        echo '<br /><button id="' . $this->plugin_slug . '_refresh_cache_button" data-url="' . $pricefile_base_url. '">' . __('Refresh cache') . '</button>';
         echo '<span id="' . $this->plugin_slug . '_cache_refresh_status"></span>';
 
         echo '</div>';

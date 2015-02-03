@@ -9,7 +9,8 @@ class WC_Pricefiles_Product
 {
     private $product;
     private $product_meta = array();
-    
+
+
     public function __construct( $product_id )
     {
         $this->product = get_product( $product_id );
@@ -33,6 +34,48 @@ class WC_Pricefiles_Product
             return true;
         }
     }
+    
+    public function show_variations()
+    {
+        if ($this->product->product_type == 'variable' && WC_Pricefiles()->get_options()['show_variations'] == 1 ) 
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    
+    public function get_variations()
+    {
+        return $this->product->get_available_variations();
+    }
+    
+    
+    public function get_variation_title( $title )
+    {
+        $search  = array('%title%', '%var%');
+        $replace = array($title, $this->get_variation_attribute_label());
+        return str_replace($search, $replace, WC_Pricefiles()->get_options()['show_variation_format']);
+        
+    }
+    
+    function get_variation_attribute_label()
+    {
+        $attributes = $this->product->get_variation_attributes();
+        
+        $attribute_values = array();
+        
+        foreach($attributes AS $attribute)
+        {
+            $attribute_values[] = $attribute;
+        }
+        
+        return implode(' ', array_map("ucfirst", $attribute_values));
+    }
+    
     
     // Getters
     
@@ -174,7 +217,14 @@ class WC_Pricefiles_Product
      */
     public function get_sku()
     {
-        return $this->product->get_sku();
+        $sku = $this->product->get_sku();
+        
+        if(empty($sku))
+        {
+            WC_Pricefiles()->get_options();
+        }
+        
+        return $sku;
     }
 
     /**
@@ -186,7 +236,13 @@ class WC_Pricefiles_Product
      */
     public function get_title()
     {
-        return $this->product->post->post_title;
+        $title = $this->product->post->post_title;
+        
+        if($this->product->product_type == 'variation')
+        {
+            return $this->get_variation_title($title);
+        }
+        return $title;
     }
 
     /**

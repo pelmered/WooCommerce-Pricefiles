@@ -19,7 +19,7 @@ class WC_Pricefiles
      * @since    0.1.0
      * @var     string
      */
-    const VERSION = '0.1.11';
+    const VERSION = '1.0.0';
 
     /**
      * Unique identifier for your plugin.
@@ -172,7 +172,7 @@ class WC_Pricefiles
 
             //Update pricefile cat acording to the catorgory mappings on product save
             add_action('save_post', array($this, 'update_pricefile_category'));
-        
+            
             //Include admin classes
             require_once( WP_PRICEFILES_PLUGIN_PATH . 'includes/admin.php' );
             require_once( WP_PRICEFILES_PLUGIN_PATH . 'includes/admin/options.php' );
@@ -320,8 +320,9 @@ class WC_Pricefiles
             //General options
             'output_prices'         => 'shop',
             'exclude_ids'           => array(),
+            'stock_status_type'     => 'yes_no',
             'show_variations'       => 0,
-            'show_variations_format' => '',
+            'show_variation_format' => '',
             'shipping_methods'      => array(),
             'product_id_as_sku'     => 0,
             'shipping_destination'  => $wc_pricefiles_globals['default_shipping_destination'],
@@ -363,6 +364,13 @@ class WC_Pricefiles
 
     function update_pricefile_category($post_id)
     {
+        
+        
+        print_r($_POST);
+        
+        die();
+        
+        
         if (isset($_POST['post_type']) && $_POST['post_type'] != 'product')
         {
             return;
