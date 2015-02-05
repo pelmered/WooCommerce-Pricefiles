@@ -392,10 +392,16 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
         foreach ($available_pricefiles AS $slug => $data) {
             echo '<h4>' . $data['name'] . '</h4>';
-
+            
+            $last_updated = get_option(WC_PRICEFILES_PLUGIN_SLUG . '_cache_last_updated_' . $slug, false);
+            
             echo '<p>';
             echo '<input class="wide" type="text" size="110" value="' . $pricefile_base_url . $slug . '" disabled /><br />';
             echo '<span class="description"></span>';
+            if($last_updated && $this->plugin_options['use_cache'] == 1)
+            {
+                echo 'Last updated: ' . date_i18n(get_option( 'date_format' ).' '.get_option( 'time_format' ), current_time('timestamp'));
+            }
             echo '</p>';
         }
 

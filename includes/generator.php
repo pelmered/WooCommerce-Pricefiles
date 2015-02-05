@@ -132,6 +132,8 @@ abstract class WC_Pricefile_Generator
                 $excluded = $this->options['exclude_ids'];
             }
             
+            $count = 0;
+            
             while ($loop->have_posts())
             {
                 $loop->the_post();
@@ -166,12 +168,16 @@ abstract class WC_Pricefile_Generator
                     //Tell generator implementation to print this product
                     $this->print_product( $product );
                 }
+                $count++;
             }
 
             //Generate file footer
             $this->print_footer();
             
-            return $this->save_cache();
+            return array(
+                'product_count' => $count,
+                'status'        => $this->save_cache()
+            );
         } 
         else
         {
@@ -254,7 +260,7 @@ abstract class WC_Pricefile_Generator
             return false;
         }
         
-        
+        /*
         if( $this->options['cache_timeout'] > 0)
         {
             if ( ( $time = get_transient(WC_PRICEFILES_PLUGIN_SLUG . '_file_cache_time_' . $this->pricefile_slug) ) === false )
@@ -266,6 +272,7 @@ abstract class WC_Pricefile_Generator
                 return false;
             }
         }
+        */
             
         
         return true;
@@ -356,7 +363,8 @@ abstract class WC_Pricefile_Generator
             $return = file_put_contents($cache_path, $data);
             if ($return && $return > 0)
             {
-                set_transient(WC_PRICEFILES_PLUGIN_SLUG . '_file_cache_time_' . $this->pricefile_slug, time(), 25 * HOUR_IN_SECONDS);
+                update_option(WC_PRICEFILES_PLUGIN_SLUG . '_cache_last_updated_' . $this->pricefile_slug, current_time('timestamp'));
+                //set_transient(WC_PRICEFILES_PLUGIN_SLUG . '_file_cache_time_' . $this->pricefile_slug, time(), 25 * HOUR_IN_SECONDS);
                 $return = 'cache_written';
             }
             else

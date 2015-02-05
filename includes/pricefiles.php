@@ -230,9 +230,10 @@ class WC_Pricefiles
                         
                         $wc_pricefile_generator = $class_name::get_instance($slug);
                         //var_dump($wc_pricefile_generator);
-                        $response_code = $wc_pricefile_generator->generate_pricefile();
+                        $status = $wc_pricefile_generator->generate_pricefile();
                         
-                        $response[$slug] = $response_code;
+                        $response[$slug] = $status['status'];
+                        $response[$slug.'_count'] = $status['product_count'];
                         
                         if($response_code != 'cache_written')
                         {
@@ -247,14 +248,14 @@ class WC_Pricefiles
                         if($response_code == 'no_cache')
                         {
                             $response['status'] = 'ok_no_cache';
-                            $response['code'] = $response_code;
+                            $response['code'] = $status['status'];
                             $response['msg'] = 'Cache not activated';
                             $response['time'] = timer_stop();
                         }
                         else if($error)
                         {
                             $response['status'] = 'error';
-                            $response['code'] = $response_code;
+                            $response['code'] = $status['status'];
                             $response['msg'] = $error;
                             $response['time'] = timer_stop();
                         }
