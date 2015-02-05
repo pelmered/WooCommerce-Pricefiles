@@ -9,6 +9,7 @@
  * @package WordPress
  */
 
+//Set GET paramenters so that the pricefile script runs
 $_GET['pricefile'] = 'all';
 $_GET['refresh'] = '1';
 $_GET['output'] = 'json';
@@ -28,14 +29,12 @@ if ( !empty($_POST) || defined('DOING_AJAX') || defined('DOING_CRON') )
 define('DOING_CRON', true);
 
 if ( !defined('ABSPATH') ) {
-	/** Set up WordPress environment */
-	require_once( dirname( __FILE__ ) . '/wp-load.php' );
+    /** Set up WordPress environment */
+    require_once( dirname( __FILE__ ) . '/wp-load.php' );
 }
 
-echo "\n";
 
-WC_Pricefiles();
 
-echo "\n\n";
+//WC_Pricefiles();
 
 die();

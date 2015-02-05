@@ -52,39 +52,23 @@ abstract class WC_Pricefile_Generator
 
     public function __construct($pricefile_slug)
     {
-        global $wc_pricefiles_globals;
-        
         require_once( WP_PRICEFILES_PLUGIN_PATH . 'includes/product.php' );
 
         $this->options = WC_Pricefiles()->get_options();
         
+        ignore_user_abort(true);
+        
         if ( (!empty($this->options['disable_timeout']) && $this->options['disable_timeout'] == 1) )
         {
-            if(!@set_time_limit(0)) {
+            if(!@set_time_limit(0)) 
+            {
                 //TODO: Debug log: Could not set time limit
             }
         }
         
         if ( (!empty($this->options['set_memory_limit']) && $this->options['set_memory_limit'] == 1) )
         {
-            $ml = ini_get('memory_limit');
-            
-            preg_match('/(\d{1,10})([a-zA-Z]{1,2})/', $ml, $matches);
-            
-            if(
-                    ( $matches[2] == 'G' && $matches[1] < 0.5 ) || 
-                    ($matches[2] == 'M' && $matches[1] < 512)
-            )
-            {
-                ini_set('memory_limit', '2048M');
-                
-                $new_ml = ini_get('memory_limit');
-                
-                if($new_ml != '2048M')
-                {
-                    //TODO: Debug log: Could not set memory limit
-                }
-            }
+            $this->set_memory_limit();
         }
         
         $this->pricefile_slug = $pricefile_slug;
@@ -142,11 +126,12 @@ abstract class WC_Pricefile_Generator
             if (empty($this->options['exclude_ids']))
             {
                 $excluded = array();
-            } else
+            } 
+            else
             {
                 $excluded = $this->options['exclude_ids'];
             }
-
+            
             while ($loop->have_posts())
             {
                 $loop->the_post();
@@ -181,14 +166,14 @@ abstract class WC_Pricefile_Generator
                     //Tell generator implementation to print this product
                     $this->print_product( $product );
                 }
-        
             }
 
             //Generate file footer
             $this->print_footer();
-
+            
             return $this->save_cache();
-        } else
+        } 
+        else
         {
             if($this->is_debug())
             {
@@ -196,7 +181,42 @@ abstract class WC_Pricefile_Generator
                 return false;
             }
         }
+    }
+    
+    function set_memory_limit() 
+    {
+        $ml = ini_get('memory_limit');
 
+        //Unlimited. No need to set limit
+        if($ml == "-1")
+        {
+            return true;
+        }
+        
+        preg_match('/(\d{1,10})([a-zA-Z]{1,2})/', $ml, $matches);
+        
+        //If memory limit is under 2G, try to set it to 2G
+        if(
+                !is_array($matches) || empty($matches) ||
+                ( $matches[2] == 'G' && $matches[1] < 2 ) || 
+                ($matches[2] == 'M' && $matches[1] < 2048) ||
+                ($matches[2] == 'K' && $matches[1] < 2048000)
+        )
+        {
+            ini_set('memory_limit', '2048M');
+
+            $new_ml = ini_get('memory_limit');
+
+            if($new_ml != '2048M')
+            {
+                //TODO: Debug log: Could not set memory limit
+                if($this->is_debug())
+                {
+                    echo 'Cound not set memory limit (Limit:'.$ml.')';
+                }
+                return false;
+            }
+        }
     }
 
     /**
@@ -228,15 +248,25 @@ abstract class WC_Pricefile_Generator
             return false;
         }
         
+        
         if (!empty($_GET['refresh']) && $_GET['refresh'] == 1)
         {            
             return false;
         }
-
-        if ( ( $time = get_transient(WC_PRICEFILES_PLUGIN_SLUG . '_file_cache_time_' . $this->pricefile_slug) ) === false )
+        
+        
+        if( $this->options['cache_timeout'] > 0)
         {
-            return false;
+            if ( ( $time = get_transient(WC_PRICEFILES_PLUGIN_SLUG . '_file_cache_time_' . $this->pricefile_slug) ) === false )
+            {
+                if($this->is_debug())
+                {
+                    echo 'Cache file time expired. Cache timeout: '.$this->options['cache_timeout'];
+                }
+                return false;
+            }
         }
+            
         
         return true;
     }
@@ -248,17 +278,27 @@ abstract class WC_Pricefile_Generator
      */
     function read_cache()
     {
-        if($this->can_read_cache())
+        if($this->can_read_cache() && $this->use_cache())
         {
             $cache_path = WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG . '/' . $this->pricefile_slug . '.txt';
 
             if (file_exists($cache_path))
             {
-                //echo 'serverd from cache:';
+                if($this->is_debug())
+                {
+                    echo 'serverd from cache: ';
+                }
+                
                 echo file_get_contents($cache_path);
 
-                //return 'cache_read';
                 return true;
+            }
+            else
+            {
+                if($this->is_debug())
+                {
+                    echo 'Cache file not found';
+                }
             }
         }
         
@@ -316,7 +356,7 @@ abstract class WC_Pricefile_Generator
             $return = file_put_contents($cache_path, $data);
             if ($return && $return > 0)
             {
-                set_transient(WC_PRICEFILES_PLUGIN_SLUG . '_file_cache_time_' . $this->pricefile_slug, time(), 12 * HOUR_IN_SECONDS);
+                set_transient(WC_PRICEFILES_PLUGIN_SLUG . '_file_cache_time_' . $this->pricefile_slug, time(), 25 * HOUR_IN_SECONDS);
                 $return = 'cache_written';
             }
             else
@@ -327,6 +367,11 @@ abstract class WC_Pricefile_Generator
                     echo 'Cache not written';
                 }
             }
+        }
+        
+        if($this->is_debug())
+        {
+            echo ucfirst($this->pricefile_slug).' cache status: '.$return."\n";
         }
         
         if(empty($_GET['output']) || $_GET['output'] != 'json')
@@ -352,7 +397,8 @@ abstract class WC_Pricefile_Generator
         {
             return TRUE;
         }
-        else {
+        else 
+        {
             return FALSE;
         }
     }

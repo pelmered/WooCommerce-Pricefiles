@@ -302,6 +302,21 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
                         ' ('.(is_writable(WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG . '/') ? '<span style="color: green">'.__('Is writable', $this->plugin_slug).'</span>' : '<span style="color: red">'.__('NOT WRITABLE', $this->plugin_slug).'</span>' ).').'       
             )
         );
+        /*
+        add_settings_field(
+            'cache_timeout', 
+            __('Cache timeout', $this->plugin_slug), 
+            array($this, 'text_option_callback'), 
+            $this->plugin_slug . '_advanced_options_section', 
+            $this->plugin_slug . '_advanced_options', 
+            array(
+                'key'           => 'cache_timeout',
+                'default'       => 0,
+                //'label'         => __('Cache timeout', $this->plugin_slug),
+                'description'   => __('Hours before pricefile cache expires. 0 = no timeout<br />Default: <strong>0</strong>.', $this->plugin_slug),
+            )
+        );
+        */
         add_settings_field(
             'use_debug', 
             __('Debug mode', $this->plugin_slug), 
@@ -311,7 +326,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             array(
                 'key'           => 'use_debug',
                 'label'         => __('Use debug mode', $this->plugin_slug),
-                'description'   => __('Output debug messages. Only check this when debugging.', $this->plugin_slug),
+                'description'   => __('Output debug messages in pricefile during genereation. Only check this when debugging.', $this->plugin_slug),
             )
         );
         add_settings_field(

@@ -242,14 +242,20 @@ class WC_Pricefiles
                     if(!empty($_GET['output']) && $_GET['output'] == 'json')
                     {
                         $response = array();
-                        if($error)
+                        
+                        if($response_code == 'no_cache')
+                        {
+                            $response['status'] = 'ok_no_cache';
+                            $response['code'] = $response_code;
+                            $response['msg'] = 'Cache not activated';
+                            $response['time'] = timer_stop();
+                        }
+                        else if($error)
                         {
                             $response['status'] = 'error';
                             $response['code'] = $response_code;
                             $response['msg'] = $error;
                             $response['time'] = timer_stop();
-                            
-                            
                         }
                         else
                         {
@@ -349,6 +355,7 @@ class WC_Pricefiles
             
             //Advanced options
             'use_cache'             => 0,
+            'cache_timeout'         => 0,
             'use_debug'             => 0,
             'set_memory_limit'      => 0,
             'disable_timeout'       => 0,
@@ -384,13 +391,6 @@ class WC_Pricefiles
 
     function update_pricefile_category($post_id)
     {
-        
-        
-        print_r($_POST);
-        
-        die();
-        
-        
         if (isset($_POST['post_type']) && $_POST['post_type'] != 'product')
         {
             return;

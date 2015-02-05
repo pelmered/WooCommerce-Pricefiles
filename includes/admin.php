@@ -77,7 +77,7 @@ class WC_Pricefiles_Admin //extends EWP_Plugin_Settings
         {
             $args['value'] = (empty($this->plugin_options[$args['key']]) ? $args['default'] : $this->plugin_options[$args['key']] );
         }
-
+        
         echo '<label class="shipping-method"> ';
         echo '<input type="text" size="50" name="' . $this->plugin_slug . '_options['.$args['key'].']" id="' . $this->plugin_slug . '_options_'.$args['key'].'" value="'.$args['value'].'" />';
         //echo '<span>' . $args['label'] . '</span>';
