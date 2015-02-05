@@ -221,7 +221,12 @@ class WC_Pricefiles_Product
         
         if(empty($sku))
         {
-            WC_Pricefiles()->get_options();
+            $options = WC_Pricefiles()->get_options();
+            
+            if($options['product_id_as_sku'] == 1)
+            {
+                return $this->product->id;
+            }
         }
         
         return $sku;

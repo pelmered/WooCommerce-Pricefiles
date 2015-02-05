@@ -217,6 +217,7 @@ class WC_Pricefiles
                     while (@ob_end_flush()){}
                     
                     $error = false;
+                    $response = array();
                     
                     foreach($available_pricefiles AS $slug => $data )
                     {
@@ -231,6 +232,8 @@ class WC_Pricefiles
                         //var_dump($wc_pricefile_generator);
                         $response_code = $wc_pricefile_generator->generate_pricefile();
                         
+                        $response[$slug] = $response_code;
+                        
                         if($response_code != 'cache_written')
                         {
                             $error = 'Cache could not be written';
@@ -241,8 +244,6 @@ class WC_Pricefiles
                     //AJAX refresh from admin
                     if(!empty($_GET['output']) && $_GET['output'] == 'json')
                     {
-                        $response = array();
-                        
                         if($response_code == 'no_cache')
                         {
                             $response['status'] = 'ok_no_cache';

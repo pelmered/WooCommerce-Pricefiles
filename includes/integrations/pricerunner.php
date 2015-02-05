@@ -42,7 +42,7 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
      * @param     array  An opaque object used by property getters.
      * @since     0.1.12
      */
-    protected function print_product( $product )
+    protected function print_product($product)
     {
         echo $this::format_value($product->get_categories());
         echo $this::format_value($product->get_sku());
