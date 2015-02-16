@@ -40,6 +40,11 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
      */
     protected function print_product($product)
     {
+        if (WC_Pricefiles()->get_options()['prisjakt_referrals']) {
+            $url = add_query_arg('ref', 'prisjakt', $product->get_url());
+        } else {
+            $url = $product->get_url();
+        }
         echo $this::format_value($product->get_title());
         echo $this::format_value($product->get_sku());
         echo $this::format_value($product->get_ean());
@@ -48,7 +53,7 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
         echo $this::format_value($product->get_categories());
         echo $this::format_value($product->get_price());
         echo $this::format_value($product->get_shipping_cost());
-        echo $this::format_value($product->get_url());
+        echo $this::format_value($url);
         echo $this::format_value($product->get_image_url());
         echo $this::format_value($product->get_stock_status());
         echo "\n";
