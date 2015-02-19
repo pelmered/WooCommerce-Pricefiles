@@ -232,10 +232,14 @@ class WC_Pricefiles
                         //var_dump($wc_pricefile_generator);
                         $status = $wc_pricefile_generator->generate_pricefile();
                         
+                        print_r($status);
+                        
                         $response[$slug] = $status['status'];
                         $response[$slug.'_count'] = $status['product_count'];
+                        $response[$slug.'_excluded'] = $status['excluded_count'];
+                        $response[$slug.'_hidden'] = $status['hidden_count'];
                         
-                        if($response_code != 'cache_written')
+                        if($status['status'] != 'cache_written')
                         {
                             $error = 'Cache could not be written';
                         }

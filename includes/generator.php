@@ -125,14 +125,17 @@ abstract class WC_Pricefile_Generator
             //Get list of excluded products
             if (empty($this->options['exclude_ids']))
             {
-                $excluded = array();
+                $excluded_ids = array();
             } 
             else
             {
-                $excluded = $this->options['exclude_ids'];
+                $excluded_ids = $this->options['exclude_ids'];
             }
             
             $count = 0;
+            $variants_count = 0;
+            $hidden_count = 0;
+            $excluded_count = 0;
             
             while ($loop->have_posts())
             {
@@ -140,8 +143,9 @@ abstract class WC_Pricefile_Generator
 
                 $product_id = get_the_id();
 
-                if (in_array($product_id, $excluded))
+                if (in_array($product_id, $excluded_ids))
                 {
+                    $excluded_count++;
                     continue;
                 }
                 
@@ -157,18 +161,23 @@ abstract class WC_Pricefile_Generator
                         {
                             //Instantiate product variation
                             $product_variation = new WC_Pricefiles_Product($variation['variation_id']);
-
+                            
                             //Tell generator implementation to print this product
                             $this->print_product( $product_variation );
+                            $variants_count++;
                         }
                     }
                 }
-                else if( $product->show() )
+                elseif( $product->show() )
                 {
                     //Tell generator implementation to print this product
                     $this->print_product( $product );
+                    $count++;
                 }
-                $count++;
+                else
+                {
+                    $hidden_count++;
+                }
             }
 
             //Generate file footer
@@ -176,6 +185,9 @@ abstract class WC_Pricefile_Generator
             
             return array(
                 'product_count' => $count,
+                'variants_count' => $variants_count,
+                'excluded_count' => $excluded_count,
+                'hidden_count' => $hidden_count,
                 'status'        => $this->save_cache()
             );
         } 

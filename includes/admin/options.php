@@ -7,7 +7,6 @@
 
 class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 {
-
     function __construct($plugin_slug)
     {
         $this->plugin_slug = $plugin_slug;
@@ -245,6 +244,18 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
                         'Sting that will be used to concatinate variable attributes if there are more than one for a product variation.<br />' .
                         'If you leave it blank the default is " "(a space) witch gives you for example this: <strong>"T-shirt - Blue XL"</strong> (depending on the variation format)' 
                     , $this->plugin_slug),
+            )
+        );
+        add_settings_field(
+            'append_attribute_to_variants', 
+            __('Append attribute ', $this->plugin_slug), 
+            array($this, 'checkbox_option_callback'), 
+            $this->plugin_slug . '_advanced_options_section', 
+            $this->plugin_slug . '_advanced_options', 
+            array(
+                'key'           => 'append_attribute_to_variants',
+                'label'         => __('Use debug mode', $this->plugin_slug),
+                'description'   => __('Output debug messages in pricefile during genereation. Only check this when debugging.', $this->plugin_slug),
             )
         );
         add_settings_field(

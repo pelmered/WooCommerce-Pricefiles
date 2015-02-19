@@ -35,6 +35,11 @@ class WC_Pricefiles_Product
         }
     }
     
+    public function is_variant()
+    {
+        return ($this->product->product_type == 'variation');
+    }
+    
     public function show_variations()
     {
         if ($this->product->product_type == 'variable' && WC_Pricefiles()->get_options()['show_variations'] == 1 ) 
@@ -57,23 +62,44 @@ class WC_Pricefiles_Product
     public function get_variation_title( $title )
     {
         $search  = array('%title%', '%var%');
-        $replace = array($title, $this->get_variation_attribute_label());
+        $replace = array($title, implode(' ', $this->get_variation_attribute_names()));
         return str_replace($search, $replace, WC_Pricefiles()->get_options()['show_variation_format']);
         
     }
     
-    function get_variation_attribute_label()
+    function get_attribute($taxonomy = 'pa_storlek', $term_slug)
+    {
+        $terms = get_the_terms( $this->product->id, $taxonomy);
+
+        foreach ( $terms as $term ) {
+            
+            if($term->slug == $term_slug)
+            {
+                return $term;
+            }
+        }
+        
+        return false;
+    }
+    
+    function get_variation_attribute_values()
+    {
+        return array_values($this->product->get_variation_attributes());
+    }  
+    
+    function get_variation_attribute_names()
     {
         $attributes = $this->product->get_variation_attributes();
         
-        $attribute_values = array();
+        $attribute_names = array();
         
-        foreach($attributes AS $attribute)
+        foreach($attributes AS $k => $slug)
         {
-            $attribute_values[] = $attribute;
+            $a = $this->get_attribute(str_replace('attribute_', '', $k), $slug);
+            $attribute_names[] = $a->name;
         }
         
-        return implode(' ', array_map("ucfirst", $attribute_values));
+        return $attribute_names;
     }
     
     
@@ -219,6 +245,7 @@ class WC_Pricefiles_Product
     {
         $sku = $this->product->get_sku();
         
+        
         if(empty($sku))
         {
             $options = WC_Pricefiles()->get_options();
@@ -227,6 +254,15 @@ class WC_Pricefiles_Product
             {
                 return $this->product->id;
             }
+        }
+        
+        if($this->is_variant())
+        {
+            if($this->product->parent->get_sku() == $sku)
+            {
+                $sku = $sku . '-'.implode('-', $this->get_variation_attribute_values());
+            }
+            
         }
         
         return $sku;
@@ -243,7 +279,7 @@ class WC_Pricefiles_Product
     {
         $title = $this->product->post->post_title;
         
-        if($this->product->product_type == 'variation')
+        if($this->is_variant())
         {
             return $this->get_variation_title($title);
         }
