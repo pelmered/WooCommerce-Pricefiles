@@ -357,6 +357,7 @@ class WC_Pricefiles
             'show_variation_format' => '',
             'shipping_methods'      => array(),
             'product_id_as_sku'     => 0,
+            'prisjakt_referrals'    => 0,
             'shipping_destination'  => $wc_pricefiles_globals['default_shipping_destination'],
             
             //Advanced options

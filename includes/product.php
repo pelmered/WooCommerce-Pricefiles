@@ -445,7 +445,7 @@ class WC_Pricefiles_Product
                 {
                     $total_tax = 0;
                     
-                    if( self::get_price_type() == 'incl' )
+                    if( WC_Pricefiles()->get_price_type() == 'incl' )
                     {
                         //Sum the taxes
                         foreach($rate->taxes AS $tax)

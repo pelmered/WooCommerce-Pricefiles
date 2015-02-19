@@ -19,13 +19,20 @@ The next major version(1.0) will be a major rewrite of the plugin. The code will
 
 There will also be focus on performance and getting the plugin to work on large WooCommerce stores with a lot of products. As a part of this the cachesystem will be revised and improved. 
 
+Next version will include:
+ -  Major rewrite of the code
+ -  Support for variable products
+ -  Rewrite and refactor the cron+cache functionality 
+ -  More info on how to genereate pricefiles with cron and cache
+ -  Support for multisite/network install
+ -  Prisjakt sales tracking (avslutsuppföljning)
+ -  Admin interface improvements
+
 ###Changelog
 [Changelog on WordPress.org](https://wordpress.org/plugins/woocommerce-pricefiles/changelog/)
 
 ###TODO
 - [WC Brands](http://www.woothemes.com/products/brands/ "WC Brands on WooThemes.com") integration 
-- Support for variable products
 - Rewrite and refactor the cron+cache functionality 
-- More info on how to genereate pricefiles with cron and cache
 - More admin options(If you want anything specific, send me a message and I will consider it)
 - Add more services, including Kelkoo and Google Shopping/Google Merchant

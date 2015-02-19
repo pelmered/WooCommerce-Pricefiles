@@ -280,6 +280,17 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             )
         );
         add_settings_field(
+            'prisjakt_referrals', __('Enable Prisjakt referrals', $this->plugin_slug),
+            array($this, 'checkbox_option_callback'),
+            $this->plugin_slug . '_options_section',
+            $this->plugin_slug . '_options',
+            array(
+                'key'           => 'prisjakt_referrals',
+                'label'         => __('Enable Prisjakt referrals', $this->plugin_slug),
+                'description'   => __('If checked, a ref=prisjakt query parameter will be added to the product URLs in the Prisjakt pricefile.', $this->plugin_slug),
+            )
+        );
+        add_settings_field(
             'shipping_destination', 
             __('Shipping destination', $this->plugin_slug), 
             array($this, 'shipping_destination_callback'), 
