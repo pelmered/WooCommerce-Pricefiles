@@ -32,7 +32,7 @@ Next version will include:
 [Changelog on WordPress.org](https://wordpress.org/plugins/woocommerce-pricefiles/changelog/)
 
 ###TODO
+- Unit testing
 - [WC Brands](http://www.woothemes.com/products/brands/ "WC Brands on WooThemes.com") integration 
-- Rewrite and refactor the cron+cache functionality 
 - More admin options(If you want anything specific, send me a message and I will consider it)
 - Add more services, including Kelkoo and Google Shopping/Google Merchant
