@@ -66,10 +66,6 @@ class WC_Pricefiles
 
         // Load plugin text domain
         add_action('init', array($this, 'load_plugin_textdomain'));
-
-        if(is_admin())
-        {
-        }
     }
 
     /**
@@ -229,8 +225,6 @@ class WC_Pricefiles
                         $wc_pricefile_generator = $class_name::get_instance($slug);
                         //var_dump($wc_pricefile_generator);
                         $status = $wc_pricefile_generator->generate_pricefile();
-                        
-                        print_r($status);
                         
                         $response[$slug] = $status['status'];
                         $response[$slug.'_count'] = $status['product_count'];
