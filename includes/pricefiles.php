@@ -98,8 +98,6 @@ class WC_Pricefiles
         //if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) 
         if ( is_plugin_active( 'woocommerce/woocommerce.php' ) )
         {
-            require_once( WP_PRICEFILES_PLUGIN_PATH .'includes/pricefiles.php' );
-            
             return true;
         }
         else
