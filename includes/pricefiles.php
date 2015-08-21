@@ -707,6 +707,10 @@ class WC_Pricefiles
         {
             update_post_meta($post_id, $this->plugin_slug.'_pricelist_cat', stripslashes($_POST[$this->plugin_slug.'_pricelist_cat']));            
         }
+        if(!empty($_POST[$this->plugin_slug.'_prisjakt_status']))
+        {
+            update_post_meta($post_id, $this->plugin_slug.'_prisjakt_status', stripslashes($_POST[$this->plugin_slug.'_prisjakt_status']));            
+        }
     }
 
     /**

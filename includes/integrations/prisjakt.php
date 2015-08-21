@@ -20,7 +20,7 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
     protected function print_header()
     {
         $columns = array(
-            'Produktnamn','Art.nr.','EAN','Tillverkare','Tillverkar-SKU','Kategori','Pris inkl.moms','Frakt','Produkt-URL','Bild-URL','Lagerstatus'
+            'Produktnamn','Art.nr.','EAN','Tillverkare','Tillverkar-SKU','Kategori','Pris inkl.moms','Frakt','Produkt-URL','Bild-URL','Lagerstatus','Status'
         );
         
         $header = '';
@@ -56,6 +56,7 @@ class WC_Pricefile_Prisjakt extends WC_Pricefile_Generator
         echo $this::format_value($url);
         echo $this::format_value($product->get_image_url());
         echo $this::format_value($product->get_stock_status());
+        echo $this::format_value($product->get_prisjakt_status());
         echo "\n";
     }
 
