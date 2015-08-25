@@ -106,7 +106,34 @@ global $woocommerce, $post;
 
         woocommerce_wp_select($category_field);
     }
-   
+    
+    
+    // Prisjakt Status
+    $current = get_post_meta( $post->ID, '_prisjakt_status', true );
+    
+    $prisjakt_status_field = array(
+        'id'    => WC_PRICEFILES_PLUGIN_SLUG.'_prisjakt_status',
+        'label' => __('Prisjakt Status'),
+        'class' => 'chosen-select',
+        'options' => array()
+    );
+    
+    $prisjakt_status_list = array(
+        "Normal" => "Normal",
+        "Begagnad" => "Begagnad",
+        "Ej köpbar" => "Ej köpbar",
+        "Demo" => "Demo",
+        "Nerladdning"=> "Nerladdning",
+        "Avhämtning" => "Avhämtning"
+    );
+    
+    foreach ($prisjakt_status_list as $id => $name) {
+        $prisjakt_status_field['options'][esc_attr($id)] = esc_attr($name);
+    }
+    
+    woocommerce_wp_select($prisjakt_status_field);
+    
+    // Final
     do_action( WC_PRICEFILES_PLUGIN_SLUG . '_product_options'); 
     
     ?>

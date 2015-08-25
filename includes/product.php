@@ -142,6 +142,23 @@ class WC_Pricefiles_Product
     }
 
     /**
+     * Extract the Prisjakt Status of a product.
+     * 
+     * @return  string The Prisjakt Status or 'Normal' if it's missing.
+     * @since   0.1.10
+     */
+    public function get_prisjakt_status()
+    {
+        if (isset($this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_prisjakt_status'][0]))
+        {
+            return $this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_prisjakt_status'][0];
+        }
+        else {
+            return 'Normal';
+        }
+    }
+    
+    /**
      * Extract the manufacturer name of a product.
      *
      * @param   array   An array with keys for product and product_meta.
