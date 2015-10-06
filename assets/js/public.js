@@ -1,6 +1,8 @@
 (function ($) {
-	"use strict";
-	$(function () {
-		// Public-facing JavaScript
-	});
+    "use strict";
+    $(
+        function () {
+            // Public-facing JavaScript
+        }
+    );
 }(jQuery));

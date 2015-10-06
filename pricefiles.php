@@ -27,19 +27,18 @@ ini_set('display_errors', 1);
 */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if (! defined('WPINC') ) {
+    die;
 }
 
-require('define.php');
+require 'define.php';
 define('WP_PRICEFILES_PLUGIN_NAME', untrailingslashit(plugin_basename(__FILE__)));
 
-if ( ! class_exists( 'WC_Pricefiles' ) )
-{
-    require_once( WP_PRICEFILES_PLUGIN_PATH .'includes/pricefiles.php' );
+if (! class_exists('WC_Pricefiles') ) {
+    include_once WP_PRICEFILES_PLUGIN_PATH .'includes/pricefiles.php';
 }
 
-add_action( 'plugins_loaded', 'WC_Pricefiles' );    
+add_action('plugins_loaded', 'WC_Pricefiles');    
 
 // Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
 register_activation_hook(__FILE__, array(WC_Pricefiles(), 'activate'));
@@ -48,7 +47,7 @@ register_deactivation_hook(__FILE__, array(WC_Pricefiles(), 'deactivate'));
 
 function WC_Pricefiles()
 {
-    require_once( WP_PRICEFILES_PLUGIN_PATH .'includes/pricefiles.php' );
+    include_once WP_PRICEFILES_PLUGIN_PATH .'includes/pricefiles.php';
 
     return WC_Pricefiles::get_instance();
 }

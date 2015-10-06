@@ -13,7 +13,7 @@ class WC_Pricefiles_Admin //extends EWP_Plugin_Settings
     function submit_button()
     {
         echo '<p class="submit">';
-        echo '<input type="submit" name="save_attribute" id="submit" class="button-primary" value="'.__('Save Changes', 'woocommerce' ).'">';
+        echo '<input type="submit" name="save_attribute" id="submit" class="button-primary" value="'.__('Save Changes', 'woocommerce').'">';
         echo '</p>';
     }
     
@@ -46,15 +46,14 @@ class WC_Pricefiles_Admin //extends EWP_Plugin_Settings
             'description'   => '',
         );
         
-        return wp_parse_args( $args, $defaults );
+        return wp_parse_args($args, $defaults);
     }
     
     function checkbox_option_callback($args)
     {
         $args = $this->parse_args($args);
         
-        if(empty($args['value']))
-        {
+        if(empty($args['value'])) {
             $args['value'] = (empty($this->plugin_options[$args['key']]) ? $args['default'] : $this->plugin_options[$args['key']] );
         }
         
@@ -63,8 +62,7 @@ class WC_Pricefiles_Admin //extends EWP_Plugin_Settings
         echo '<span>' . $args['label'] . '</span>';
         echo '</label>';
 
-        if( !empty($args['description']))
-        {
+        if(!empty($args['description'])) {
             echo '<p style="clear: both">' . $args['description'] . '</p>';
         }
     }
@@ -73,8 +71,7 @@ class WC_Pricefiles_Admin //extends EWP_Plugin_Settings
     {
         $args = $this->parse_args($args);
         
-        if(empty($args['value']))
-        {
+        if(empty($args['value'])) {
             $args['value'] = (empty($this->plugin_options[$args['key']]) ? $args['default'] : $this->plugin_options[$args['key']] );
         }
         
@@ -83,8 +80,7 @@ class WC_Pricefiles_Admin //extends EWP_Plugin_Settings
         //echo '<span>' . $args['label'] . '</span>';
         echo '</label>';
 
-        if( !empty($args['description']))
-        {
+        if(!empty($args['description'])) {
             echo '<p style="clear: both">' . $args['description'] . '</p>';
         }
     }
@@ -93,8 +89,7 @@ class WC_Pricefiles_Admin //extends EWP_Plugin_Settings
     {
         $args = $this->parse_args($args);
         
-        if(empty($args['value']))
-        {
+        if(empty($args['value'])) {
             $args['value'] = (empty($this->plugin_options[$args['key']]) ? $args['default'] : $this->plugin_options[$args['key']] );
         }
 
@@ -109,8 +104,7 @@ class WC_Pricefiles_Admin //extends EWP_Plugin_Settings
         
         echo '</label>';
 
-        if( !empty($args['description']))
-        {
+        if(!empty($args['description'])) {
             echo '<p style="clear: both">' . $args['description'] . '</p>';
         }
     }
@@ -123,8 +117,9 @@ class WC_Pricefiles_Admin //extends EWP_Plugin_Settings
     
     function validate_input($input) 
     {
-        if (!is_array($input))
-            return false;
+        if (!is_array($input)) {
+            return false; 
+        }
 
         if (empty($input['exclude_ids'])) {
             $input['exclude_ids'] = array();

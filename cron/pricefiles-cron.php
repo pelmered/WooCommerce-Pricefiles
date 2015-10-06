@@ -16,8 +16,9 @@ $_GET['output'] = 'json';
 
 ignore_user_abort(true);
 
-if ( !empty($_POST) || defined('DOING_AJAX') || defined('DOING_CRON') )
-	die();
+if (!empty($_POST) || defined('DOING_AJAX') || defined('DOING_CRON') ) {
+    die(); 
+}
 
 
 
@@ -28,9 +29,11 @@ if ( !empty($_POST) || defined('DOING_AJAX') || defined('DOING_CRON') )
  */
 define('DOING_CRON', true);
 
-if ( !defined('ABSPATH') ) {
-    /** Set up WordPress environment */
-    require_once( dirname( __FILE__ ) . '/wp-load.php' );
+if (!defined('ABSPATH') ) {
+    /**
+ * Set up WordPress environment 
+*/
+    include_once dirname(__FILE__) . '/wp-load.php';
 }
 
 

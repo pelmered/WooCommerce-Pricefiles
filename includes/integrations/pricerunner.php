@@ -5,9 +5,9 @@
  *
  * The WooCommerce product class handles individual product data.
  *
- * @class 		WC_Pricefile_Pricerunner
- * @version		0.1.0
- * @author 		Peter Elmered
+ * @class   WC_Pricefile_Pricerunner
+ * @version 0.1.0
+ * @author  Peter Elmered
  */
 class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
 {
@@ -18,7 +18,7 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
     /**
      * Implements WC_Pricefile_Generator->start()= and generates header for CSV-file
      * 
-     * @since    0.1.12
+     * @since 0.1.12
      */
     protected function print_header()
     {
@@ -39,8 +39,8 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
     /**
      * Implements WC_Pricefile_Generator->print_product()= and echoes a formatted product
      * 
-     * @param     array  An opaque object used by property getters.
-     * @since     0.1.12
+     * @param array  An opaque object used by property getters.
+     * @since 0.1.12
      */
     protected function print_product($product)
     {
@@ -64,7 +64,7 @@ class WC_Pricefile_Pricerunner extends WC_Pricefile_Generator
     /**
      * Implements WC_Pricefile_Generator->finish()= and doing nothing (no wrapping up needed)
      * 
-     * @since     0.1.12
+     * @since 0.1.12
      */
     protected function print_footer()
     {

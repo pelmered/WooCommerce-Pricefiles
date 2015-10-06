@@ -1,11 +1,13 @@
 // Administration-specific JavaScripts for WC-Pricefiles
 (function ($) {
-	"use strict";
-	$(function () {
+    "use strict";
+    $(
+        function () {
                 
             
                 
-	});
+        }
+    );
 }(jQuery));
 
 
