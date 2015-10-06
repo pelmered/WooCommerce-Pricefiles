@@ -13,9 +13,9 @@ class WC_Pricefiles_Product
 
     public function __construct( $product_id )
     {
-        $this->product = get_product( $product_id );
+        $this->product = get_product($product_id);
 
-        $this->product_meta = get_post_meta( $product_id );
+        $this->product_meta = get_post_meta($product_id);
     }
     
     /**
@@ -25,8 +25,7 @@ class WC_Pricefiles_Product
      */
     public function show()
     {
-        if (!$this->product->is_purchasable() || $this->product->visibility == 'hidden')
-        {
+        if (!$this->product->is_purchasable() || $this->product->visibility == 'hidden') {
             return false;
         }
         else
@@ -42,8 +41,7 @@ class WC_Pricefiles_Product
     
     public function show_variations()
     {
-        if ($this->product->product_type == 'variable' && WC_Pricefiles()->get_options()['show_variations'] == 1 ) 
-        {
+        if ($this->product->product_type == 'variable' && WC_Pricefiles()->get_options()['show_variations'] == 1 ) {
             return true;
         }
         else
@@ -69,12 +67,11 @@ class WC_Pricefiles_Product
     
     function get_attribute($taxonomy = 'pa_storlek', $term_slug)
     {
-        $terms = get_the_terms( $this->product->id, $taxonomy);
+        $terms = get_the_terms($this->product->id, $taxonomy);
 
         foreach ( $terms as $term ) {
             
-            if($term->slug == $term_slug)
-            {
+            if($term->slug == $term_slug) {
                 return $term;
             }
         }
@@ -108,14 +105,13 @@ class WC_Pricefiles_Product
     
     /**
      * Get price with correct tax display option
-	 *
-     * @return  string  'incl' or 'excl'
-     * @since   0.1.10
+     *
+     * @return string  'incl' or 'excl'
+     * @since  0.1.10
      */
     public function get_price()
     {
-        if (WC_Pricefiles()->get_price_type() === 'excl')
-        {
+        if (WC_Pricefiles()->get_price_type() === 'excl') {
             return $this->product->get_price_excluding_tax(1);
         } else
         {
@@ -126,14 +122,13 @@ class WC_Pricefiles_Product
     /**
      * Extract the EAN code of a product.
      * 
-     * @param   array   An array with keys for product and product_meta.
+     * @param  array   An array with keys for product and product_meta.
      * @return string The EAN code or an empty string if it's missing.
-     * @since    0.1.10
+     * @since  0.1.10
      */
     public function get_ean()
     {
-        if (isset($this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0]))
-        {
+        if (isset($this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0])) {
             return $this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_ean_code'][0];
         }
         else {
@@ -144,13 +139,12 @@ class WC_Pricefiles_Product
     /**
      * Extract the Prisjakt Status of a product.
      * 
-     * @return  string The Prisjakt Status or 'Normal' if it's missing.
-     * @since   0.1.10
+     * @return string The Prisjakt Status or 'Normal' if it's missing.
+     * @since  0.1.10
      */
     public function get_prisjakt_status()
     {
-        if (isset($this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_prisjakt_status'][0]))
-        {
+        if (isset($this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_prisjakt_status'][0])) {
             return $this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_prisjakt_status'][0];
         }
         else {
@@ -161,14 +155,13 @@ class WC_Pricefiles_Product
     /**
      * Extract the manufacturer name of a product.
      *
-     * @param   array   An array with keys for product and product_meta.
-     * @return  string  The manufacturer name or an empty string if it's missing.
-     * @since   0.1.10
+     * @param  array   An array with keys for product and product_meta.
+     * @return string  The manufacturer name or an empty string if it's missing.
+     * @since  0.1.10
      */
     public function get_manufacturer()
     {
-        if (isset($this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0]))
-        {
+        if (isset($this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0])) {
             $term = get_term_by('slug', $this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_manufacturer'][0], 'pa_manufacturer');
             if ($term !== false) {
                 return $term->name;
@@ -185,14 +178,13 @@ class WC_Pricefiles_Product
     /**
      * Extract the manufacturer SKU of a product.
      * 
-     * @param   array   An array with keys for product and product_meta.
-     * @return  string  The manufacturer SKU or an empty string if it's missing.
-     * @since    0.1.10
+     * @param  array   An array with keys for product and product_meta.
+     * @return string  The manufacturer SKU or an empty string if it's missing.
+     * @since  0.1.10
      */
     public function get_manufacturer_sku()
     {
-        if (isset($this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0]))
-        {
+        if (isset($this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0])) {
             return $this->product_meta[WC_PRICEFILES_PLUGIN_SLUG . '_sku_manufacturer'][0];
         }
         else {
@@ -203,14 +195,13 @@ class WC_Pricefiles_Product
     /**
      * Extract the stock status of a product.
      * 
-     * @param   array   An array with keys for product and product_meta.
-     * @return  string  'Ja' or 'Nej'
-     * @since    0.1.12
+     * @param  array   An array with keys for product and product_meta.
+     * @return string  'Ja' or 'Nej'
+     * @since  0.1.12
      */
     public function get_stock_status()
     {
-        if ($this->product->is_in_stock())
-        {
+        if ($this->product->is_in_stock()) {
             return 'Ja';
         }
         else
@@ -222,9 +213,9 @@ class WC_Pricefiles_Product
     /**
      * Extract the product URL a product.
      * 
-     * @param   array   An array with keys for product and product_meta.
-     * @return  string  A URL.
-     * @since    0.1.12
+     * @param  array   An array with keys for product and product_meta.
+     * @return string  A URL.
+     * @since  0.1.12
      */
     public function get_url()
     {
@@ -234,15 +225,14 @@ class WC_Pricefiles_Product
     /**
      * Extract the image URL a product.
      * 
-     * @param   array   An array with keys for product and product_meta.
-     * @return  string  A URL or an empty string if it's missing.
-     * @since    0.1.12
+     * @param  array   An array with keys for product and product_meta.
+     * @return string  A URL or an empty string if it's missing.
+     * @since  0.1.12
      */
     public function get_image_url()
     {
         $product_id = $this->product->id;
-        if (has_post_thumbnail($product_id))
-        {
+        if (has_post_thumbnail($product_id)) {
             return wp_get_attachment_url(get_post_thumbnail_id($product_id));
         }
         else
@@ -254,29 +244,25 @@ class WC_Pricefiles_Product
     /**
      * Extract the product SKU of a product.
      * 
-     * @param   array   An array with keys for product and product_meta.
-     * @return  string  The SKU.
-     * @since    0.1.12
+     * @param  array   An array with keys for product and product_meta.
+     * @return string  The SKU.
+     * @since  0.1.12
      */
     public function get_sku()
     {
         $sku = $this->product->get_sku();
         
         
-        if(empty($sku))
-        {
+        if(empty($sku)) {
             $options = WC_Pricefiles()->get_options();
             
-            if($options['product_id_as_sku'] == 1)
-            {
+            if($options['product_id_as_sku'] == 1) {
                 return $this->product->id;
             }
         }
         
-        if($this->is_variant())
-        {
-            if($this->product->parent->get_sku() == $sku)
-            {
+        if($this->is_variant()) {
+            if($this->product->parent->get_sku() == $sku) {
                 $sku = $sku . '-'.implode('-', $this->get_variation_attribute_values());
             }
             
@@ -288,16 +274,15 @@ class WC_Pricefiles_Product
     /**
      * Extract the product title of a product.
      * 
-     * @param   array   An array with keys for product and product_meta.
-     * @return  string  The product title.
-     * @since    0.1.12
+     * @param  array   An array with keys for product and product_meta.
+     * @return string  The product title.
+     * @since  0.1.12
      */
     public function get_title()
     {
         $title = $this->product->post->post_title;
         
-        if($this->is_variant())
-        {
+        if($this->is_variant()) {
             return $this->get_variation_title($title);
         }
         return $title;
@@ -306,9 +291,9 @@ class WC_Pricefiles_Product
     /**
      * Extract the description of a product.
      * 
-     * @param   array   An array with keys for product and product_meta.
-     * @return  string  The product description.
-     * @since    0.1.12
+     * @param  array   An array with keys for product and product_meta.
+     * @return string  The product description.
+     * @since  0.1.12
      */
     public function get_description()
     {
@@ -318,9 +303,9 @@ class WC_Pricefiles_Product
     /**
      * Extract the stock quantity of a product.
      * 
-     * @param   array   An array with keys for product and product_meta.
-     * @return  int  The stock quantity
-     * @since    0.1.12
+     * @param  array   An array with keys for product and product_meta.
+     * @return int  The stock quantity
+     * @since  0.1.12
      */
     public function get_stock_quantity()
     {
@@ -330,9 +315,9 @@ class WC_Pricefiles_Product
     /**
      * Extract the delivery time of a product.
      * 
-     * @param   array   An array with keys for product and product_meta.
-     * @return  string  Always an empty string.
-     * @since    0.1.12
+     * @param  array   An array with keys for product and product_meta.
+     * @return string  Always an empty string.
+     * @since  0.1.12
      */
     static function get_delivery_time()
     {
@@ -341,10 +326,10 @@ class WC_Pricefiles_Product
     
     /**
      * Get product categories formatted for pricefile.
-	 *
-     * @param   array   $product_meta Return value from get_post_meta()
-     * @return  string  The manufacturer name or an empty string if it's missing.
-     * @since   0.1.10
+     *
+     * @param  array $product_meta Return value from get_post_meta()
+     * @return string  The manufacturer name or an empty string if it's missing.
+     * @since  0.1.10
      */
     public function get_categories()
     {
@@ -354,15 +339,13 @@ class WC_Pricefiles_Product
 
         $cat = get_post_meta($product_id, WC_PRICEFILES_PLUGIN_SLUG . '_pricelist_cat', true);
         
-        if ($cat && !empty($wc_pricefiles_globals['wc_pricefiles_categories'][$cat]))
-        {
+        if ($cat && !empty($wc_pricefiles_globals['wc_pricefiles_categories'][$cat])) {
             return $wc_pricefiles_globals['wc_pricefiles_categories'][$cat];
         }
 
         $terms = get_the_terms($product_id, 'product_cat');
         
-        if(is_wp_error( $terms ) || count($terms) == 0 || !is_array($terms))
-        {
+        if(is_wp_error($terms) || count($terms) == 0 || !is_array($terms)) {
             return '';
         }
         
@@ -373,8 +356,7 @@ class WC_Pricefiles_Product
 
         foreach ($terms AS $term)
         {
-            if ($term->parent)
-            {
+            if ($term->parent) {
                 $parents[] = $term->parent;
             }
 
@@ -404,9 +386,9 @@ class WC_Pricefiles_Product
      * This function is a hack to calculate the shipping cost for a single product. To do this we must first build a cart object and after that a package object that is needed to calculate the price. 
      * TODO: This need to be revisited. Has been improved, but not perfect
      * 
-     * @global  object  $woocommerce
-     * @param   object  $product Product object
-     * @return  float   Lowest shipping price
+     * @global object  $woocommerce
+     * @param  object $product Product object
+     * @return float   Lowest shipping price
      */
     public function get_shipping_cost()
     {
@@ -452,18 +434,15 @@ class WC_Pricefiles_Product
 
         $lowest_shipping_cost = 0;
 
-        if (!empty($shipping_methods))
-        {
+        if (!empty($shipping_methods)) {
             //$shipping_methods = array_intersect_key($shipping_method_rates['rates'], $this->shipping_methods);
 
             foreach ($shipping_method_rates['rates'] AS $rate)
             {
-                if (in_array($rate->method_id, $shipping_methods))
-                {
+                if (in_array($rate->method_id, $shipping_methods)) {
                     $total_tax = 0;
                     
-                    if( WC_Pricefiles()->get_price_type() == 'incl' )
-                    {
+                    if(WC_Pricefiles()->get_price_type() == 'incl' ) {
                         //Sum the taxes
                         foreach($rate->taxes AS $tax)
                         {
@@ -478,8 +457,7 @@ class WC_Pricefiles_Product
                         $total_cost = $rate->cost;
                     }
 
-                    if (empty($lowest_shipping_cost) || $total_cost < $lowest_shipping_cost)
-                    {
+                    if (empty($lowest_shipping_cost) || $total_cost < $lowest_shipping_cost) {
                         $lowest_shipping_cost = $total_cost;
                     }
                 }

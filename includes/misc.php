@@ -17,7 +17,7 @@ class WC_Pricefiles_Misc
 
     function get_woocomemrce_path()
     {
-        return dirname(dirname(plugin_dir_path( __FILE__ ))).'/woocommerce/woocommerce.php';
+        return dirname(dirname(plugin_dir_path(__FILE__))).'/woocommerce/woocommerce.php';
     }
     
     function woocommerce_not_active_notice()
@@ -25,7 +25,8 @@ class WC_Pricefiles_Misc
         ?>
         <div class="updated fade">
             <p><?php 
-            printf(__('The Pricefiles plugin requires the plugin %sWooCommerce%s to work. Please install WooCommerce or %sdeactive%s this plugin.', WC_PRICEFILES_PLUGIN_SLUG), 
+            printf(
+                __('The Pricefiles plugin requires the plugin %sWooCommerce%s to work. Please install WooCommerce or %sdeactive%s this plugin.', WC_PRICEFILES_PLUGIN_SLUG), 
                 '<a href="http://wordpress.org/plugins/woocommerce/">', '</a>',
                 '<a href="?deactivate-woocommerce-pricefiles=1">', '</a>'
             ); ?></p>
@@ -43,7 +44,7 @@ class WC_Pricefiles_Misc
     {
         
         
-        deactivate_plugins( plugin_basename(__FILE__) );
+        deactivate_plugins(plugin_basename(__FILE__));
     }
     function deactivate_plugin_notice()
     {

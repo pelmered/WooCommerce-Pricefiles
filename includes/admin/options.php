@@ -16,7 +16,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
         add_action('admin_init', array($this, 'initialize_pricefile_options'));
         
-        require_once dirname(WC_PLUGIN_FILE).'/includes/wc-template-functions.php';
+        include_once dirname(WC_PLUGIN_FILE).'/includes/wc-template-functions.php';
 
         parent::__construct($plugin_slug);
     }
@@ -33,7 +33,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
     {
         //manage_woocommerce
         add_submenu_page(
-                'woocommerce', __('Pricefiles', $this->plugin_slug), __('Pricefiles', $this->plugin_slug), 'manage_woocommerce', $this->plugin_slug, array($this, 'display_settings_page')
+            'woocommerce', __('Pricefiles', $this->plugin_slug), __('Pricefiles', $this->plugin_slug), 'manage_woocommerce', $this->plugin_slug, array($this, 'display_settings_page')
         );
     }
 
@@ -54,8 +54,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         //Get key of first tab (the default) 
         $first_key = key($tabs);
 
-        if (!empty($_GET['tab']) && in_array($_GET['tab'], array_keys($tabs)))
-        {
+        if (!empty($_GET['tab']) && in_array($_GET['tab'], array_keys($tabs))) {
             $active_tab = $_GET['tab'];
         } else
         {
@@ -72,15 +71,14 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             <h2 class="nav-tab-wrapper">
         <?php foreach ($tabs AS $slug => $name) : ?>
                     <a href="?page=<?php echo $this->plugin_slug; ?>&tab=<?php echo $slug; ?>" class="nav-tab <?php echo $active_tab == $slug ? 'nav-tab-active' : ''; ?>"><?php echo $name['name']; ?></a>
-                <?php endforeach; ?>
+        <?php endforeach; ?>
             </h2>
             
             <?php $this->donation_button(); ?>
 
             <form method="post" action="options.php">
         <?php
-        if (is_callable($tabs[$active_tab]['callback']))
-        {
+        if (is_callable($tabs[$active_tab]['callback'])) {
             call_user_func($tabs[$active_tab]['callback']);
         } else
         {
@@ -125,10 +123,10 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
     function initialize_pricefile_options()
     {
         register_setting(
-                $this->plugin_slug . '_options', $this->plugin_slug . '_options', array($this, 'validate_input')
+            $this->plugin_slug . '_options', $this->plugin_slug . '_options', array($this, 'validate_input')
         );
         register_setting(
-                $this->plugin_slug . '_advanced_options', $this->plugin_slug . '_options', array($this, 'validate_input')
+            $this->plugin_slug . '_advanced_options', $this->plugin_slug . '_options', array($this, 'validate_input')
         );
 
         /*
@@ -221,11 +219,11 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             array(
                 'key'           => 'show_variation_format',
                 'description' => __(
-                        'Define format for product variation titles in the pricefile. <br />' .
-                        '<strong>%title%</strong> ville be replaced by product title. <br />' .
-                        '<strong>%var%</strong> ville be replaced by variable atribute. <br />' .
-                        'Default: <strong>%title% - %var%</strong>'
-                    , $this->plugin_slug),
+                    'Define format for product variation titles in the pricefile. <br />' .
+                    '<strong>%title%</strong> ville be replaced by product title. <br />' .
+                    '<strong>%var%</strong> ville be replaced by variable atribute. <br />' .
+                    'Default: <strong>%title% - %var%</strong>', $this->plugin_slug
+                ),
             )
         );
         add_settings_field(
@@ -236,9 +234,9 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             array(
                 'key'           => 'variation_glue',
                 'description' => __(
-                        'Sting that will be used to concatinate variable attributes if there are more than one for a product variation.<br />' .
-                        'If you leave it blank the default is " "(a space) witch gives you for example this: <strong>"T-shirt - Blue XL"</strong> (depending on the variation format)' 
-                    , $this->plugin_slug),
+                    'Sting that will be used to concatinate variable attributes if there are more than one for a product variation.<br />' .
+                    'If you leave it blank the default is " "(a space) witch gives you for example this: <strong>"T-shirt - Blue XL"</strong> (depending on the variation format)', $this->plugin_slug
+                ),
             )
         );
         add_settings_field(
@@ -314,8 +312,10 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             array(
                 'key'           => 'use_cache',
                 'label'         => __('Use cache', $this->plugin_slug),
-                'description' => __('Use cache for pricefile. Usefull if you have many products. Needs cron to refresh cache.<br />' . 
-                        WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG . '/' . ' needs to be writable by PHP', $this->plugin_slug).
+                'description' => __(
+                    'Use cache for pricefile. Usefull if you have many products. Needs cron to refresh cache.<br />' . 
+                    WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG . '/' . ' needs to be writable by PHP', $this->plugin_slug
+                ).
                         ' ('.(is_writable(WP_CONTENT_DIR . '/cache/' . WC_PRICEFILES_PLUGIN_SLUG . '/') ? '<span style="color: green">'.__('Is writable', $this->plugin_slug).'</span>' : '<span style="color: red">'.__('NOT WRITABLE', $this->plugin_slug).'</span>' ).').'       
             )
         );
@@ -415,9 +415,8 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
             echo '<p>';
             echo '<input class="wide" type="text" size="110" value="' . $pricefile_base_url . $slug . '" disabled /><br />';
             echo '<span class="description"></span>';
-            if($last_updated && $this->plugin_options['use_cache'] == 1)
-            {
-                echo 'Last updated: ' . date_i18n(get_option( 'date_format' ).' '.get_option( 'time_format' ), current_time('timestamp'));
+            if($last_updated && $this->plugin_options['use_cache'] == 1) {
+                echo 'Last updated: ' . date_i18n(get_option('date_format').' '.get_option('time_format'), current_time('timestamp'));
             }
             echo '</p>';
         }
@@ -427,8 +426,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         
         
         foreach ($available_pricefiles AS $slug => $data) {
-            if(!empty($data['info_link']))
-            {
+            if(!empty($data['info_link'])) {
                 echo '<a href="'.$data['info_link'].'">'.$data['name'].'</a><br />'; 
             }
         }
@@ -462,8 +460,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
         echo '<select id="woocommerce_pricefiles_exclude_ids" name="' . $this->plugin_slug . '_options[exclude_ids][]" class="ajax_chosen_select_products" multiple="multiple" data-placeholder="' . __('Search for a product&hellip;', 'woocommerce') . '">';
 
-        if ($product_ids)
-        {
+        if ($product_ids) {
             foreach ($product_ids as $product_id) 
             {
 
@@ -499,8 +496,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
         $shipping_methods = $woocommerce->shipping->load_shipping_methods();
 
-        if ($shipping_methods)
-        {
+        if ($shipping_methods) {
             foreach ($shipping_methods as $shipping_method) {
                 echo '<label class="shipping-method"> ';
                 echo '<span>' . esc_html($shipping_method->method_title) . '</span>';
@@ -518,8 +514,7 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
 
         $shipping_destination_values = $this->plugin_options['shipping_destination'];
 
-        if (!$shipping_destination_values)
-        {
+        if (!$shipping_destination_values) {
             global $wc_pricefiles_globals;
             $shipping_destination_values = $wc_pricefiles_globals['default_shipping_destination'];
         }
@@ -646,12 +641,12 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
         <pre>/etc/nginx/sites-available/example.com</pre>
         <p>Set:</p>
         <pre>
-    location ~ \.php$ {
+        location ~ \.php$ {
         ...
         fastcgi_pass  unix:/var/run/php5-fpm.sock;
         ...
-	<strong>fastcgi_read_timeout 300;</strong>
-    }
+        <strong>fastcgi_read_timeout 300;</strong>
+        }
         </pre>
         
         <p>
@@ -692,11 +687,11 @@ class WC_Pricefiles_Admin_Options extends WC_Pricefiles_Admin
     
     function validate_input($input)
     {
-        if (!is_array($input))
-            return false;
+        if (!is_array($input)) {
+            return false; 
+        }
 
-        if (empty($input['exclude_ids']))
-        {
+        if (empty($input['exclude_ids'])) {
             $input['exclude_ids'] = array();
         }
 

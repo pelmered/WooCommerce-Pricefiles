@@ -58,11 +58,11 @@ class WC_Pricefiles_Admin_Category_Mapping extends WC_Pricefiles_Admin
     {
         
         register_setting(
-                $this->plugin_slug . '_category_mappings', $this->plugin_slug . '_category_mappings', array($this, 'apply_category_mappings')
+            $this->plugin_slug . '_category_mappings', $this->plugin_slug . '_category_mappings', array($this, 'apply_category_mappings')
         );
         
         add_settings_section(
-                $this->plugin_slug . '_category_mappings', __('Category mappings', $this->plugin_slug), array($this, 'category_mappings_section_callback'), $this->plugin_slug . '_category_mappings_section'
+            $this->plugin_slug . '_category_mappings', __('Category mappings', $this->plugin_slug), array($this, 'category_mappings_section_callback'), $this->plugin_slug . '_category_mappings_section'
         );
         add_settings_field(
             'category_mapping', 
@@ -103,8 +103,7 @@ class WC_Pricefiles_Admin_Category_Mapping extends WC_Pricefiles_Admin
         echo '<th>' . __('Pricefile categories', $this->plugin_slug) . '</th></tr>';
 
         foreach ($shop_categories AS $shop_cat) {
-            if ($option)
-            {
+            if ($option) {
                 $current = $option[$shop_cat->term_id];
             } else
             {
@@ -131,8 +130,7 @@ class WC_Pricefiles_Admin_Category_Mapping extends WC_Pricefiles_Admin
         $overwrite = $input['overwrite'];
 
 
-        if ($overwrite == 1)
-        {
+        if ($overwrite == 1) {
             unset($input['overwrite']);
 
 
@@ -155,8 +153,7 @@ class WC_Pricefiles_Admin_Category_Mapping extends WC_Pricefiles_Admin
                 //$products = new WP_Query($args);
                 $products = get_posts($args);
 
-                if (count($products) > 0)
-                {
+                if (count($products) > 0) {
                     foreach ($products AS $product) {
                         update_post_meta($product->ID, '_pricelist_cat', $pl_cat_id);
                         //wp_set_post_terms( $product->ID, $pl_cat_id, '_pricelist_cat' );
