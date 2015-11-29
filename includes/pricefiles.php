@@ -223,7 +223,7 @@ class WC_Pricefiles
                         }
                         
                         $wc_pricefile_generator = $class_name::get_instance($slug);
-                        //var_dump($wc_pricefile_generator);
+                        
                         $status = $wc_pricefile_generator->generate_pricefile();
                         
                         $response[$slug] = $status['status'];
@@ -294,7 +294,7 @@ class WC_Pricefiles
         }
         
         $options = get_option(WC_PRICEFILES_PLUGIN_SLUG . '_options', array());
-        
+
         $this->options = wp_parse_args($options, $this->default_pricelist_options());
         
         return $this->options;
@@ -346,7 +346,8 @@ class WC_Pricefiles
             'exclude_ids'           => array(),
             'stock_status_type'     => 'yes_no',
             'show_variations'       => 0,
-            'show_variation_format' => '',
+            'show_variation_format' => '%title% - %var%',
+            'variation_glue'        => ' ',
             'shipping_methods'      => array(),
             'product_id_as_sku'     => 0,
             'prisjakt_referrals'    => 0,

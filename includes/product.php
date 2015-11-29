@@ -62,7 +62,8 @@ class WC_Pricefiles_Product
     public function get_variation_title( $title )
     {
         $search  = array('%title%', '%var%');
-        $replace = array($title, implode(' ', $this->get_variation_attribute_names()));
+        $replace = array($title, implode(WC_Pricefiles()->get_options()['variation_glue'], $this->get_variation_attribute_names()));
+
         return str_replace($search, $replace, WC_Pricefiles()->get_options()['show_variation_format']);
         
     }
@@ -98,6 +99,7 @@ class WC_Pricefiles_Product
             $a = $this->get_attribute(str_replace('attribute_', '', $k), $slug);
             $attribute_names[] = $a->name;
         }
+
         
         return $attribute_names;
     }
