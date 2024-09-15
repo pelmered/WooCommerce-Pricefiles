@@ -14,7 +14,7 @@ I strongly recomend downloading the plugin from [WordPress.org](https://wordpres
  -  [Kelkoo](http://www.kelkoo.com/ "") (On hold. Will be developed if I feel there is sufficient demand. If you want it send me a message.).
  -  [Google Merchant Center](https://www.google.com/merchants/merchantdashboard "") (On hold. There are other plugins for this. Duplication of efforts vs all-in-one solution).
 
-###Next version
+### Next version
 The next major version(1.0) will be a major rewrite of the plugin. The code will be refactored to be a lot cleaner and easier to follow. 
 
 There will also be focus on performance and getting the plugin to work on large WooCommerce stores with a lot of products. As a part of this the cachesystem will be revised and improved. 
@@ -28,10 +28,10 @@ Next version will include:
  -  Prisjakt sales tracking (avslutsuppföljning)
  -  Admin interface improvements
 
-###Changelog
+### Changelog
 [Changelog on WordPress.org](https://wordpress.org/plugins/woocommerce-pricefiles/changelog/)
 
-###TODO
+### TODO
 - Unit testing
 - [WC Brands](http://www.woothemes.com/products/brands/ "WC Brands on WooThemes.com") integration 
 - More admin options(If you want anything specific, send me a message and I will consider it)
